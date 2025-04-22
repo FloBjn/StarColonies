@@ -1,13 +1,16 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
-
+using StarColonies.Domains;
 using StarColonies.Infrastructures.data.Entities;
 
 namespace StarColonies.Infrastructures.data;
 
 public class StarColoniesContext : IdentityDbContext<StarColoniesUser>
 {
+    
+    public DbSet<Colon> Colons { get; set; }
+
     public StarColoniesContext(DbContextOptions<StarColoniesContext> options)
         : base(options)
     {
