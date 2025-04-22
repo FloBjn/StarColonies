@@ -193,7 +193,7 @@ namespace StarColonies.Web.Areas.Identity.Pages.Account
                 _context.Colons.Add(colon); // _context = ton StarColoniesContext
                 await _context.SaveChangesAsync();
 
-                await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
+                await _userStore.SetUserNameAsync(user, Input.FirstName, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
                 user.FirstName = Input.FirstName;
                 var result = await _userManager.CreateAsync(user, Input.Password);
