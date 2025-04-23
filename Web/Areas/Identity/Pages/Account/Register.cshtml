@@ -15,31 +15,31 @@
             @* name field *@
             <div class="form-floating mb-3">
                 <input asp-for="Input.FirstName" class="form-control" autocomplete="username" aria-required="true" placeholder="your name" />
-                <label asp-for="Input.FirstName">Votre pseudo</label>
+                <label asp-for="Input.FirstName" class="form-label text-black">Votre pseudo</label>
                 <span asp-validation-for="Input.FirstName" class="text-danger"></span>
             </div>
             @* date naissance field *@
             <div class="form-floating mb-3">
                 <input asp-for="Input.BirthDate" class="form-control" type="date" aria-required="true"/>
-                <label asp-for="Input.BirthDate">Votre date de naissance</label>
+                <label asp-for="Input.BirthDate" class="form-label text-black">Votre date de naissance</label>
                 <span asp-validation-for="Input.BirthDate" class="text-danger"></span>
             </div>
             @* email field *@
             <div class="form-floating mb-3">
                 <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
-                <label asp-for="Input.Email">Email</label>
+                <label asp-for="Input.Email" class="form-label text-black">Email</label>
                 <span asp-validation-for="Input.Email" class="text-danger"></span>
             </div>
             @* password field *@
             <div class="form-floating mb-3">
                 <input asp-for="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
-                <label asp-for="Input.Password">Password</label>
+                <label asp-for="Input.Password" class="form-label text-black">Password</label>
                 <span asp-validation-for="Input.Password" class="text-danger"></span>
             </div>
             @* password confirm field *@
             <div class="form-floating mb-3">
                 <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
-                <label asp-for="Input.ConfirmPassword">Confirm Password</label>
+                <label asp-for="Input.ConfirmPassword" class="form-label text-black">Confirm Password</label>
                 <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
             </div>
             @* Avatar field *@
@@ -69,19 +69,19 @@
                     <option value="Médecin">Médecin</option>
                     <option value="Explorateur">Explorateur</option>
                 </select>
-                <label asp-for="Input.Profession">Choisir une proffession</label>
+                <label asp-for="Input.Profession" class="form-label text-black">Choisir une proffession</label>
                 <span asp-validation-for="Input.Profession" class="text-danger"></span>
             </div>
             @* Force field *@
             <div class="form-floating mb-3">
                 <input asp-for="Input.Force" type="number" min="0" max="7" class="form-control" aria-required="true" placeholder="0"/>
-                <label asp-for="Input.Force">Point de compétence Force</label>
+                <label asp-for="Input.Force" class="form-label text-black">Point de compétence Force</label>
                 <span asp-validation-for="Input.Force" class="text-danger"></span>
             </div>
             @* Endurance field *@
             <div class="form-floating mb-3">
                 <input asp-for="Input.Endurance" type="number" min="0" max="7" class="form-control" aria-required="true" placeholder="0"/>
-                <label asp-for="Input.Endurance">Point de compétence Endurance</label>
+                <label asp-for="Input.Endurance" class="form-label text-black">Point de compétence Endurance</label>
                 <span asp-validation-for="Input.Endurance" class="text-danger"></span>
             </div>
             <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
