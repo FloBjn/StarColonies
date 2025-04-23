@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.RazorPages;
 using StarColonies.Domains.interfaces;
+using StarColonies.Web.ViewModels;
 
 namespace StarColonies.Web.Pages;
 
@@ -31,24 +32,5 @@ public class TestPageMission : PageModel
                 Endurance = mb.Defis.Endurance
             }).ToList()
         }).ToList();
-    }
-
-    public class MissionViewModel
-    {
-        public int Id { get; set; }
-        public string Nom { get; set; }= string.Empty;
-        public int Niveau { get; set; }
-        public List<DefisViewModel> Defis { get; set; } = new();
-    }
-
-    public class DefisViewModel
-    {
-        public int Id { get; set; }
-        
-        public int Force { get; set; }
-        
-        public int Endurance { get; set; }
-        
-        public string Nom { get; set; }= string.Empty;
     }
 }
