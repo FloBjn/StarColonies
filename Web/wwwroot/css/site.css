@@ -26,6 +26,7 @@ body {
   margin-bottom: 60px;
   background-color: #0C0F12;
   font-family: 'Upheaval TT', 'Orbitron', sans-serif;
+  letter-spacing: 0.1em;
 }
 
 .custom-navbar {
@@ -62,6 +63,10 @@ body {
 
 .logo-img {
   height: 50px;
+}
+
+.animated-blackhole{
+  width: 27%;
 }
 
 .custom-footer {
