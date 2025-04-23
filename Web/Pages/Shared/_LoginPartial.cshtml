@@ -1,0 +1,22 @@
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using StarColonies.Infrastructures.data.Entities
+
+@inject SignInManager<StarColoniesUser> SignInManager
+
+<ul class="navbar-nav">
+@if (SignInManager.IsSignedIn(User))
+{
+    <li class="nav-item">
+        <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Index", new { area = "" })">
+            <button id="logout" type="submit" class="nav-link btn btn-link text-white border-0">DECONNEXION</button>
+        </form>
+    </li>
+}
+else
+{
+    <li class="nav-item">
+        <a class="nav-link text-white fs-5 fw-bold" id="login" asp-area="Identity" asp-page="/Account/Login">CONNEXION</a>
+    </li>
+}
+</ul>
