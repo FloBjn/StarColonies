@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading;
@@ -18,6 +19,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using StarColonies.Domains;
+using StarColonies.Infrastructures.data;
 using StarColonies.Infrastructures.data.Entities;
 
 namespace StarColonies.Web.Areas.Identity.Pages.Account
@@ -30,13 +33,17 @@ namespace StarColonies.Web.Areas.Identity.Pages.Account
         private readonly IUserEmailStore<StarColoniesUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly StarColoniesContext _context;
 
         public RegisterModel(
             UserManager<StarColoniesUser> userManager,
             IUserStore<StarColoniesUser> userStore,
             SignInManager<StarColoniesUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            IWebHostEnvironment webHostEnvironment,
+            StarColoniesContext context)
         {
             _userManager = userManager;
             _userStore = userStore;
@@ -44,6 +51,8 @@ namespace StarColonies.Web.Areas.Identity.Pages.Account
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _webHostEnvironment = webHostEnvironment;
+            _context = context;
         }
 
         /// <summary>
@@ -69,8 +78,12 @@ namespace StarColonies.Web.Areas.Identity.Pages.Account
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
         ///     directly from your code. This API may change or be removed in future releases.
         /// </summary>
-        public class InputModel
+        public class InputModel : IValidatableObject
         {
+            
+            [Required]
+            [Display(Name = "FirstName")]
+            public string FirstName { get; set; }
             /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
@@ -98,6 +111,41 @@ namespace StarColonies.Web.Areas.Identity.Pages.Account
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+            
+            [Required]
+            [DataType(DataType.Date)]
+            [Display(Name = "Date de naissance")]
+            public DateOnly BirthDate { get; set; }
+            
+#nullable enable
+
+            [Display(Name = "Photo de profil")]
+            [DataType(DataType.ImageUrl)]
+            public IFormFile? Avatar { get; set; }
+#nullable disable
+            
+            [Required]
+            [Display(Name = "Profession")]
+            public string Profession { get; set; } = string.Empty;
+
+            [Range(0, 7)]
+            [Display(Name = "Force")]
+            public int Force { get; set; }
+
+            [Range(0, 7)]
+            [Display(Name = "Endurance")]
+            public int Endurance { get; set; }
+
+            public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+            {
+                if (Force + Endurance != 7)
+                {
+                    yield return new ValidationResult(
+                        "La somme de la Force et de l'Endurance doit être égale à 7.",
+                        new[] { nameof(Force), nameof(Endurance) });
+                }
+            }
+
         }
 
 
@@ -111,12 +159,43 @@ namespace StarColonies.Web.Areas.Identity.Pages.Account
         {
             returnUrl ??= Url.Content("~/");
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+
             if (ModelState.IsValid)
             {
                 var user = CreateUser();
 
-                await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
+                // Traitement de l'image avant la création de l'utilisateur
+                if (Input.Avatar != null && Input.Avatar.Length > 0)
+                {
+                    var uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "images/profiles");
+                    Directory.CreateDirectory(uploadsFolder); // Création si dossier inexistant
+                    var fileName = Guid.NewGuid().ToString() + Path.GetExtension(Input.Avatar.FileName);
+                    var filePath = Path.Combine(uploadsFolder, fileName);
+
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await Input.Avatar.CopyToAsync(fileStream);
+                    }
+
+                    // Affecte le chemin de l’image à l’utilisateur
+                    user.Avatar = "/images/profiles/" + fileName;
+                }
+                
+                var colon = new Colon
+                {
+                    Name = Input.FirstName,
+                    Profession = Input.Profession,
+                    Force = Input.Force,
+                    Endurance = Input.Endurance,
+                    UserId = user.Id
+                };
+
+                _context.Colons.Add(colon); // _context = ton StarColoniesContext
+                await _context.SaveChangesAsync();
+
+                await _userStore.SetUserNameAsync(user, Input.FirstName, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
+                user.FirstName = Input.FirstName;
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
                 if (result.Succeeded)
@@ -154,7 +233,7 @@ namespace StarColonies.Web.Areas.Identity.Pages.Account
             // If we got this far, something failed, redisplay form
             return Page();
         }
-
+        
         private StarColoniesUser CreateUser()
         {
             try
