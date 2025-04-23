@@ -1,3 +1,8 @@
+@font-face {
+  font-family: 'Upheaval TT';
+  src: url('fonts/upheaval/upheavtt.ttf');
+}
+
 html {
   font-size: 14px;
 }
@@ -19,4 +24,25 @@ html {
 
 body {
   margin-bottom: 60px;
+  background-color: #0C0F12;
+  font-family: 'Upheaval TT', 'Orbitron', sans-serif;
+}
+
+.custom-navbar {
+  background-color: #151b23;
+  border-bottom: 2px solid;
+  border-top: 2px solid;
+  border-color: rgba(255, 255, 255, 0.5);
+  margin-top: 0.5em;
+  letter-spacing: 0.5em;
+}
+
+.logo-img {
+  height: 50px;
+}
+
+.custom-footer {
+  background-color: #15181B;
+  border-top: 1px solid #333;
+  border-radius: 2em 2em 0 0;
 }
