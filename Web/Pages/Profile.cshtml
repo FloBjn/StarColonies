@@ -5,6 +5,24 @@
     ViewData["Title"] = "Profil";
 }
 
+<h1 class="m-auto text-center mb-5">Votre profil utilisateur</h1>
+
+<section class="w-75 d-flex mb-xl-5">
+    <div class="w-50 d-flex flex-wrap">
+        <h2 class="w-100 text-center mb-4">Avatar</h2>
+        <div class="w-100 d-flex mb-3">
+            <img src="images/profiles/f37694e8-901e-414c-bc21-af02fcdcdf75.png" class="img-fluid img-avatar m-md-auto rounded-3"/>    
+        </div>
+        <button id="modifyAvatar" type="button" class="w-25 btn btn-primary btn-sm m-auto">Modifier</button>
+    </div>
+    
+    <div class="w-50">
+        <h2 class="w-100 text-center">Infos personnelles</h2>
+
+    </div>
+
+</section>
+
 <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Index", new { area = "" })">
     <button id="logout" type="submit" class="w-100 btn btn-lg custom-disc-button">DECONNEXION</button>
 </form>

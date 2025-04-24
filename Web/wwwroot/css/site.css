@@ -95,3 +95,9 @@ body {
   letter-spacing: 0.2em;
   color: white;
 }
+
+.img-avatar {
+  width: 18.75rem;
+  height: 18.75rem;
+  object-fit: cover;
+}
