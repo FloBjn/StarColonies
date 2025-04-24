@@ -78,3 +78,12 @@ body {
 .custom-form{
   width: 35%;
 }
+
+.custom-form input {
+  border-radius: 1em;
+}
+
+.custom-form button {
+  border-radius: 0.5em;
+  
+}
