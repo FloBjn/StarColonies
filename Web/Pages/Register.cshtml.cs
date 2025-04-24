@@ -165,22 +165,15 @@ namespace StarColonies.Web.Pages
                 var user = CreateUser();
 
                 // Traitement de l'image avant la création de l'utilisateur
-                if (Input.Avatar != null && Input.Avatar.Length > 0)
+                if (_webHostEnvironment.IsDevelopment())
                 {
-                    var uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "images/profiles");
-                    Directory.CreateDirectory(uploadsFolder); // Création si dossier inexistant
-                    var fileName = Guid.NewGuid().ToString() + Path.GetExtension(Input.Avatar.FileName);
-                    var filePath = Path.Combine(uploadsFolder, fileName);
-
-                    using (var fileStream = new FileStream(filePath, FileMode.Create))
-                    {
-                        await Input.Avatar.CopyToAsync(fileStream);
-                    }
-
-                    // Affecte le chemin de l’image à l’utilisateur
-                    user.Avatar = "/images/profiles/" + fileName;
+                    await UploadImageDev(user);
                 }
-                
+                else
+                {
+                    await UploadImageProd(user);
+                }
+
                 var colon = new Colon
                 {
                     Name = Input.FirstName,
@@ -233,7 +226,46 @@ namespace StarColonies.Web.Pages
             // If we got this far, something failed, redisplay form
             return Page();
         }
+
+        private async Task UploadImageDev(StarColoniesUser user)
+        {
+            if (Input.Avatar != null && Input.Avatar.Length > 0)
+            {
+                var uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "images/profiles");
+                Directory.CreateDirectory(uploadsFolder); // Création si dossier inexistant
+                var fileName = Guid.NewGuid().ToString() + Path.GetExtension(Input.Avatar.FileName);
+                var filePath = Path.Combine(uploadsFolder, fileName);
+
+                await using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    await Input.Avatar.CopyToAsync(fileStream);
+                }
+
+                // Affecte le chemin de l’image à l’utilisateur
+                user.Avatar = "/images/profiles/" + fileName;
+            }
+        }
         
+        private async Task UploadImageProd(StarColoniesUser user)
+        {
+            if (Input.Avatar != null && Input.Avatar.Length > 0)
+            {
+                var fileName = Path.GetFileName(Input.Avatar.FileName);
+                var filePath = Path.Combine(_webHostEnvironment.WebRootPath, "image", fileName);
+
+                // Crée le dossier s'il n'existe pas
+                Directory.CreateDirectory(Path.GetDirectoryName(filePath)!);
+
+                await using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    await Input.Avatar.CopyToAsync(fileStream);
+                }
+
+                // Affecte le chemin de l’image à l’utilisateur
+                user.Avatar = $"/Q230243/image/{fileName}";
+            }
+        }
+
         private StarColoniesUser CreateUser()
         {
             try
