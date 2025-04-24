@@ -1,0 +1,46 @@
+﻿@page
+@model StarColonies.Web.Pages.Test1
+
+@{
+    var missions = new List<dynamic>
+    {
+        new { Id = 1, Nom = "Mission Alpha", Niveau = "Facile", Details = "Détails de la mission Alpha..." },
+        new { Id = 2, Nom = "Mission Beta", Niveau = "Moyen", Details = "Détails de la mission Beta..." },
+        new { Id = 3, Nom = "Mission Gamma", Niveau = "Difficile", Details = "Détails de la mission Gamma..." }
+    };
+}
+
+<div class="missions">
+    @foreach (var mission in missions)
+    {
+        <div class="mission-block">
+            <div class="mission-header" onclick="toggleDetails(@mission.Id)">
+                <strong>@mission.Nom</strong> - Niveau : @mission.Niveau
+            </div>
+            <div id="details-@mission.Id" class="mission-details">
+                @mission.Details
+            </div>
+        </div>
+    }
+</div>
+
+<style>
+    .mission-header {
+        cursor: pointer;
+    }
+
+    .mission-details {
+        display: none;
+    }
+</style>
+
+<script>
+    function toggleDetails(id) {
+        var details = document.getElementById("details-" + id);
+        if (details.style.display === "none" || details.style.display === "") {
+            details.style.display = "block";
+        } else {
+            details.style.display = "none";
+        }
+    }
+</script>
