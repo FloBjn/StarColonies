@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using StarColonies.Domains.interfaces;
+using StarColonies.Infrastructures;
 using StarColonies.Infrastructures.data;
 using StarColonies.Infrastructures.data.Entities;
 using StarColonies.Web.Middlewares;
@@ -19,6 +21,9 @@ builder.Services
     .AddEntityFrameworkStores<StarColoniesContext>();
 
 builder.Services.AddTransient<ReverseProxyLinksMiddleware>();
+
+//Interfaces
+builder.Services.AddScoped<IMissionRepository, MissionRepository>();
 
 var app = builder.Build();
 

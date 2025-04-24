@@ -1,0 +1,23 @@
+﻿@page
+@model StarColonies.Web.Pages.TestPageMission
+
+<h2>Liste des Missions</h2>
+
+@foreach (var mission in Model.Missions)
+{
+<div style="margin-bottom: 1rem; padding: 1rem; border: 1px solid #ccc;">
+    <h3>@mission.Nom (@mission.Niveau)</h3>
+    <ul>
+        @foreach (var defis in mission.Defis)
+        {
+            <li>
+                <div>
+                    <p>@defis.Nom</p>
+                    <p>Endurance : @defis.Endurance</p>
+                    <p>Force : @defis.Force</p>
+                </div>
+            </li>
+        }
+    </ul>
+</div>
+}

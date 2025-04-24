@@ -10,6 +10,9 @@ public class StarColoniesContext : IdentityDbContext<StarColoniesUser>
 {
     
     public DbSet<Colon> Colons { get; set; }
+    public DbSet<Mission> Missions { get; set; }
+    
+    public DbSet<Defis> Defis { get; set; }
 
     public StarColoniesContext(DbContextOptions<StarColoniesContext> options)
         : base(options)
@@ -28,6 +31,23 @@ public class StarColoniesContext : IdentityDbContext<StarColoniesUser>
 
         // Tu peux ajouter ici tes configurations manuelles (si tu en as)
         // builder.ApplyConfiguration(new TonEntityConfiguration());
+        builder.Entity<MissionBete>()
+            .HasKey(mb => new { mb.MissionId, BeteId = mb.DefisId });
+
+        builder.Entity<MissionBete>()
+            .HasOne(mb => mb.Mission)
+            .WithMany(m => m.MissionBetes)
+            .HasForeignKey(mb => mb.MissionId);
+
+        builder.Entity<MissionBete>()
+            .HasOne(mb => mb.Defis)
+            .WithMany(b => b.MissionBetes)
+            .HasForeignKey(mb => mb.DefisId);
+        
+        builder.Entity<Defis>()
+            .HasOne(d => d.TypeDefis)
+            .WithMany(t => t.Defis)
+            .HasForeignKey(d => d.TypeDefisId);
     }
     
 }

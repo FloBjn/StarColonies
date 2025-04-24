@@ -22,6 +22,34 @@ namespace StarColonies.Infrastructures.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("Defis", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Endurance")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Force")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Nom")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("TypeDefisId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TypeDefisId");
+
+                    b.ToTable("Defis");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -155,6 +183,38 @@ namespace StarColonies.Infrastructures.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("Mission", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Nom")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Missions");
+                });
+
+            modelBuilder.Entity("MissionBete", b =>
+                {
+                    b.Property<int>("MissionId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("DefisId")
+                        .HasColumnType("int");
+
+                    b.HasKey("MissionId", "DefisId");
+
+                    b.HasIndex("DefisId");
+
+                    b.ToTable("MissionBete");
+                });
+
             modelBuilder.Entity("StarColonies.Domains.Colon", b =>
                 {
                     b.Property<int>("Id")
@@ -261,6 +321,34 @@ namespace StarColonies.Infrastructures.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("TypeDefis", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Nom")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TypeDefis");
+                });
+
+            modelBuilder.Entity("Defis", b =>
+                {
+                    b.HasOne("TypeDefis", "TypeDefis")
+                        .WithMany("Defis")
+                        .HasForeignKey("TypeDefisId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("TypeDefis");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -310,6 +398,40 @@ namespace StarColonies.Infrastructures.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("MissionBete", b =>
+                {
+                    b.HasOne("Defis", "Defis")
+                        .WithMany("MissionBetes")
+                        .HasForeignKey("DefisId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Mission", "Mission")
+                        .WithMany("MissionBetes")
+                        .HasForeignKey("MissionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Defis");
+
+                    b.Navigation("Mission");
+                });
+
+            modelBuilder.Entity("Defis", b =>
+                {
+                    b.Navigation("MissionBetes");
+                });
+
+            modelBuilder.Entity("Mission", b =>
+                {
+                    b.Navigation("MissionBetes");
+                });
+
+            modelBuilder.Entity("TypeDefis", b =>
+                {
+                    b.Navigation("Defis");
                 });
 #pragma warning restore 612, 618
         }
