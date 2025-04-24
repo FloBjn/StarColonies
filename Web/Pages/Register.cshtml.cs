@@ -23,7 +23,7 @@ using StarColonies.Domains;
 using StarColonies.Infrastructures.data;
 using StarColonies.Infrastructures.data.Entities;
 
-namespace StarColonies.Web.Areas.Identity.Pages.Account
+namespace StarColonies.Web.Pages
 {
     public class RegisterModel : PageModel
     {

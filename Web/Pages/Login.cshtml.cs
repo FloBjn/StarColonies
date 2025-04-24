@@ -16,7 +16,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using StarColonies.Infrastructures.data.Entities;
 
-namespace StarColonies.Web.Areas.Identity.Pages.Account
+namespace StarColonies.Web.Pages
 {
     public class LoginModel : PageModel
     {
@@ -112,7 +112,7 @@ namespace StarColonies.Web.Areas.Identity.Pages.Account
 
             if (ModelState.IsValid)
             {
-                // ➕ Essayer de récupérer l'utilisateur par nom d'utilisateur, sinon par email
+                //Essayer de récupérer l'utilisateur par nom d'utilisateur, sinon par email
                 var user = await _userManager.FindByNameAsync(Input.EmailOrUsername)
                            ?? await _userManager.FindByEmailAsync(Input.EmailOrUsername);
 
@@ -124,7 +124,7 @@ namespace StarColonies.Web.Areas.Identity.Pages.Account
                     if (result.Succeeded)
                     {
                         _logger.LogInformation("User logged in.");
-                        return LocalRedirect(returnUrl);
+                        return RedirectToPage("/Dashboard");
                     }
 
                     if (result.RequiresTwoFactor)
