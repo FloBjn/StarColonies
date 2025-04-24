@@ -1,21 +1,6 @@
-@using Microsoft.AspNetCore.Identity
 @using Microsoft.AspNetCore.Mvc.TagHelpers
-@using StarColonies.Infrastructures.data.Entities
 
-@inject SignInManager<StarColoniesUser> SignInManager
-@inject UserManager<StarColoniesUser> UserManager
 
-<ul class="navbar-nav">
-@if (SignInManager.IsSignedIn(User))
-{
-    <li class="nav-item">
-        <a id="manage" class="nav-link text-white" asp-area="" asp-page="Index" title="Manage">Bonjour @UserManager.GetUserName(User)!</a>
-    </li>
-}
-else
-{
-    <li class="nav-item">
-        <a class="nav-link text-white fs-5 fw-bold" id="register" asp-area="" asp-page="Register">S'INSCRIRE</a>
-    </li>
-}
-</ul>
+<li class="nav-item">
+    <a class="nav-link text-white fs-5 fw-bold" id="register" asp-area="" asp-page="Register">S'INSCRIRE</a>
+</li>
