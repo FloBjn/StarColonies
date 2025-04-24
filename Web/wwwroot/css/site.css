@@ -85,5 +85,6 @@ body {
 
 .custom-form button {
   border-radius: 0.5em;
-  
+  background-color: #391C3B;
+  letter-spacing: 0.2em;
 }
