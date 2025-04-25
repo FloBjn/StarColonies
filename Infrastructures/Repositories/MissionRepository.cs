@@ -1,8 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using StarColonies.Domains;
 using StarColonies.Domains.interfaces;
 using StarColonies.Infrastructures.data;
 
-namespace StarColonies.Infrastructures;
+namespace StarColonies.Infrastructures.Repositories;
 
 public class MissionRepository : IMissionRepository
 {
@@ -15,7 +16,7 @@ public class MissionRepository : IMissionRepository
     
     public async Task<List<Mission>> GetAllAsync()
     {
-        return await _context.Missions
+        return await _context.ScMission
             .Include(m => m.MissionBetes)
             .ThenInclude(mb => mb.Defis)
             .ToListAsync();
@@ -23,7 +24,7 @@ public class MissionRepository : IMissionRepository
 
     public async Task<Mission?> GetByIdAsync(int id)
     {
-        return await _context.Missions
+        return await _context.ScMission
             .Include(m => m.MissionBetes)
             .ThenInclude(mb => mb.Defis)
             .ThenInclude(d => d.TypeDefis)

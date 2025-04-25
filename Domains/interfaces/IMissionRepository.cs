@@ -4,6 +4,6 @@ public interface IMissionRepository
 {
     Task<List<Mission>> GetAllAsync();
     
-    Task<Mission?> GetByIdAsync(int id);
+    Task<Mission?> GetByIdAsync(int missionId);
 
 }

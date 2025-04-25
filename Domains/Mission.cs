@@ -1,19 +1,18 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
+namespace StarColonies.Domains;
+
 public class Mission
 {
-    public int Id { get; set; }
-    public string Nom { get; set; }
+    public string Name { get; set; }
+    public ICollection<Enemy> MissionEnemies { get; set; }= new List<Enemy>();
     
-    [NotMapped]
-    public int Niveau
+    //[NotMapped]
+    public int Level
     {
         get
         {
-            return MissionBetes?
-                .Sum(mb => mb.Defis.Force) ?? 0;
+            return MissionEnemies?.Sum(mb => mb.Force) ?? 0;
         }
     }
-
-    public ICollection<MissionBete> MissionBetes { get; set; }= new List<MissionBete>();
 }
