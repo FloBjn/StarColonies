@@ -96,8 +96,20 @@ body {
   color: white;
 }
 
+/*Profile page*/
+
 .img-avatar {
   width: 18.75rem;
   height: 18.75rem;
   object-fit: cover;
+}
+
+.w-40{
+  width: 40%;
+}
+
+.changed-field {
+  border: 2px solid #0d6efd !important; /* Bootstrap primary */
+  transition: border-color 0.3s ease;
+  background-color: #e7f1ff;
 }
