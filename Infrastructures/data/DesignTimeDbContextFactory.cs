@@ -1,10 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
-using Microsoft.Extensions.Configuration;
-using System.IO;
-using StarColonies.Infrastructures.data;
 
-namespace StarColonies.Infrastructures.Data
+namespace StarColonies.Infrastructures.data
 {
     public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<StarColoniesContext>
     {

@@ -22,6 +22,7 @@ using Microsoft.Extensions.Logging;
 using StarColonies.Domains;
 using StarColonies.Infrastructures.data;
 using StarColonies.Infrastructures.data.Entities;
+using StarColonies.Infrastructures.Entities;
 
 namespace StarColonies.Web.Pages
 {
@@ -177,18 +178,18 @@ namespace StarColonies.Web.Pages
                 var colon = new Colon
                 {
                     Name = Input.FirstName,
-                    Profession = Input.Profession,
+                    Job = Input.Profession,
                     Force = Input.Force,
-                    Endurance = Input.Endurance,
+                    Stamina = Input.Endurance,
                     UserId = user.Id
                 };
 
-                _context.Colons.Add(colon); // _context = ton StarColoniesContext
+                _context.ScColon.Add(colon); // _context = ton StarColoniesContext
                 await _context.SaveChangesAsync();
 
                 await _userStore.SetUserNameAsync(user, Input.FirstName, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
-                user.FirstName = Input.FirstName;
+                user.Name = Input.FirstName;
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
                 if (result.Succeeded)
