@@ -41,19 +41,14 @@
     @* Avatar field *@
     <div class="mb-3">
         <label asp-for="Input.Avatar" class="form-label">Votre avatar</label>
-        <input asp-for="Input.Avatar" type="file" class="form-control" />
+        <input asp-for="Input.Avatar" type="file" class="form-control" id="avatarInput"/>
         <span asp-validation-for="Input.Avatar" class="text-danger"></span>
     </div>
     <img id="preview" class="img-thumbnail mb-2" style="display:none; max-height:150px;" />
 
     <script>
-        document.querySelector('#Input_Avatar').addEventListener('change', function (e) {
-            const preview = document.getElementById('preview');
-            const file = e.target.files[0];
-            if (file) {
-                preview.src = URL.createObjectURL(file);
-                preview.style.display = 'block';
-            }
+        document.addEventListener('DOMContentLoaded', function () {
+            setupImagePreview('avatarInput','preview');
         });
     </script>
     <h3>Infos sur ton Colon</h3>

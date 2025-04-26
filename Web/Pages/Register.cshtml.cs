@@ -183,7 +183,7 @@ namespace StarColonies.Web.Pages
                     UserId = user.Id
                 };
 
-                _context.Colons.Add(colon); // _context = ton StarColoniesContext
+                _context.Colons.Add(colon);
                 await _context.SaveChangesAsync();
 
                 await _userStore.SetUserNameAsync(user, Input.FirstName, CancellationToken.None);

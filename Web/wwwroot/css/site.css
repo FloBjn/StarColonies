@@ -113,3 +113,9 @@ body {
   transition: border-color 0.3s ease;
   background-color: #e7f1ff;
 }
+
+div.avatarPopup{
+  visibility: hidden;
+  opacity: 0; 
+  transition: opacity 0.3s ease;
+}
