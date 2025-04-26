@@ -22,34 +22,6 @@ namespace StarColonies.Infrastructures.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Defis", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("Endurance")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Force")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Nom")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("TypeDefisId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("TypeDefisId");
-
-                    b.ToTable("Defis");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -183,72 +155,99 @@ namespace StarColonies.Infrastructures.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("Mission", b =>
+            modelBuilder.Entity("StarColonies.Infrastructures.Entities.StarColoniesColon", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<string>("ColonId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Nom")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Missions");
-                });
-
-            modelBuilder.Entity("MissionBete", b =>
-                {
-                    b.Property<int>("MissionId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("DefisId")
-                        .HasColumnType("int");
-
-                    b.HasKey("MissionId", "DefisId");
-
-                    b.HasIndex("DefisId");
-
-                    b.ToTable("MissionBete");
-                });
-
-            modelBuilder.Entity("StarColonies.Domains.Colon", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("Endurance")
-                        .HasColumnType("int");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("Force")
+                        .HasColumnType("int");
+
+                    b.Property<int>("JobName")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Profession")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("Stamina")
+                        .HasColumnType("int");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.HasKey("ColonId");
 
-                    b.HasKey("Id");
-
-                    b.ToTable("Colons");
+                    b.ToTable("ScColon");
                 });
 
-            modelBuilder.Entity("StarColonies.Infrastructures.data.Entities.StarColoniesUser", b =>
+            modelBuilder.Entity("StarColonies.Infrastructures.Entities.StarColoniesEnemy", b =>
                 {
-                    b.Property<string>("Id")
+                    b.Property<string>("EnemyId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("StarColoniesMissionMissionId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("EnemyId");
+
+                    b.HasIndex("StarColoniesMissionMissionId");
+
+                    b.ToTable("ScEnemy");
+                });
+
+            modelBuilder.Entity("StarColonies.Infrastructures.Entities.StarColoniesEnemyType", b =>
+                {
+                    b.Property<string>("EnemyTypeId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("EnemyTypeId");
+
+                    b.ToTable("ScEnemyType");
+                });
+
+            modelBuilder.Entity("StarColonies.Infrastructures.Entities.StarColoniesMission", b =>
+                {
+                    b.Property<string>("MissionId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("MissionId");
+
+                    b.ToTable("ScMission");
+                });
+
+            modelBuilder.Entity("StarColonies.Infrastructures.Entities.StarColoniesTeam", b =>
+                {
+                    b.Property<string>("TeamId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("TeamId");
+
+                    b.ToTable("ScTeam");
+                });
+
+            modelBuilder.Entity("StarColonies.Infrastructures.Entities.StarColoniesUser", b =>
+                {
+                    b.Property<string>("UserId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("AccessFailedCount")
@@ -271,8 +270,7 @@ namespace StarColonies.Infrastructures.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<string>("FirstName")
-                        .IsRequired()
+                    b.Property<string>("Id")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("LockoutEnabled")
@@ -304,11 +302,15 @@ namespace StarColonies.Infrastructures.Migrations
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
 
+                    b.Property<string>("UserColonColonId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
-                    b.HasKey("Id");
+                    b.HasKey("UserId");
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
@@ -318,35 +320,24 @@ namespace StarColonies.Infrastructures.Migrations
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
+                    b.HasIndex("UserColonColonId");
+
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("TypeDefis", b =>
+            modelBuilder.Entity("StarColoniesColonStarColoniesTeam", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                    b.Property<string>("ColonsTeamColonId")
+                        .HasColumnType("nvarchar(450)");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<string>("TeamsTeamId")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("Nom")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.HasKey("ColonsTeamColonId", "TeamsTeamId");
 
-                    b.HasKey("Id");
+                    b.HasIndex("TeamsTeamId");
 
-                    b.ToTable("TypeDefis");
-                });
-
-            modelBuilder.Entity("Defis", b =>
-                {
-                    b.HasOne("TypeDefis", "TypeDefis")
-                        .WithMany("Defis")
-                        .HasForeignKey("TypeDefisId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("TypeDefis");
+                    b.ToTable("StarColoniesColonStarColoniesTeam");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -360,7 +351,7 @@ namespace StarColonies.Infrastructures.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("StarColonies.Infrastructures.data.Entities.StarColoniesUser", null)
+                    b.HasOne("StarColonies.Infrastructures.Entities.StarColoniesUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -369,7 +360,7 @@ namespace StarColonies.Infrastructures.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("StarColonies.Infrastructures.data.Entities.StarColoniesUser", null)
+                    b.HasOne("StarColonies.Infrastructures.Entities.StarColoniesUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -384,7 +375,7 @@ namespace StarColonies.Infrastructures.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("StarColonies.Infrastructures.data.Entities.StarColoniesUser", null)
+                    b.HasOne("StarColonies.Infrastructures.Entities.StarColoniesUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -393,45 +384,64 @@ namespace StarColonies.Infrastructures.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("StarColonies.Infrastructures.data.Entities.StarColoniesUser", null)
+                    b.HasOne("StarColonies.Infrastructures.Entities.StarColoniesUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("MissionBete", b =>
+            modelBuilder.Entity("StarColonies.Infrastructures.Entities.StarColoniesEnemy", b =>
                 {
-                    b.HasOne("Defis", "Defis")
-                        .WithMany("MissionBetes")
-                        .HasForeignKey("DefisId")
+                    b.HasOne("StarColonies.Infrastructures.Entities.StarColoniesMission", null)
+                        .WithMany("MissionEnemies")
+                        .HasForeignKey("StarColoniesMissionMissionId");
+                });
+
+            modelBuilder.Entity("StarColonies.Infrastructures.Entities.StarColoniesEnemyType", b =>
+                {
+                    b.HasOne("StarColonies.Infrastructures.Entities.StarColoniesEnemy", null)
+                        .WithOne("EnemyType")
+                        .HasForeignKey("StarColonies.Infrastructures.Entities.StarColoniesEnemyType", "EnemyTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("StarColonies.Infrastructures.Entities.StarColoniesUser", b =>
+                {
+                    b.HasOne("StarColonies.Infrastructures.Entities.StarColoniesColon", "UserColon")
+                        .WithMany()
+                        .HasForeignKey("UserColonColonId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Mission", "Mission")
-                        .WithMany("MissionBetes")
-                        .HasForeignKey("MissionId")
+                    b.Navigation("UserColon");
+                });
+
+            modelBuilder.Entity("StarColoniesColonStarColoniesTeam", b =>
+                {
+                    b.HasOne("StarColonies.Infrastructures.Entities.StarColoniesColon", null)
+                        .WithMany()
+                        .HasForeignKey("ColonsTeamColonId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Defis");
-
-                    b.Navigation("Mission");
+                    b.HasOne("StarColonies.Infrastructures.Entities.StarColoniesTeam", null)
+                        .WithMany()
+                        .HasForeignKey("TeamsTeamId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
-            modelBuilder.Entity("Defis", b =>
+            modelBuilder.Entity("StarColonies.Infrastructures.Entities.StarColoniesEnemy", b =>
                 {
-                    b.Navigation("MissionBetes");
+                    b.Navigation("EnemyType")
+                        .IsRequired();
                 });
 
-            modelBuilder.Entity("Mission", b =>
+            modelBuilder.Entity("StarColonies.Infrastructures.Entities.StarColoniesMission", b =>
                 {
-                    b.Navigation("MissionBetes");
-                });
-
-            modelBuilder.Entity("TypeDefis", b =>
-                {
-                    b.Navigation("Defis");
+                    b.Navigation("MissionEnemies");
                 });
 #pragma warning restore 612, 618
         }

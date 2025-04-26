@@ -2,13 +2,9 @@
 
 public class Colon
 { 
-        public int Id { get; set; }
-        public string Name { get; set; } = default!;
-        public string Profession { get; set; } = default!;
-        public int Force { get; set; }
-        public int Endurance { get; set; }
-
-        public string UserId { get; set; } = default!;
-        
-
+    public string Name { get; set; } = default!;
+    public int Force { get; set; }
+    public int Stamina { get; set; }
+    public JobName JobName { get; set; } = default!;
+    public IList<Team> Teams { get; set; } = new List<Team>();
 }

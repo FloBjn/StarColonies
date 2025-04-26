@@ -10,9 +10,9 @@
     <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
     @* name field *@
     <div class="form-floating mb-3">
-        <input asp-for="Input.FirstName" class="form-control" autocomplete="username" aria-required="true" placeholder="your name" />
-        <label asp-for="Input.FirstName" class="form-label text-black">Votre pseudo</label>
-        <span asp-validation-for="Input.FirstName" class="text-danger"></span>
+        <input asp-for="Input.Name" class="form-control" autocomplete="username" aria-required="true" placeholder="your name" />
+        <label asp-for="Input.Name" class="form-label text-black">Votre pseudo</label>
+        <span asp-validation-for="Input.Name" class="text-danger"></span>
     </div>
     @* date naissance field *@
     <div class="form-floating mb-3">
@@ -61,9 +61,10 @@
     <div class="form-floating mb-3">
         <select asp-for="Input.Profession" class="form-control" aria-required="true">
             <option value="">-- Choisir une profession --</option>
-            <option value="Ingénieur">Ingénieur</option>
-            <option value="Médecin">Médecin</option>
-            <option value="Explorateur">Explorateur</option>
+            <option value="0">Ingénieur</option>
+            <option value="1">Soldat</option>
+            <option value="2">Scientifique</option>
+            <option value="3">Medecin</option>
         </select>
         <label asp-for="Input.Profession" class="form-label text-black">Choisir une proffession</label>
         <span asp-validation-for="Input.Profession" class="text-danger"></span>

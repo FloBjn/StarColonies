@@ -2,17 +2,19 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using StarColonies.Domains;
-using StarColonies.Infrastructures.data.Entities;
+using StarColonies.Infrastructures.Entities;
 
 namespace StarColonies.Infrastructures.data;
 
 public class StarColoniesContext : IdentityDbContext<StarColoniesUser>
 {
+    public DbSet<StarColoniesColon> ScColon { get; set; }
+    public DbSet<StarColoniesUser> ScUser { get; set; }
+    public DbSet<StarColoniesEnemyType> ScEnemyType { get; set; }
+    public DbSet<StarColoniesEnemy> ScEnemy { get; set; }
+    public DbSet<StarColoniesMission> ScMission { get; set; }
+    public DbSet<StarColoniesTeam> ScTeam { get; set; }
     
-    public DbSet<Colon> Colons { get; set; }
-    public DbSet<Mission> Missions { get; set; }
-    
-    public DbSet<Defis> Defis { get; set; }
 
     public StarColoniesContext(DbContextOptions<StarColoniesContext> options)
         : base(options)
@@ -24,30 +26,55 @@ public class StarColoniesContext : IdentityDbContext<StarColoniesUser>
         base.OnConfiguring(optionsBuilder);
         optionsBuilder.ConfigureWarnings(w => w.Ignore(RelationalEventId.PendingModelChangesWarning));
     }
-
+    
+    
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
-
-        // Tu peux ajouter ici tes configurations manuelles (si tu en as)
-        // builder.ApplyConfiguration(new TonEntityConfiguration());
-        builder.Entity<MissionBete>()
-            .HasKey(mb => new { mb.MissionId, BeteId = mb.DefisId });
-
-        builder.Entity<MissionBete>()
-            .HasOne(mb => mb.Mission)
-            .WithMany(m => m.MissionBetes)
-            .HasForeignKey(mb => mb.MissionId);
-
-        builder.Entity<MissionBete>()
-            .HasOne(mb => mb.Defis)
-            .WithMany(b => b.MissionBetes)
-            .HasForeignKey(mb => mb.DefisId);
         
-        builder.Entity<Defis>()
-            .HasOne(d => d.TypeDefis)
-            .WithMany(t => t.Defis)
-            .HasForeignKey(d => d.TypeDefisId);
+        //Définir PK
+        builder.Entity<StarColoniesColon>().HasKey(scj => scj.ColonId);
+        //PK générée toute seule
+        builder.Entity<StarColoniesColon>()
+            .Property(e => e.ColonId)
+            .ValueGeneratedOnAdd();
+        //Définir les associations liées aux teams
+        builder.Entity<StarColoniesColon>()
+            .HasMany(t => t.Teams)
+            .WithMany(c => c.ColonsTeam);
+        
+        builder.Entity<StarColoniesUser>().HasKey(scu => scu.UserId);
+        builder.Entity<StarColoniesUser>()
+            .Property(e => e.UserId)
+            .ValueGeneratedOnAdd();
+        builder.Entity<StarColoniesUser>()
+            .HasOne(u => u.UserColon);
+        
+        builder.Entity<StarColoniesEnemyType>().HasKey(sct => sct.EnemyTypeId);
+        builder.Entity<StarColoniesEnemyType>()
+            .Property(e => e.EnemyTypeId)
+            .ValueGeneratedOnAdd();
+
+        builder.Entity<StarColoniesEnemy>().HasKey(sce => sce.EnemyId);
+        builder.Entity<StarColoniesEnemy>()
+            .Property(e => e.EnemyId)
+            .ValueGeneratedOnAdd();
+        builder.Entity<StarColoniesEnemy>()
+            .HasOne(e => e.EnemyType)
+            .WithOne()
+            .HasForeignKey<StarColoniesEnemyType>(e => e.EnemyTypeId);
+        
+        builder.Entity<StarColoniesMission>().HasKey(scm => scm.MissionId);
+        builder.Entity<StarColoniesMission>()
+            .Property(e => e.MissionId)
+            .ValueGeneratedOnAdd();
+        builder.Entity<StarColoniesMission>()
+            .HasMany(m => m.MissionEnemies);
+        
+        builder.Entity<StarColoniesTeam>().HasKey(sct => sct.TeamId);
+        builder.Entity<StarColoniesTeam>()
+            .Property(e => e.TeamId)
+            .ValueGeneratedOnAdd();
     }
     
 }
