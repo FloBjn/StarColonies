@@ -8,8 +8,10 @@ public class ColonMapper
     public static Colon ToDomain(StarColoniesColon entity) => new Colon
     {
         Name = entity.Name,
+        Level = entity.Level,
         Force = entity.Force,
         Stamina = entity.Stamina,
+        NumberResource = entity.NumberResource,
         JobName = JobNameMapper.ToJobName(entity.JobName),
         Teams = entity.Teams.Select(TeamMapper.ToDomain).ToList()
     };
@@ -17,8 +19,10 @@ public class ColonMapper
     public static StarColoniesColon ToEntity(Colon colon) => new StarColoniesColon
     {
         Name = colon.Name,
+        Level = colon.Level,
         Force = colon.Force,
         Stamina = colon.Stamina,
+        NumberResource = colon.NumberResource,
         JobName = JobNameMapper.ToInt(colon.JobName),
         Teams = colon.Teams.Select(TeamMapper.ToEntity).ToList()
     };
