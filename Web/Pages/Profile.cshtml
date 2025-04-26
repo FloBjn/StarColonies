@@ -1,7 +1,7 @@
 ﻿@page
 @using Microsoft.AspNetCore.Identity
 @using Microsoft.AspNetCore.Mvc.TagHelpers
-@using StarColonies.Infrastructures.data.Entities
+@using StarColonies.Infrastructures.Entities
 @model ProfileModel
 
 @inject SignInManager<StarColoniesUser> SignInManager
@@ -13,7 +13,7 @@
 {
     <div class="position-relative text-center mb-4 w-100">
         <div class="flex-fill text-center">
-            <h1 class="m-0">Votre profil @Model.UserConnected?.FirstName</h1>
+            <h1 class="m-0">Votre profil @Model.UserConnected?.UserColon.Name</h1>
         </div>
         <form id="logoutForm" class="position-absolute top-0 end-0" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Index", new { area = "" })">
             <button id="logout" type="submit" class="w-100 btn btn-lg custom-disc-button">DECONNEXION</button>
@@ -56,7 +56,7 @@
             <form class="mb-5 d-flex flex-wrap w-75 mx-auto" id="PersonalInfosForm" method="post">
                 @* name field *@
                 <div class="form-floating mb-3 w-100">
-                    <input asp-for="InputPersonal.FirstName" class="form-control" autocomplete="username" aria-required="true" value="@Model.UserConnected?.FirstName" />
+                    <input asp-for="InputPersonal.FirstName" class="form-control" autocomplete="username" aria-required="true" value="@Model.UserConnected?.UserColon.Name" />
                     <label asp-for="InputPersonal.FirstName" class="form-label text-black">Votre pseudo</label>
                     <span asp-validation-for="InputPersonal.FirstName" class="text-danger"></span>
                 </div>

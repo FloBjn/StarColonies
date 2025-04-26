@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Security.Claims;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading;
@@ -20,8 +21,10 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using StarColonies.Domains;
+using StarColonies.Domains.interfaces;
 using StarColonies.Infrastructures.data;
-using StarColonies.Infrastructures.data.Entities;
+using StarColonies.Infrastructures.Entities;
+using StarColonies.Infrastructures.Mappers;
 
 namespace StarColonies.Web.Pages
 {
@@ -35,6 +38,7 @@ namespace StarColonies.Web.Pages
         private readonly IEmailSender _emailSender;
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly StarColoniesContext _context;
+        private readonly IUserRepository _userRepository;
 
         public RegisterModel(
             UserManager<StarColoniesUser> userManager,
@@ -185,7 +189,7 @@ namespace StarColonies.Web.Pages
                     await UploadImageProd(user);
                 }
 
-                await _userRepository.AddAsync(user);
+                // await _userRepository.AddAsync(user);
                 await _context.SaveChangesAsync();
 
                 var scUser = UserMapper.ToEntity(user);
@@ -197,8 +201,19 @@ namespace StarColonies.Web.Pages
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
+                    
+                    Console.Out.Write("scUserId : " + scUser.Id);
 
                     var userId = await _userManager.GetUserIdAsync(scUser);
+                    Console.Out.Write("userId : " + userId);
+
+                    var claims = new List<Claim>
+                    {
+                        new (ClaimTypes.NameIdentifier, userId), // Ajouter l'ID comme claim
+                    };
+                    await _userManager.AddClaimsAsync(scUser, claims);
+                    
+                    
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(scUser);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
                     var callbackUrl = Url.Page(

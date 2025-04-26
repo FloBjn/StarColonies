@@ -246,7 +246,7 @@ namespace StarColonies.Infrastructures.Migrations
 
             modelBuilder.Entity("StarColonies.Infrastructures.Entities.StarColoniesUser", b =>
                 {
-                    b.Property<string>("UserId")
+                    b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("nvarchar(450)");
 
@@ -259,6 +259,10 @@ namespace StarColonies.Infrastructures.Migrations
                     b.Property<DateOnly>("BirthDate")
                         .HasColumnType("date");
 
+                    b.Property<string>("ColonId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
@@ -269,9 +273,6 @@ namespace StarColonies.Infrastructures.Migrations
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
-
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -310,7 +311,7 @@ namespace StarColonies.Infrastructures.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
-                    b.HasKey("UserId");
+                    b.HasKey("Id");
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");

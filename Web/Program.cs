@@ -15,7 +15,7 @@ builder.Services.AddDbContext<StarColoniesContext>(options =>
 });
 
 builder.Services
-    .AddDefaultIdentity<StarColoniesUser>()
+    .AddDefaultIdentity<StarColoniesUser>(options => options.SignIn.RequireConfirmedAccount = false)
     .AddEntityFrameworkStores<StarColoniesContext>();
 
 builder.Services.AddTransient<ReverseProxyLinksMiddleware>();

@@ -2,7 +2,8 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using StarColonies.Infrastructures.data.Entities;
+using StarColonies.Domains.interfaces;
+using StarColonies.Infrastructures.Entities;
 
 namespace StarColonies.Web.Pages;
 
@@ -21,6 +22,13 @@ public class ProfileModel : PageModel
     
     public async Task<IActionResult> OnGetAsync()
     {
+        Console.WriteLine($"IsAuthenticated: {User.Identity.IsAuthenticated}");
+        Console.WriteLine($"Name: {User.Identity.Name}");
+        Console.WriteLine($"Claims:");
+        foreach (var claim in User.Claims)
+        {
+            Console.WriteLine($" - {claim.Type}: {claim.Value}");
+        }
         UserConnected = await _userManager.GetUserAsync(User);
         if (UserConnected != null) BirthDateFormatted = UserConnected.BirthDate.ToString("yyyy-MM-dd");
 

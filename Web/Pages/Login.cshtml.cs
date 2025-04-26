@@ -112,12 +112,16 @@ namespace StarColonies.Web.Pages
 
             if (ModelState.IsValid)
             {
+                Console.Out.WriteLine("email : "+Input.EmailOrUsername);
+                Console.Out.WriteLine("pass : "+Input.Password);
                 //Essayer de récupérer l'utilisateur par nom d'utilisateur, sinon par email
                 var user = await _userManager.FindByNameAsync(Input.EmailOrUsername)
                            ?? await _userManager.FindByEmailAsync(Input.EmailOrUsername);
 
+                Console.Out.WriteLine("user :" + (user == null ? "null" : user.UserName));
                 if (user != null)
                 {
+                    Console.Out.WriteLine("userName : " + user.UserName);
                     var result = await _signInManager.PasswordSignInAsync(
                         user.UserName, Input.Password, Input.RememberMe, lockoutOnFailure: false);
 

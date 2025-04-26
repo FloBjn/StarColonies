@@ -43,9 +43,9 @@ public class StarColoniesContext : IdentityDbContext<StarColoniesUser>
             .HasMany(t => t.Teams)
             .WithMany(c => c.ColonsTeam);
         
-        builder.Entity<StarColoniesUser>().HasKey(scu => scu.UserId);
+        builder.Entity<StarColoniesUser>().HasKey(scu => scu.Id);
         builder.Entity<StarColoniesUser>()
-            .Property(e => e.UserId)
+            .Property(e => e.Id)
             .ValueGeneratedOnAdd();
         builder.Entity<StarColoniesUser>()
             .HasOne(u => u.UserColon);

@@ -16,6 +16,8 @@ public static class UserMapper
     {
         Avatar = user.Avatar,
         BirthDate = user.BirthDate,
-        UserColon = ColonMapper.ToEntity(user.UserColon)
+        UserColon = ColonMapper.ToEntity(user.UserColon),
+        ColonId = ColonMapper.ToEntity(user.UserColon).ColonId
+        
     };
 }

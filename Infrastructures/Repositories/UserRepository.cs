@@ -32,7 +32,7 @@ public class UserRepository : IUserRepository
         var entity = await _context.ScUser
             .Include(u => u.UserColon)
             .ThenInclude(c=> c.Teams)
-            .FirstOrDefaultAsync(u => u.UserId == userId);
+            .FirstOrDefaultAsync(u => u.Id == userId);
 
         return entity is null ? null : UserMapper.ToDomain(entity);
     }
