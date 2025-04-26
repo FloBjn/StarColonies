@@ -4,7 +4,7 @@ namespace StarColonies.Infrastructures.Entities;
 
 public class StarColoniesUser : IdentityUser
 {
-    public int UserId { get; set; }
+    public string UserId { get; set; }
     public string? Avatar { get; set; }
     public required DateOnly BirthDate { get; set; }
     

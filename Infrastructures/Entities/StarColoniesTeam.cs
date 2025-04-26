@@ -2,6 +2,7 @@
 
 public class StarColoniesTeam
 {
-    public int TeamId { get; set; }
+    public string TeamId { get; set; }
     public string Name { get; set; }
+    public IList<StarColoniesColon> ColonsTeam { get; set; } = new List<StarColoniesColon>();
 }

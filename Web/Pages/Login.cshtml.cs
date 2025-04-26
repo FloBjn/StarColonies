@@ -14,7 +14,6 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
-using StarColonies.Infrastructures.data.Entities;
 using StarColonies.Infrastructures.Entities;
 
 namespace StarColonies.Web.Pages

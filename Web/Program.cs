@@ -1,13 +1,9 @@
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using StarColonies.Domains.interfaces;
-using StarColonies.Infrastructures;
 using StarColonies.Infrastructures.data;
-using StarColonies.Infrastructures.data.Entities;
 using StarColonies.Infrastructures.Entities;
 using StarColonies.Infrastructures.Repositories;
 using StarColonies.Web.Middlewares;
-;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,6 +22,7 @@ builder.Services.AddTransient<ReverseProxyLinksMiddleware>();
 
 //Interfaces
 builder.Services.AddScoped<IMissionRepository, MissionRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 var app = builder.Build();
 

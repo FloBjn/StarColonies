@@ -10,7 +10,8 @@ public class ColonMapper
         Name = entity.Name,
         Force = entity.Force,
         Stamina = entity.Stamina,
-        Job = JobMapper.ToDomain(entity.Job)
+        JobName = JobNameMapper.ToJobName(entity.JobName),
+        Teams = entity.Teams.Select(TeamMapper.ToDomain).ToList()
     };
 
     public static StarColoniesColon ToEntity(Colon colon) => new StarColoniesColon
@@ -18,6 +19,7 @@ public class ColonMapper
         Name = colon.Name,
         Force = colon.Force,
         Stamina = colon.Stamina,
-        Job = JobMapper.ToEntity(colon.Job)
+        JobName = JobNameMapper.ToInt(colon.JobName),
+        Teams = colon.Teams.Select(TeamMapper.ToEntity).ToList()
     };
 }

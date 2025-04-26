@@ -2,6 +2,7 @@
 using StarColonies.Domains;
 using StarColonies.Domains.interfaces;
 using StarColonies.Infrastructures.data;
+using StarColonies.Infrastructures.Mappers;
 
 namespace StarColonies.Infrastructures.Repositories;
 
@@ -16,18 +17,25 @@ public class MissionRepository : IMissionRepository
     
     public async Task<List<Mission>> GetAllAsync()
     {
-        return await _context.ScMission
-            .Include(m => m.MissionBetes)
-            .ThenInclude(mb => mb.Defis)
+        var entities = await _context.ScMission
+            .Include(e => e.MissionEnemies)
+            .ThenInclude(et => et.EnemyType)
             .ToListAsync();
+        
+        //pas sûre du return, je renvoie une liste possiblement vide, est-ce un problème?
+        return entities.Select(MissionMapper.ToDomain).ToList();
     }
 
-    public async Task<Mission?> GetByIdAsync(int id)
+    public async Task<Mission?> GetByIdAsync(string missionId)
     {
-        return await _context.ScMission
-            .Include(m => m.MissionBetes)
-            .ThenInclude(mb => mb.Defis)
-            .ThenInclude(d => d.TypeDefis)
-            .FirstOrDefaultAsync(m => m.Id == id);
+        var entity = await _context.ScMission
+            .Include(e => e.MissionEnemies)
+            .ThenInclude(et => et.EnemyType)
+            .FirstOrDefaultAsync(m => m.MissionId == missionId);
+
+        
+        //pas sûre du return, je renvoie une liste possiblement vide, est-ce un problème?
+        return entity is null ? null : MissionMapper.ToDomain(entity);
+        
     }
 }
