@@ -14,6 +14,8 @@ public class StarColoniesContext : IdentityDbContext<StarColoniesUser>
     public DbSet<StarColoniesEnemy> ScEnemy { get; set; }
     public DbSet<StarColoniesMission> ScMission { get; set; }
     public DbSet<StarColoniesTeam> ScTeam { get; set; }
+    public DbSet<StarColoniesBonusObject> ScBonusObject { get; set; }
+    public DbSet<StarColoniesMissionHistory> ScMissionHistory { get; set; }
     
 
     public StarColoniesContext(DbContextOptions<StarColoniesContext> options)
@@ -31,50 +33,103 @@ public class StarColoniesContext : IdentityDbContext<StarColoniesUser>
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
-        
-        //Définir PK
-        builder.Entity<StarColoniesColon>().HasKey(scj => scj.ColonId);
-        //PK générée toute seule
-        builder.Entity<StarColoniesColon>()
-            .Property(e => e.ColonId)
-            .ValueGeneratedOnAdd();
-        //Définir les associations liées aux teams
-        builder.Entity<StarColoniesColon>()
-            .HasMany(t => t.Teams)
-            .WithMany(c => c.ColonsTeam);
-        
-        builder.Entity<StarColoniesUser>().HasKey(scu => scu.UserId);
-        builder.Entity<StarColoniesUser>()
-            .Property(e => e.UserId)
-            .ValueGeneratedOnAdd();
-        builder.Entity<StarColoniesUser>()
-            .HasOne(u => u.UserColon);
-        
-        builder.Entity<StarColoniesEnemyType>().HasKey(sct => sct.EnemyTypeId);
-        builder.Entity<StarColoniesEnemyType>()
-            .Property(e => e.EnemyTypeId)
-            .ValueGeneratedOnAdd();
 
-        builder.Entity<StarColoniesEnemy>().HasKey(sce => sce.EnemyId);
-        builder.Entity<StarColoniesEnemy>()
-            .Property(e => e.EnemyId)
-            .ValueGeneratedOnAdd();
-        builder.Entity<StarColoniesEnemy>()
-            .HasOne(e => e.EnemyType)
-            .WithOne()
-            .HasForeignKey<StarColoniesEnemyType>(e => e.EnemyTypeId);
+        builder.Entity<StarColoniesColon>(entity =>
+        {
+            //Définir PK
+            entity.HasKey(scj => scj.ColonId);
+            //PK générée toute seule
+            entity.Property(e => e.ColonId)
+                .ValueGeneratedOnAdd();
+            //Définir les associations
+            entity.HasMany(t => t.Teams)
+                .WithMany(c => c.ColonsTeam);
+        });
         
-        builder.Entity<StarColoniesMission>().HasKey(scm => scm.MissionId);
-        builder.Entity<StarColoniesMission>()
-            .Property(e => e.MissionId)
-            .ValueGeneratedOnAdd();
-        builder.Entity<StarColoniesMission>()
-            .HasMany(m => m.MissionEnemies);
+
+        builder.Entity<StarColoniesUser>(entity =>
+        {
+            entity.HasKey(scu => scu.UserId);
+            
+            entity.Property(e => e.UserId)
+                        .ValueGeneratedOnAdd();
+            
+            entity.HasOne(u => u.UserColon)
+                .WithOne()
+                .HasForeignKey<StarColoniesUser>(e => e.ColonId)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
         
-        builder.Entity<StarColoniesTeam>().HasKey(sct => sct.TeamId);
-        builder.Entity<StarColoniesTeam>()
-            .Property(e => e.TeamId)
-            .ValueGeneratedOnAdd();
+
+        builder.Entity<StarColoniesEnemyType>(entity =>
+        {
+            entity.HasKey(sct => sct.EnemyTypeId);
+            
+            entity.Property(e => e.EnemyTypeId)
+                .ValueGeneratedOnAdd();
+        });
+        
+
+        builder.Entity<StarColoniesEnemy>(entity =>
+        {
+            entity.HasKey(sce => sce.EnemyId);
+            
+            entity.Property(e => e.EnemyId)
+                .ValueGeneratedOnAdd();
+            
+            entity.HasOne(e => e.EnemyType)
+                .WithOne()
+                .HasForeignKey<StarColoniesEnemyType>(e => e.EnemyTypeId);
+        });
+        
+
+        builder.Entity<StarColoniesMission>(entity =>
+        {
+            entity.HasKey(scj => scj.MissionId);
+            
+            entity.Property(e => e.MissionId)
+                .ValueGeneratedOnAdd();
+            
+            entity.HasMany(m => m.MissionEnemies);
+        });
+        
+        
+        builder.Entity<StarColoniesTeam>(entity =>
+        {
+            entity.HasKey(sct => sct.TeamId);
+            
+            entity.Property(e => e.TeamId)
+                .ValueGeneratedOnAdd();
+        });
+        
+
+        builder.Entity<StarColoniesBonusObject>(entity =>
+        {
+            entity.HasKey(scbo => scbo.BonusObjectId);
+            
+            entity.Property(scbo => scbo.BonusObjectId)
+                .ValueGeneratedOnAdd();
+        });
+        
+        
+        builder.Entity<StarColoniesMissionHistory>(entity =>
+        {
+            entity.HasKey(e => e.MissionHistoryId);
+            
+            entity.Property(e => e.MissionHistoryId)
+                .ValueGeneratedOnAdd();
+
+            entity.HasOne(e => e.Mission)
+                .WithMany()
+                .HasForeignKey(e => e.MissionId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasOne(e => e.Team)
+                .WithMany()
+                .HasForeignKey(e => e.TeamId)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
+        
     }
     
 }
