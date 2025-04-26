@@ -43,7 +43,8 @@ namespace StarColonies.Web.Pages
             ILogger<RegisterModel> logger,
             IEmailSender emailSender,
             IWebHostEnvironment webHostEnvironment,
-            StarColoniesContext context)
+            StarColoniesContext context,
+            IUserRepository userRepository)
         {
             _userManager = userManager;
             _userStore = userStore;
@@ -53,6 +54,7 @@ namespace StarColonies.Web.Pages
             _emailSender = emailSender;
             _webHostEnvironment = webHostEnvironment;
             _context = context;
+            _userRepository = userRepository;
         }
 
         /// <summary>
@@ -83,11 +85,8 @@ namespace StarColonies.Web.Pages
             
             [Required]
             [Display(Name = "FirstName")]
-            public string FirstName { get; set; }
-            /// <summary>
-            ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-            ///     directly from your code. This API may change or be removed in future releases.
-            /// </summary>
+            public string Name { get; set; }
+
             [Required]
             [EmailAddress]
             [Display(Name = "Email")]
@@ -117,16 +116,16 @@ namespace StarColonies.Web.Pages
             [Display(Name = "Date de naissance")]
             public DateOnly BirthDate { get; set; }
             
-#nullable enable
+            #nullable enable
 
             [Display(Name = "Photo de profil")]
             [DataType(DataType.ImageUrl)]
             public IFormFile? Avatar { get; set; }
-#nullable disable
+            #nullable disable
             
             [Required]
             [Display(Name = "Profession")]
-            public string Profession { get; set; } = string.Empty;
+            public int Profession { get; set; }
 
             [Range(0, 7)]
             [Display(Name = "Force")]
@@ -162,8 +161,20 @@ namespace StarColonies.Web.Pages
 
             if (ModelState.IsValid)
             {
-                var user = CreateUser();
-
+                var colon = new Colon
+                {
+                    Name = Input.Name,
+                    JobName = JobNameMapper.ToJobName(Input.Profession),
+                    Force = Input.Force,
+                    Stamina = Input.Endurance,
+                };
+                
+                var user = new User
+                {
+                    BirthDate = Input.BirthDate,
+                    UserColon = colon,
+                };
+                
                 // Traitement de l'image avant la création de l'utilisateur
                 if (_webHostEnvironment.IsDevelopment())
                 {
@@ -174,30 +185,21 @@ namespace StarColonies.Web.Pages
                     await UploadImageProd(user);
                 }
 
-                var colon = new Colon
-                {
-                    Name = Input.FirstName,
-                    Profession = Input.Profession,
-                    Force = Input.Force,
-                    Endurance = Input.Endurance,
-                    UserId = user.Id
-                };
-
-                _context.Colons.Add(colon);
+                await _userRepository.AddAsync(user);
                 await _context.SaveChangesAsync();
 
-                await _userStore.SetUserNameAsync(user, Input.FirstName, CancellationToken.None);
-                await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
-                user.FirstName = Input.FirstName;
-                user.BirthDate = Input.BirthDate;
-                var result = await _userManager.CreateAsync(user, Input.Password);
+                var scUser = UserMapper.ToEntity(user);
+
+                await _userStore.SetUserNameAsync(scUser, Input.Name, CancellationToken.None);
+                await _emailStore.SetEmailAsync(scUser, Input.Email, CancellationToken.None);
+                var result = await _userManager.CreateAsync(scUser, Input.Password);
 
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
 
-                    var userId = await _userManager.GetUserIdAsync(user);
-                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                    var userId = await _userManager.GetUserIdAsync(scUser);
+                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(scUser);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
                     var callbackUrl = Url.Page(
                         "/Account/ConfirmEmail",
@@ -214,10 +216,11 @@ namespace StarColonies.Web.Pages
                     }
                     else
                     {
-                        await _signInManager.SignInAsync(user, isPersistent: false);
+                        await _signInManager.SignInAsync(scUser, isPersistent: false);
                         return LocalRedirect(returnUrl);
                     }
                 }
+                
                 foreach (var error in result.Errors)
                 {
                     ModelState.AddModelError(string.Empty, error.Description);
@@ -228,7 +231,7 @@ namespace StarColonies.Web.Pages
             return Page();
         }
 
-        private async Task UploadImageDev(StarColoniesUser user)
+        private async Task UploadImageDev(User user)
         {
             if (Input.Avatar != null && Input.Avatar.Length > 0)
             {
@@ -247,7 +250,7 @@ namespace StarColonies.Web.Pages
             }
         }
         
-        private async Task UploadImageProd(StarColoniesUser user)
+        private async Task UploadImageProd(User user)
         {
             if (Input.Avatar != null && Input.Avatar.Length > 0)
             {
@@ -264,20 +267,6 @@ namespace StarColonies.Web.Pages
 
                 // Affecte le chemin de l’image à l’utilisateur
                 user.Avatar = $"/Q230243/image/{fileName}";
-            }
-        }
-
-        private StarColoniesUser CreateUser()
-        {
-            try
-            {
-                return Activator.CreateInstance<StarColoniesUser>();
-            }
-            catch
-            {
-                throw new InvalidOperationException($"Can't create an instance of '{nameof(StarColoniesUser)}'. " +
-                    $"Ensure that '{nameof(StarColoniesUser)}' is not an abstract class and has a parameterless constructor, or alternatively " +
-                    $"override the register page in /Areas/Identity/Pages/Account/Register.cshtml");
             }
         }
 
