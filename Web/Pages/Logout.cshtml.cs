@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using StarColonies.Infrastructures.data.Entities;
 using StarColonies.Infrastructures.Entities;
 
 namespace StarColonies.Web.Pages;

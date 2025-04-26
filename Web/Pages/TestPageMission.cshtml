@@ -3,17 +3,17 @@
 
 <h2>Liste des Missions</h2>
 
-@foreach (var mission in Model.Missions)
+@foreach (var mission in await Model.GetAllMissions())
 {
 <div style="margin-bottom: 1rem; padding: 1rem; border: 1px solid #ccc;">
-    <h3>@mission.Nom (@mission.Niveau)</h3>
+    <h3>@mission.Name (@mission.Level)</h3>
     <ul>
-        @foreach (var defis in mission.Defis)
+        @foreach (var defis in mission.MissionEnemies)
         {
             <li>
                 <div>
-                    <p>@defis.Nom</p>
-                    <p>Endurance : @defis.Endurance</p>
+                    <p>@defis.Name</p>
+                    <p>Endurance : @defis.Stamina</p>
                     <p>Force : @defis.Force</p>
                 </div>
             </li>

@@ -3,5 +3,5 @@
 public class Team
 {
     public string Name { get; set; }
-    public ICollection<Colon> ColonsTeam { get; set; } = new List<Colon>();
+    public IList<Colon> ColonsTeam { get; set; } = new List<Colon>();
 }

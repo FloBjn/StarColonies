@@ -2,6 +2,6 @@
 
 public class StarColoniesEnemyType
 {
-    public int EnemyTypeId { get; set; }
+    public string EnemyTypeId { get; set; }
     public required string Name { get; set; }
 }

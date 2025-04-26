@@ -2,6 +2,7 @@
 
 public class StarColoniesMission
 {
-    public int MissionId { get; set; }
+    public string MissionId { get; set; }
     public string Name { get; set; }
+    public IList<StarColoniesEnemy> MissionEnemies { get; set; } = new List<StarColoniesEnemy>();
 }

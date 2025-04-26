@@ -18,35 +18,29 @@ public class UserRepository : IUserRepository
 
     public async Task<List<User>> GetAllAsync()
     {
-        var entity = await _context.ScUser
+        var entities = await _context.ScUser
             .Include(u => u.UserColon)
+            .ThenInclude(c=> c.Teams)
             .ToListAsync();
-
-        var toDomain = new List<User>();
-        foreach (var user in entity)
-        {
-            
-            toDomain.Add(UserMapper.ToDomain(user));
-        }
         
         //pas sûre du return, je renvoie une liste possiblement vide, est-ce un problème?
-        return toDomain;
+        return entities.Select(UserMapper.ToDomain).ToList();
     }
 
-    public async Task<User?> GetUserByIdAsync(int userId)
+    public async Task<User?> GetUserByIdAsync(string userId)
     {
         var entity = await _context.ScUser
             .Include(u => u.UserColon)
+            .ThenInclude(c=> c.Teams)
             .FirstOrDefaultAsync(u => u.UserId == userId);
 
         return entity is null ? null : UserMapper.ToDomain(entity);
     }
     
-    /*
     public async Task AddAsync(User user)
     {
         var entity = UserMapper.ToEntity(user);
-        _context.Users.Add(entity);
+        _context.ScUser.Add(entity);
         await _context.SaveChangesAsync();
-    }*/
+    }
 }
