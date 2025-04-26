@@ -10,7 +10,6 @@ public class StarColoniesContext : IdentityDbContext<StarColoniesUser>
 {
     public DbSet<StarColoniesColon> ScColon { get; set; }
     public DbSet<StarColoniesUser> ScUser { get; set; }
-    public DbSet<StarColoniesEnemyType> ScEnemyType { get; set; }
     public DbSet<StarColoniesEnemy> ScEnemy { get; set; }
     public DbSet<StarColoniesMission> ScMission { get; set; }
     public DbSet<StarColoniesTeam> ScTeam { get; set; }
@@ -61,25 +60,12 @@ public class StarColoniesContext : IdentityDbContext<StarColoniesUser>
         });
         
 
-        builder.Entity<StarColoniesEnemyType>(entity =>
-        {
-            entity.HasKey(sct => sct.EnemyTypeId);
-            
-            entity.Property(e => e.EnemyTypeId)
-                .ValueGeneratedOnAdd();
-        });
-        
-
         builder.Entity<StarColoniesEnemy>(entity =>
         {
             entity.HasKey(sce => sce.EnemyId);
             
             entity.Property(e => e.EnemyId)
                 .ValueGeneratedOnAdd();
-            
-            entity.HasOne(e => e.EnemyType)
-                .WithOne()
-                .HasForeignKey<StarColoniesEnemyType>(e => e.EnemyTypeId);
         });
         
 
