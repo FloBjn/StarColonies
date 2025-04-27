@@ -1,7 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using StarColonies.Domains;
 using StarColonies.Domains.interfaces;
 using StarColonies.Infrastructures.data;
+using StarColonies.Infrastructures.Entities;
 using StarColonies.Infrastructures.Mappers;
 
 namespace StarColonies.Infrastructures.Repositories;
@@ -9,7 +12,8 @@ namespace StarColonies.Infrastructures.Repositories;
 public class UserRepository : IUserRepository
 {
     private readonly StarColoniesContext _dbContext;
-
+    private readonly UserManager<StarColoniesUser> _userManager; 
+    
     public UserRepository(StarColoniesContext dbContext)
     {
         _dbContext = dbContext;
@@ -24,6 +28,19 @@ public class UserRepository : IUserRepository
         
         //pas sûre du return, je renvoie une liste possiblement vide, est-ce un problème?
         return entities.Select(UserMapper.ToDomain).ToList();
+    }
+    
+    public async Task<User> GetConnectedUser(ClaimsPrincipal user)
+    {
+        var userConnected = new User();
+        
+        var userDb = await _userManager.GetUserAsync(user);
+        if(userDb != null) userConnected = await GetUserByIdAsync(userDb.Id);
+
+        //Console.WriteLine("username : " + userConnected.Name);
+        //Console.WriteLine("userColon : " + userConnected.UserColon.Name);
+        //BirthDateFormatted = userConnected.BirthDate.ToString("yyyy-MM-dd");
+        return userConnected;
     }
 
     public async Task<User?> GetUserByIdAsync(string userId)

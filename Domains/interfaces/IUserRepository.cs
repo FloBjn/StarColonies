@@ -1,4 +1,6 @@
-﻿namespace StarColonies.Domains.interfaces;
+﻿using System.Security.Claims;
+
+namespace StarColonies.Domains.interfaces;
 
 public interface IUserRepository
 {
@@ -7,4 +9,5 @@ public interface IUserRepository
     Task AddAsync(User user);
     void ModifyUserAsync(User user);
     void DeleteUserAsync(User user);
+    Task<User> GetConnectedUser(ClaimsPrincipal user);
 }

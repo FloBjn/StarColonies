@@ -4,29 +4,32 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using StarColonies.Domains;
 using StarColonies.Domains.interfaces;
-using StarColonies.Infrastructures.Entities;
+//using StarColonies.Infrastructures.Entities;
 
 namespace StarColonies.Web.Pages;
 
 public class ProfileModel : PageModel
 {
-    private readonly UserManager<StarColoniesUser> _userManager;
     private readonly IUserRepository _userRepository;
 
     public User? UserConnected { get; set; }
     
     public string BirthDateFormatted { get; set; } = string.Empty;
     
-    public ProfileModel(UserManager<StarColoniesUser> userManager, IUserRepository userRepository)
+    public ProfileModel(IUserRepository userRepository)
     {
-        _userManager = userManager;
         _userRepository = userRepository;   
+    }
+
+    public async Task<User?> GetConnectedUser()
+    {
+        return await _userRepository.GetConnectedUser(User);
     }
     
     public async Task<IActionResult> OnGetAsync()
     {
-        var userDb = await _userManager.GetUserAsync(User);
-        if(userDb != null) UserConnected = await _userRepository.GetUserByIdAsync(userDb.Id);
+        UserConnected = await GetConnectedUser();
+
         if (UserConnected != null)
         {
             Console.WriteLine("username : " + UserConnected.Name);
