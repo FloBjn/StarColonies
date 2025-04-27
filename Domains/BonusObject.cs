@@ -2,6 +2,7 @@
 
 public class BonusObject
 {
+    public string BonusObjectId { get; set; }
     public string Name { get; set; } = default!;
     public int Price { get; set; }
     public int BonusLevel { get; set; }

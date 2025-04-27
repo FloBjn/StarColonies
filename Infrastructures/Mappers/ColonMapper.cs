@@ -7,6 +7,7 @@ public class ColonMapper
 {
     public static Colon ToDomain(StarColoniesColon entity) => new Colon
     {
+        ColonId = entity.ColonId,
         Name = entity.Name,
         Level = entity.Level,
         Force = entity.Force,
@@ -18,6 +19,7 @@ public class ColonMapper
 
     public static StarColoniesColon ToEntity(Colon colon) => new StarColoniesColon
     {
+        ColonId = colon.ColonId,
         Name = colon.Name,
         Level = colon.Level,
         Force = colon.Force,

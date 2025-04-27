@@ -182,10 +182,12 @@ public class StarColoniesContext : IdentityDbContext<StarColoniesUser>
         
         
         var baseMission = Guid.NewGuid().ToString();
+        var testMission = Guid.NewGuid().ToString();
         
         builder.Entity<StarColoniesMission>().HasData(new List<StarColoniesMission>
                 {
-                    new StarColoniesMission {MissionId = baseMission,Name = "Exploration de la base abandonnée"}
+                    new StarColoniesMission {MissionId = baseMission,Name = "Exploration de la base abandonnée"},
+                    new StarColoniesMission {MissionId = testMission,Name = "Test"}
                 });
         
         
@@ -193,7 +195,9 @@ public class StarColoniesContext : IdentityDbContext<StarColoniesUser>
         {
             entity.HasData(
                 new { MissionId = baseMission, EnemyId = anomalieId },
-                new { MissionId = baseMission, EnemyId = predateurId }
+                new { MissionId = baseMission, EnemyId = predateurId },
+                new { MissionId = testMission, EnemyId = predateurId },
+                new { MissionId = testMission, EnemyId = titanId }
             );
         });
     }

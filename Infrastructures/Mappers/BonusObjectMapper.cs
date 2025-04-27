@@ -7,6 +7,7 @@ public class BonusObjectMapper
 {
     public static BonusObject ToDomain(StarColoniesBonusObject entity) => new BonusObject
     {
+        BonusObjectId = entity.BonusObjectId,
         Name = entity.Name,
         Price = entity.Price,
         BonusLevel = entity.BonusLevel,
@@ -17,6 +18,7 @@ public class BonusObjectMapper
 
     public static StarColoniesBonusObject ToEntity(BonusObject bonusObject) => new StarColoniesBonusObject
     {
+        BonusObjectId = bonusObject.BonusObjectId,
         Name = bonusObject.Name,
         Price = bonusObject.Price,
         BonusLevel = bonusObject.BonusLevel,

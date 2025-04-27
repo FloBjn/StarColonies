@@ -7,12 +7,14 @@ public class MissionMapper
 {
     public static Mission ToDomain(StarColoniesMission entity) => new Mission
     {
+        MissionId = entity.MissionId,
         Name = entity.Name,
         MissionEnemies = entity.MissionEnemies.Select(EnemyMapper.ToDomain).ToList()
     };
 
     public static StarColoniesMission ToEntity(Mission mission) => new StarColoniesMission
     {
+        MissionId = mission.MissionId,
         Name = mission.Name,
         MissionEnemies = mission.MissionEnemies.Select(EnemyMapper.ToEntity).ToList()
     };

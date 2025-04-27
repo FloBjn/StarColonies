@@ -1,6 +1,6 @@
 ﻿namespace StarColonies.Domains;
 
-public class Statistical
+public class Statistics
 {
     public IList<MissionHistory> MissionHistories { get; set; } = new List<MissionHistory>();
     

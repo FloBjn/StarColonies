@@ -2,6 +2,7 @@
 
 public class Colon
 { 
+    public string ColonId { get; set; }
     public string Name { get; set; } = default!;
     public int Level { get; set; } = 1;
     public int Force { get; set; }
