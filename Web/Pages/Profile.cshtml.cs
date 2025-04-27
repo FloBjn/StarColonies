@@ -101,7 +101,7 @@ public class ProfileModel : PageModel
         UserColon.Force = InputColon.Force;
         UserColon.Stamina = InputColon.Endurance;
         
-        await _colonRepository.ModifyColonPerfAsync(UserColon);
+        await _colonRepository.UpdateColonPerfAsync(UserColon);
     } 
 
     private async Task UpdatePersonalInfo()
@@ -111,10 +111,10 @@ public class ProfileModel : PageModel
         UserConnected.BirthDate = InputPersonal.BirthDate;
         UserConnected.Email = InputPersonal.Email;
         
-        await _userRepository.ModifyUserAsync(UserConnected);
+        await _userRepository.UpdateUserAsync(UserConnected);
         Console.WriteLine("userColon : " + UserColon.Name);
         UserConnected.UserColon.Name = InputPersonal.FirstName;
-        await _colonRepository.ModifyColonNameAsync(UserConnected.UserColon);
+        await _colonRepository.UpdateColonNameAsync(UserConnected.UserColon);
         UserColon = UserConnected.UserColon;
     }
     
