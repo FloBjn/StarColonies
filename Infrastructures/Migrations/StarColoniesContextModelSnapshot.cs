@@ -172,23 +172,23 @@ namespace StarColonies.Infrastructures.Migrations
                     b.HasData(
                         new
                         {
-                            MissionId = "108ff542-3d17-4407-9028-34713b295c83",
-                            EnemyId = "1f4b61d2-8079-4bf2-881e-203dda31144c"
+                            MissionId = "08ff802c-31a5-4eb4-8f8b-83c027c32b77",
+                            EnemyId = "7890ab16-e18d-4569-874c-15dedd511643"
                         },
                         new
                         {
-                            MissionId = "108ff542-3d17-4407-9028-34713b295c83",
-                            EnemyId = "32b73efa-3550-458c-8e9c-ad7725417941"
+                            MissionId = "08ff802c-31a5-4eb4-8f8b-83c027c32b77",
+                            EnemyId = "78a4f67b-8fc2-41b0-a39b-5c44a11475b5"
                         },
                         new
                         {
-                            MissionId = "2cfd996d-1d34-4ad1-90ce-68268d09577e",
-                            EnemyId = "32b73efa-3550-458c-8e9c-ad7725417941"
+                            MissionId = "4c2decbd-a7da-4a20-8822-f11cab2d98a3",
+                            EnemyId = "78a4f67b-8fc2-41b0-a39b-5c44a11475b5"
                         },
                         new
                         {
-                            MissionId = "2cfd996d-1d34-4ad1-90ce-68268d09577e",
-                            EnemyId = "46160fcc-941b-4d52-bd23-bfce1160e86b"
+                            MissionId = "4c2decbd-a7da-4a20-8822-f11cab2d98a3",
+                            EnemyId = "fcb15990-9c63-42ee-87b8-8d01a8e32fb1"
                         });
                 });
 
@@ -226,7 +226,7 @@ namespace StarColonies.Infrastructures.Migrations
                     b.HasData(
                         new
                         {
-                            BonusObjectId = "c26c1ff1-b88f-49be-9aa6-fafa06edadbd",
+                            BonusObjectId = "4f478f0e-0e92-40d3-bb9a-ad1956e03d0c",
                             BonusForce = 0,
                             BonusLevel = 1,
                             BonusStamina = 0,
@@ -235,7 +235,7 @@ namespace StarColonies.Infrastructures.Migrations
                         },
                         new
                         {
-                            BonusObjectId = "8c880c71-faa7-438b-bfc7-b50b6cf9c9e0",
+                            BonusObjectId = "129576c4-04b9-4e0b-b0fa-a533650425b5",
                             BonusForce = 1,
                             BonusLevel = 0,
                             BonusStamina = 0,
@@ -244,7 +244,7 @@ namespace StarColonies.Infrastructures.Migrations
                         },
                         new
                         {
-                            BonusObjectId = "8001d346-0758-4b9c-92ac-4b60e7bf109e",
+                            BonusObjectId = "392dc416-7b3a-4ce1-ac00-f768fd249c44",
                             BonusForce = 0,
                             BonusLevel = 0,
                             BonusStamina = 1,
@@ -285,7 +285,7 @@ namespace StarColonies.Infrastructures.Migrations
                     b.HasData(
                         new
                         {
-                            ColonId = "de449e12-4ea3-475b-8740-19ccf9bee767",
+                            ColonId = "8e94315e-e601-4c3f-a5ca-9c387a03e0d3",
                             Force = 5,
                             JobName = 1,
                             Level = 1,
@@ -295,7 +295,7 @@ namespace StarColonies.Infrastructures.Migrations
                         },
                         new
                         {
-                            ColonId = "4cb23001-c8f4-4779-8e71-2d76aeae6660",
+                            ColonId = "d68c1490-13b8-4a1f-a22c-86cfdba97397",
                             Force = 3,
                             JobName = 0,
                             Level = 1,
@@ -305,7 +305,7 @@ namespace StarColonies.Infrastructures.Migrations
                         },
                         new
                         {
-                            ColonId = "14683277-38cd-4f8b-8dbf-7d1f2a54da49",
+                            ColonId = "8547bef7-b566-4f31-9ce4-c8b4875926b1",
                             Force = 2,
                             JobName = 3,
                             Level = 1,
@@ -315,7 +315,7 @@ namespace StarColonies.Infrastructures.Migrations
                         },
                         new
                         {
-                            ColonId = "9d8661b7-8b71-4afe-8f6c-22ab12995927",
+                            ColonId = "def96cb1-4a80-4771-a7b1-5c14dc4f95f6",
                             Force = 4,
                             JobName = 2,
                             Level = 1,
@@ -351,7 +351,7 @@ namespace StarColonies.Infrastructures.Migrations
                     b.HasData(
                         new
                         {
-                            EnemyId = "448b5cc6-ec39-4b46-8dba-f8b3881743e6",
+                            EnemyId = "3b7180a4-4740-4aff-b2dd-7f6a7c996472",
                             EnemyTypeNameId = 0,
                             Force = 2,
                             Name = "Drone",
@@ -359,7 +359,7 @@ namespace StarColonies.Infrastructures.Migrations
                         },
                         new
                         {
-                            EnemyId = "1f4b61d2-8079-4bf2-881e-203dda31144c",
+                            EnemyId = "7890ab16-e18d-4569-874c-15dedd511643",
                             EnemyTypeNameId = 1,
                             Force = 1,
                             Name = "Anomalie",
@@ -367,7 +367,7 @@ namespace StarColonies.Infrastructures.Migrations
                         },
                         new
                         {
-                            EnemyId = "a17ce60f-ff7d-4354-9d74-59f79858802d",
+                            EnemyId = "a8bc7c3f-e88a-400a-bc19-e3d86712a81f",
                             EnemyTypeNameId = 2,
                             Force = 4,
                             Name = "Cryptoïde",
@@ -375,7 +375,7 @@ namespace StarColonies.Infrastructures.Migrations
                         },
                         new
                         {
-                            EnemyId = "dc7a4232-1bfd-4aa7-bb7b-9b6d56bd210d",
+                            EnemyId = "1b0911f8-d4a2-423c-891b-b2c5a86f5506",
                             EnemyTypeNameId = 3,
                             Force = 7,
                             Name = "Spectre",
@@ -383,7 +383,7 @@ namespace StarColonies.Infrastructures.Migrations
                         },
                         new
                         {
-                            EnemyId = "28b37e7c-af7e-472d-88e4-009122783b4d",
+                            EnemyId = "e2363b69-fcca-4310-83c5-4260a8f22caf",
                             EnemyTypeNameId = 0,
                             Force = 1,
                             Name = "Nanobot",
@@ -391,7 +391,7 @@ namespace StarColonies.Infrastructures.Migrations
                         },
                         new
                         {
-                            EnemyId = "32b73efa-3550-458c-8e9c-ad7725417941",
+                            EnemyId = "78a4f67b-8fc2-41b0-a39b-5c44a11475b5",
                             EnemyTypeNameId = 4,
                             Force = 4,
                             Name = "Prédateur",
@@ -399,7 +399,7 @@ namespace StarColonies.Infrastructures.Migrations
                         },
                         new
                         {
-                            EnemyId = "1eebcbcf-c1d6-4378-952a-7b0b1c042df5",
+                            EnemyId = "3fe7eb33-9096-4f83-943e-ba008f02c866",
                             EnemyTypeNameId = 5,
                             Force = 4,
                             Name = "Chimère",
@@ -407,7 +407,7 @@ namespace StarColonies.Infrastructures.Migrations
                         },
                         new
                         {
-                            EnemyId = "46160fcc-941b-4d52-bd23-bfce1160e86b",
+                            EnemyId = "fcb15990-9c63-42ee-87b8-8d01a8e32fb1",
                             EnemyTypeNameId = 2,
                             Force = 5,
                             Name = "Titan",
@@ -415,7 +415,7 @@ namespace StarColonies.Infrastructures.Migrations
                         },
                         new
                         {
-                            EnemyId = "add6a440-90db-4a6e-b5bb-0fd910af2da4",
+                            EnemyId = "6c1d35e9-4f3b-4890-89c6-f4829b8be64a",
                             EnemyTypeNameId = 3,
                             Force = 5,
                             Name = "Entité",
@@ -423,7 +423,7 @@ namespace StarColonies.Infrastructures.Migrations
                         },
                         new
                         {
-                            EnemyId = "c3522360-e50b-47d8-81e7-d0151457fde8",
+                            EnemyId = "eb5d9c49-0ad2-4699-af54-27963280d83e",
                             EnemyTypeNameId = 6,
                             Force = 2,
                             Name = "Mutant",
@@ -431,7 +431,7 @@ namespace StarColonies.Infrastructures.Migrations
                         },
                         new
                         {
-                            EnemyId = "8665c001-5c65-4759-b6b5-f79a3750dfe7",
+                            EnemyId = "6d2c23a9-31be-4505-9cc8-4b6fe3cab007",
                             EnemyTypeNameId = 2,
                             Force = 9,
                             Name = "Leviathan",
@@ -439,7 +439,7 @@ namespace StarColonies.Infrastructures.Migrations
                         },
                         new
                         {
-                            EnemyId = "c0b684fa-c049-4a85-936d-14bf355cd3ca",
+                            EnemyId = "2a2ebf3c-698b-406c-8266-716d259fd3eb",
                             EnemyTypeNameId = 2,
                             Force = 20,
                             Name = "Hégémon",
@@ -447,7 +447,7 @@ namespace StarColonies.Infrastructures.Migrations
                         },
                         new
                         {
-                            EnemyId = "c41a0f09-d71b-4c66-80a8-8b09301f0042",
+                            EnemyId = "08c3562b-9a89-4503-ae1f-986dc67ac518",
                             EnemyTypeNameId = 0,
                             Force = 20,
                             Name = "Drone de combat",
@@ -472,12 +472,12 @@ namespace StarColonies.Infrastructures.Migrations
                     b.HasData(
                         new
                         {
-                            MissionId = "108ff542-3d17-4407-9028-34713b295c83",
+                            MissionId = "08ff802c-31a5-4eb4-8f8b-83c027c32b77",
                             Name = "Exploration de la base abandonnée"
                         },
                         new
                         {
-                            MissionId = "2cfd996d-1d34-4ad1-90ce-68268d09577e",
+                            MissionId = "4c2decbd-a7da-4a20-8822-f11cab2d98a3",
                             Name = "Test"
                         });
                 });
