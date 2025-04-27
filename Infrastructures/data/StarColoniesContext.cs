@@ -133,10 +133,10 @@ public class StarColoniesContext : IdentityDbContext<StarColoniesUser>
     {
         builder.Entity<StarColoniesColon>().HasData(new List<StarColoniesColon>
         {
-             new StarColoniesColon {ColonId = new Guid().ToString(), Name = "Alex Striker", Level = 1, Force = 5, Stamina = 2, NumberResource = 0, JobName = 1},
-             new StarColoniesColon {ColonId = new Guid().ToString(), Name = "Mira Nova", Level = 1, Force = 3, Stamina = 4, NumberResource = 0, JobName = 0},
-             new StarColoniesColon {ColonId = new Guid().ToString(), Name = "Elara Starfinder", Level = 1, Force = 2, Stamina = 5, NumberResource = 0, JobName = 3},
-             new StarColoniesColon {ColonId = new Guid().ToString(), Name = "Jason Blades", Level = 1, Force = 4, Stamina = 3, NumberResource = 0, JobName = 2},
+             new StarColoniesColon {ColonId = Guid.NewGuid().ToString(), Name = "Alex Striker", Level = 1, Force = 5, Stamina = 2, NumberResource = 0, JobName = 1},
+             new StarColoniesColon {ColonId = Guid.NewGuid().ToString(), Name = "Mira Nova", Level = 1, Force = 3, Stamina = 4, NumberResource = 0, JobName = 0},
+             new StarColoniesColon {ColonId = Guid.NewGuid().ToString(), Name = "Elara Starfinder", Level = 1, Force = 2, Stamina = 5, NumberResource = 0, JobName = 3},
+             new StarColoniesColon {ColonId = Guid.NewGuid().ToString(), Name = "Jason Blades", Level = 1, Force = 4, Stamina = 3, NumberResource = 0, JobName = 2},
 
         });
         
@@ -174,14 +174,14 @@ public class StarColoniesContext : IdentityDbContext<StarColoniesUser>
         
         builder.Entity<StarColoniesBonusObject>().HasData(new List<StarColoniesBonusObject>
         {
-            new StarColoniesBonusObject {BonusObjectId = new Guid().ToString(), Name = "Potion Mystérieuse", Price = 30, BonusLevel = 1, BonusForce = 0, BonusStamina = 0},
-            new StarColoniesBonusObject {BonusObjectId = new Guid().ToString(), Name = "Barre protéinée", Price = 5, BonusLevel = 0, BonusForce = 1, BonusStamina = 0},
-            new StarColoniesBonusObject {BonusObjectId = new Guid().ToString(), Name = "Boisson énergétique", Price = 5, BonusLevel = 0, BonusForce = 0, BonusStamina = 1},
+            new StarColoniesBonusObject {BonusObjectId = Guid.NewGuid().ToString(), Name = "Potion Mystérieuse", Price = 30, BonusLevel = 1, BonusForce = 0, BonusStamina = 0},
+            new StarColoniesBonusObject {BonusObjectId = Guid.NewGuid().ToString(), Name = "Barre protéinée", Price = 5, BonusLevel = 0, BonusForce = 1, BonusStamina = 0},
+            new StarColoniesBonusObject {BonusObjectId = Guid.NewGuid().ToString(), Name = "Boisson énergétique", Price = 5, BonusLevel = 0, BonusForce = 0, BonusStamina = 1},
 
         });
         
         
-        var baseMission = new Guid().ToString();
+        var baseMission = Guid.NewGuid().ToString();
         
         builder.Entity<StarColoniesMission>().HasData(new List<StarColoniesMission>
                 {
@@ -193,7 +193,7 @@ public class StarColoniesContext : IdentityDbContext<StarColoniesUser>
         {
             entity.HasData(
                 new { MissionId = baseMission, EnemyId = anomalieId },
-                new { MissionId = baseMission, EnemyId = anomalieId }
+                new { MissionId = baseMission, EnemyId = predateurId }
             );
         });
     }
