@@ -2,5 +2,5 @@
 
 public interface IEnemyRepository
 {
-    
+    Task <IList<Enemy>> GetAllEnemyAsync();
 }
