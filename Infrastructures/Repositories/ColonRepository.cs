@@ -65,4 +65,14 @@ public class ColonRepository : IColonRepository
         _context.ScColon.Update(colonDb);
         await _context.SaveChangesAsync();
     }
+
+    public async Task UpdateColonNumberResource(Colon colon)
+    {
+        var colonDb = await GetColonEntityByIdAsync(colon.ColonId);
+        if (colonDb == null) return;
+        
+        colonDb.NumberResource = colon.NumberResource;
+        _context.ScColon.Update(colonDb);
+        await _context.SaveChangesAsync();
+    }
 }

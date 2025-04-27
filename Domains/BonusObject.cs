@@ -8,4 +8,15 @@ public class BonusObject
     public int BonusLevel { get; set; }
     public int BonusForce { get; set; }
     public int BonusStamina { get; set; }
+    public override bool Equals(object? obj)
+    {
+        if (obj is not BonusObject other)
+            return false;
+
+        return BonusObjectId == other.BonusObjectId;
+    }
+    public override int GetHashCode()
+    {
+        return BonusObjectId?.GetHashCode() ?? 0;
+    }
 }
