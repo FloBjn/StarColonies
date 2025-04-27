@@ -182,7 +182,8 @@ namespace StarColonies.Web.Pages
             };
 
             var colonEntity = ColonMapper.ToEntity(colon);
-            _dbContext.ScColon.Add(colonEntity);
+            /*_dbContext.ScColon.Add(colonEntity);*/
+            await _colonRepository.AddColonAsync(colon);
             await _dbContext.SaveChangesAsync();
             Console.Out.WriteLine($"Colon: {colonEntity.ColonId}");
 

@@ -9,12 +9,11 @@
 @{
     ViewData["Title"] = "Profil";
 }
-<p>is signed in : @SignInManager.IsSignedIn(User)</p>
-    @*@if (SignInManager.IsSignedIn(User)) 
-    {*@
+    @if (SignInManager.IsSignedIn(User)) 
+    {
         <div class="position-relative text-center mb-4 w-100">
             <div class="flex-fill text-center">
-                <h1 class="m-0">Votre profil @Model.UserConnected?.UserColon.Name</h1>
+                <h1 class="m-0">Votre profil @Model.UserConnected?.Name</h1>
             </div>
             <form id="logoutForm" class="position-absolute top-0 end-0" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Index", new { area = "" })">
                 <button id="logout" type="submit" class="w-100 btn btn-lg custom-disc-button">DECONNEXION</button>
@@ -35,13 +34,14 @@
                      style="z-index: 1050;" hidden>
                     <div class="bg-white p-4 rounded-3 shadow w-25" @*style="width: 400px; max-width: 90%;"*@>
                         <form method="post" enctype="multipart/form-data" id="avatarForm">
+                            <input type="hidden" asp-for="FormName" value="AvatarForm" />
                             <h5 class="mb-3 text-black">Modifier votre avatar</h5>
 
                             <div class="mb-3">
                                 <input asp-for="InputAvatar.Avatar" type="file" class="form-control image-input" data-preview-id="preview" id="avatarInput"/>
                                 <span asp-validation-for="InputAvatar.Avatar" class="text-danger"></span>
                             </div>
-                            <img id="preview" class="img-thumbnail mb-3" style="display:none; max-height:150px;" />
+                            <img id="preview" class="img-thumbnail mb-3" style="display:none; max-height:150px;"/>
 
                             <div class="d-flex justify-content-between mt-3">
                                 <button type="button" class="btn btn-danger" id="cancelAvatarPopup">Annuler</button>
@@ -55,9 +55,10 @@
             <section class="w-50 d-flex flex-wrap ps-5 border-start border-2 border-white">
                 <h2 class="w-100 text-center mb-5">Infos personnelles</h2>
                 <form class="mb-5 d-flex flex-wrap w-75 mx-auto" id="PersonalInfosForm" method="post">
+                    <input type="hidden" asp-for="FormName" value="PersonalForm" />
                     @* name field *@
                     <div class="form-floating mb-3 w-100">
-                        <input asp-for="InputPersonal.FirstName" class="form-control" autocomplete="username" aria-required="true" value="@Model.UserConnected?.UserColon.Name" />
+                        <input asp-for="InputPersonal.FirstName" class="form-control" autocomplete="username" aria-required="true" value="@Model.UserConnected?.Name"/>
                         <label asp-for="InputPersonal.FirstName" class="form-label text-black">Votre pseudo</label>
                         <span asp-validation-for="InputPersonal.FirstName" class="text-danger"></span>
                     </div>
@@ -69,7 +70,7 @@
                     </div>
                     @* email field *@
                     <div class="form-floating mb-3 w-100">
-                        <input asp-for="InputPersonal.Email" class="form-control" autocomplete="username" aria-required="true" value="@Model.UserConnected?.Email" />
+                        <input asp-for="InputPersonal.Email" class="form-control" autocomplete="username" aria-required="true" value="@Model.UserConnected?.Email"/>
                         <label asp-for="InputPersonal.Email" class="form-label text-black">Email</label>
                         <span asp-validation-for="InputPersonal.Email" class="text-danger"></span>
                     </div>
@@ -82,8 +83,9 @@
                 <h2 class="w-100 text-center mb-5">Infos sur ton colon</h2>
                 
                 <form class="d-flex flex-wrap justify-content-between w-75 mx-auto" id="ColonInfoForm" method="post">
+                    <input type="hidden" asp-for="FormName" value="ColonForm" />
                     @* Proffession field *@
-                    <div class="form-floating mb-3 w-100">
+                    @*<div class="form-floating mb-3 w-100">
                         <select asp-for="InputColon.Profession" class="form-control" aria-required="true">
                             <option value="">-- Choisir une profession --</option>
                             <option value="Ingénieur">Ingénieur</option>
@@ -92,16 +94,16 @@
                         </select>
                         <label asp-for="InputColon.Profession" class="form-label text-black">Choisir une proffession</label>
                         <span asp-validation-for="InputColon.Profession" class="text-danger"></span>
-                    </div>
+                    </div>*@
                     @* Force field *@
                     <div class="form-floating mb-3 w-40">
-                        <input asp-for="InputColon.Force" type="number" min="0" max="7" class="form-control" aria-required="true" placeholder="0"/>
+                        <input asp-for="InputColon.Force" type="number" min="0" max="7" class="form-control" aria-required="true" value="@Model.UserColon.Force"/>
                         <label asp-for="InputColon.Force" class=" text-black">Force</label>
                         <span asp-validation-for="InputColon.Force" class="text-danger"></span>
                     </div>
                     @* Endurance field *@
                     <div class="form-floating mb-3 w-40">
-                        <input asp-for="InputColon.Endurance" type="number" min="0" max="7" class="form-control" aria-required="true" placeholder="0"/>
+                        <input asp-for="InputColon.Endurance" type="number" min="0" max="7" class="form-control" aria-required="true" value="@Model.UserColon.Stamina"/>
                         <label asp-for="InputColon.Endurance" class="form-label text-black">Endurance</label>
                         <span asp-validation-for="InputColon.Endurance" class="text-danger"></span>
                     </div>
@@ -136,5 +138,5 @@
             <partial name="_ValidationScriptsPartial" />
         }
         
-    @*}*@
-
+    }
+    

@@ -6,4 +6,6 @@ public interface IColonRepository
     Task<Colon?> GetColonByIdAsync(string colonId);
     Task AddColonAsync(Colon colon);
     void UpdateColonAsync(Colon colon);
+    Task ModifyColonPerfAsync(Colon colon);
+    Task ModifyColonNameAsync(Colon colon);
 }
