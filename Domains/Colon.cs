@@ -7,6 +7,20 @@ public class Colon
     public int Force { get; set; }
     public int Stamina { get; set; }
     public int NumberResource { get; set; }
+
+    public void AddResource(int amount)
+    {
+        NumberResource += amount;
+    }
+
+    public bool CanAfford(int amount)
+    {
+        return amount < NumberResource;
+    }
+    public void SubtractResource(int amount)
+    {
+        NumberResource -= amount;
+    }
     public JobName JobName { get; set; }
     public IList<Team> Teams { get; set; } = new List<Team>();
 }
