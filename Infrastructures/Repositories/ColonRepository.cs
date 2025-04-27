@@ -36,4 +36,9 @@ public class ColonRepository : IColonRepository
         _context.ScColon.Add(entity);
         await _context.SaveChangesAsync();
     }
+
+    public void UpdateColonAsync(Colon colon)
+    {
+        throw new NotImplementedException();
+    }
 }

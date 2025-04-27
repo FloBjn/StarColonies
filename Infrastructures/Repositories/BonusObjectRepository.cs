@@ -30,4 +30,14 @@ public class BonusObjectRepository : IBonusObjectRepository
         _context.ScBonusObject.Add(entity);
         await _context.SaveChangesAsync();
     }
+
+    public void UpdateBonusObjectAsync(BonusObject bonusObject)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void DeleteBonusObject(string objectId)
+    {
+        throw new NotImplementedException();
+    }
 }
