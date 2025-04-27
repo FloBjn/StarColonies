@@ -19,7 +19,6 @@ public class MissionRepository : IMissionRepository
     {
         var entities = await _context.ScMission
             .Include(e => e.MissionEnemies)
-            .ThenInclude(et => et.EnemyType)
             .ToListAsync();
         
         //pas sûre du return, je renvoie une liste possiblement vide, est-ce un problème?
@@ -30,7 +29,6 @@ public class MissionRepository : IMissionRepository
     {
         var entity = await _context.ScMission
             .Include(e => e.MissionEnemies)
-            .ThenInclude(et => et.EnemyType)
             .FirstOrDefaultAsync(m => m.MissionId == missionId);
 
         

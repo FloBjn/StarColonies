@@ -76,7 +76,17 @@ public class StarColoniesContext : IdentityDbContext<StarColoniesUser>
             entity.Property(e => e.MissionId)
                 .ValueGeneratedOnAdd();
             
-            entity.HasMany(m => m.MissionEnemies);
+            entity.HasMany(m => m.MissionEnemies)
+                .WithMany()
+                .UsingEntity<Dictionary<string, object>>(
+                    "ScMissionEnemies",
+                    r => r.HasOne<StarColoniesEnemy>().WithMany().HasForeignKey("EnemyId"),
+                    l => l.HasOne<StarColoniesMission>().WithMany().HasForeignKey("MissionId"),
+                    je =>
+                    {
+                        je.HasKey("MissionId", "EnemyId");
+                        je.ToTable("ScMissionEnemies");
+                    });
         });
         
         
@@ -115,7 +125,77 @@ public class StarColoniesContext : IdentityDbContext<StarColoniesUser>
                 .HasForeignKey(e => e.TeamId)
                 .OnDelete(DeleteBehavior.Restrict);
         });
+         
+        AddInitialData(builder);
+    }
+
+    private void AddInitialData(ModelBuilder builder)
+    {
+        builder.Entity<StarColoniesColon>().HasData(new List<StarColoniesColon>
+        {
+             new StarColoniesColon {ColonId = Guid.NewGuid().ToString(), Name = "Alex Striker", Level = 1, Force = 5, Stamina = 2, NumberResource = 0, JobName = 1},
+             new StarColoniesColon {ColonId = Guid.NewGuid().ToString(), Name = "Mira Nova", Level = 1, Force = 3, Stamina = 4, NumberResource = 0, JobName = 0},
+             new StarColoniesColon {ColonId = Guid.NewGuid().ToString(), Name = "Elara Starfinder", Level = 1, Force = 2, Stamina = 5, NumberResource = 0, JobName = 3},
+             new StarColoniesColon {ColonId = Guid.NewGuid().ToString(), Name = "Jason Blades", Level = 1, Force = 4, Stamina = 3, NumberResource = 0, JobName = 2},
+
+        });
         
+        var droneId = Guid.NewGuid().ToString();
+        var anomalieId = Guid.NewGuid().ToString();
+        var cryptoideId = Guid.NewGuid().ToString();
+        var spectreId = Guid.NewGuid().ToString();
+        var nanobotId = Guid.NewGuid().ToString();
+        var predateurId = Guid.NewGuid().ToString();
+        var chimereId = Guid.NewGuid().ToString();
+        var titanId = Guid.NewGuid().ToString();
+        var entiteId = Guid.NewGuid().ToString();
+        var mutantId = Guid.NewGuid().ToString();
+        var leviathanId = Guid.NewGuid().ToString();
+        var hegemonId = Guid.NewGuid().ToString();
+        var combatDroneId = Guid.NewGuid().ToString();
+        
+        builder.Entity<StarColoniesEnemy>().HasData(new List<StarColoniesEnemy>
+        {
+            new StarColoniesEnemy {EnemyId = droneId, Name = "Drone", Force = 2, Stamina = 2, EnemyTypeNameId = 0},
+            new StarColoniesEnemy {EnemyId = anomalieId, Name = "Anomalie", Force = 1, Stamina = 3, EnemyTypeNameId = 1},
+            new StarColoniesEnemy {EnemyId = cryptoideId, Name = "Cryptoïde", Force = 4, Stamina = 12, EnemyTypeNameId = 2},
+            new StarColoniesEnemy {EnemyId = spectreId, Name = "Spectre", Force = 7, Stamina = 1, EnemyTypeNameId = 3},
+            new StarColoniesEnemy {EnemyId = nanobotId, Name = "Nanobot", Force = 1, Stamina = 2, EnemyTypeNameId = 0},
+            new StarColoniesEnemy {EnemyId = predateurId, Name = "Prédateur", Force = 4, Stamina = 3, EnemyTypeNameId = 4},
+            new StarColoniesEnemy {EnemyId = chimereId, Name = "Chimère", Force = 4, Stamina = 4, EnemyTypeNameId = 5},
+            new StarColoniesEnemy {EnemyId = titanId, Name = "Titan", Force = 5, Stamina = 3, EnemyTypeNameId = 2},
+            new StarColoniesEnemy {EnemyId = entiteId, Name = "Entité", Force = 5, Stamina = 11, EnemyTypeNameId = 3},
+            new StarColoniesEnemy {EnemyId = mutantId, Name = "Mutant", Force = 2, Stamina = 4, EnemyTypeNameId = 6},
+            new StarColoniesEnemy {EnemyId = leviathanId, Name = "Leviathan", Force = 9, Stamina = 7, EnemyTypeNameId = 2},
+            new StarColoniesEnemy {EnemyId = hegemonId, Name = "Hégémon", Force = 20, Stamina = 20, EnemyTypeNameId = 2},
+            new StarColoniesEnemy {EnemyId = combatDroneId, Name = "Drone de combat", Force = 20, Stamina = 15, EnemyTypeNameId = 0},
+        });
+
+        
+        builder.Entity<StarColoniesBonusObject>().HasData(new List<StarColoniesBonusObject>
+        {
+            new StarColoniesBonusObject {BonusObjectId = Guid.NewGuid().ToString(), Name = "Potion Mystérieuse", Price = 30, BonusLevel = 1, BonusForce = 0, BonusStamina = 0},
+            new StarColoniesBonusObject {BonusObjectId = Guid.NewGuid().ToString(), Name = "Barre protéinée", Price = 5, BonusLevel = 0, BonusForce = 1, BonusStamina = 0},
+            new StarColoniesBonusObject {BonusObjectId = Guid.NewGuid().ToString(), Name = "Boisson énergétique", Price = 5, BonusLevel = 0, BonusForce = 0, BonusStamina = 1},
+
+        });
+        
+        
+        var baseMission = Guid.NewGuid().ToString();
+        
+        builder.Entity<StarColoniesMission>().HasData(new List<StarColoniesMission>
+                {
+                    new StarColoniesMission {MissionId = baseMission,Name = "Exploration de la base abandonnée"}
+                });
+        
+        
+        builder.Entity("ScMissionEnemies", entity =>
+        {
+            entity.HasData(
+                new { MissionId = baseMission, EnemyId = anomalieId },
+                new { MissionId = baseMission, EnemyId = predateurId }
+            );
+        });
     }
     
 }

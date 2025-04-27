@@ -17,7 +17,6 @@ public class EnemyRepository : IEnemyRepository
     public async Task<IList<Enemy>> GetAllEnemyAsync()
     {
         var entities = await _context.ScEnemy
-            .Include(e => e.EnemyType)
             .ToListAsync();
         return entities.Select(EnemyMapper.ToDomain).ToList();
     }
