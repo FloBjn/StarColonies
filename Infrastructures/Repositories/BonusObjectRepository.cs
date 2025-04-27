@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using StarColonies.Domains;
 using StarColonies.Domains.interfaces;
 using StarColonies.Infrastructures.data;
+using StarColonies.Infrastructures.Entities;
 using StarColonies.Infrastructures.Mappers;
 
 namespace StarColonies.Infrastructures.Repositories;
@@ -23,6 +24,14 @@ public class BonusObjectRepository : IBonusObjectRepository
         var entity = await _context.ScBonusObject.FirstOrDefaultAsync(o => o.BonusObjectId == objectId);
         return entity is null ? null : BonusObjectMapper.ToDomain(entity);
     }
+    
+    private async Task<StarColoniesBonusObject?> GetBonusObjectEntityByIdAsync(string bonusObjectId)
+    {
+        var entity = await _context.ScBonusObject
+            .FirstOrDefaultAsync(bo => bo.BonusObjectId == bonusObjectId);
+        
+        return entity;
+    }
 
     public async Task AddBonusObjectAsync(BonusObject bonusObject)
     {
@@ -31,13 +40,45 @@ public class BonusObjectRepository : IBonusObjectRepository
         await _context.SaveChangesAsync();
     }
 
-    public void UpdateBonusObjectAsync(BonusObject bonusObject)
+    public async Task UpdateBonusObjectNameAsync(BonusObject bonusObject)
     {
-        throw new NotImplementedException();
+        var bonusObjectDb = await GetBonusObjectEntityByIdAsync(bonusObject.BonusObjectId);
+        if (bonusObjectDb == null) return;
+        
+        bonusObjectDb.Name = bonusObjectDb.Name;
+        
+        _context.ScBonusObject.Update(bonusObjectDb);
+        await _context.SaveChangesAsync();
     }
 
-    public void DeleteBonusObject(string objectId)
+    public async Task UpdateBonusObjectPriceAsync(BonusObject bonusObject)
     {
-        throw new NotImplementedException();
+        var bonusObjectDb = await GetBonusObjectEntityByIdAsync(bonusObject.BonusObjectId);
+        if (bonusObjectDb == null) return;
+        
+        bonusObjectDb.Price = bonusObjectDb.Price;
+        
+        _context.ScBonusObject.Update(bonusObjectDb);
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task UpdateBonusObjectPerfBonusAsync(BonusObject bonusObject)
+    {
+        var bonusObjectDb = await GetBonusObjectEntityByIdAsync(bonusObject.BonusObjectId);
+        if (bonusObjectDb == null) return;
+        
+        bonusObjectDb.BonusLevel = bonusObjectDb.BonusLevel;
+        bonusObjectDb.BonusForce = bonusObjectDb.BonusForce;
+        bonusObjectDb.BonusStamina = bonusObjectDb.BonusStamina;
+        
+        _context.ScBonusObject.Update(bonusObjectDb);
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task DeleteBonusObject(BonusObject bonusObject)
+    {
+        var entity = BonusObjectMapper.ToEntity(bonusObject);
+        _context.ScBonusObject.Remove(entity);
+        await _context.SaveChangesAsync();
     }
 }

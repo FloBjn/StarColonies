@@ -7,6 +7,7 @@ public interface IMissionRepository
     Task<Mission?> GetByIdAsync(string missionId);
     
     Task AddMissionAsync(Mission mission);
-    void UpdateMissionAsync(Mission mission);
-    void DeleteMissionAsync(Mission mission);
+    Task UpdateMissionNameAsync(Mission mission);
+    Task UpdateMissionEnemiesAsync(Mission mission);
+    Task DeleteMissionAsync(Mission mission);
 }

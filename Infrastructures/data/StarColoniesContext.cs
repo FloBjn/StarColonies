@@ -79,8 +79,14 @@ public class StarColoniesContext : IdentityDbContext<StarColoniesUser>
                 .WithMany()
                 .UsingEntity<Dictionary<string, object>>(
                     "ScMissionEnemies",
-                    r => r.HasOne<StarColoniesEnemy>().WithMany().HasForeignKey("EnemyId"),
-                    l => l.HasOne<StarColoniesMission>().WithMany().HasForeignKey("MissionId"),
+                    r => r.HasOne<StarColoniesEnemy>()
+                        .WithMany()
+                        .HasForeignKey("EnemyId")
+                        .OnDelete(DeleteBehavior.Restrict),
+                    l => l.HasOne<StarColoniesMission>()
+                        .WithMany()
+                        .HasForeignKey("MissionId")
+                        .OnDelete(DeleteBehavior.Cascade),
                     je =>
                     {
                         je.HasKey("MissionId", "EnemyId");
@@ -92,6 +98,42 @@ public class StarColoniesContext : IdentityDbContext<StarColoniesUser>
         builder.Entity<StarColoniesTeam>(entity =>
         {
             entity.HasKey(sct => sct.TeamId);
+            
+            entity.HasMany(t => t.ColonsTeam)
+                .WithMany(c => c.Teams)
+                .UsingEntity<Dictionary<string, object>>(
+                    "ScTeamColonMembers",
+                    r => r.HasOne<StarColoniesColon>()
+                        .WithMany()
+                        .HasForeignKey("ColonId")
+                        .OnDelete(DeleteBehavior.Restrict),
+                    l => l.HasOne<StarColoniesTeam>()
+                        .WithMany()
+                        .HasForeignKey("TeamId")
+                        .OnDelete(DeleteBehavior.Cascade), //Quand on supprime une team, on delete toute les relations avec celle-ci
+                    je =>
+                    {
+                        je.HasKey("TeamId", "ColonId");
+                        je.ToTable("ScTeamColonMembers");
+                    });
+            
+            entity.HasMany(t => t.TeamBonusObjects)
+                .WithMany()
+                .UsingEntity<Dictionary<string, object>>(
+                    "ScTeamBonusObjects",
+                    r => r.HasOne<StarColoniesBonusObject>()
+                        .WithMany()
+                        .HasForeignKey("BonusObjectId")
+                        .OnDelete(DeleteBehavior.Restrict),
+                    l => l.HasOne<StarColoniesTeam>()
+                        .WithMany()
+                        .HasForeignKey("TeamId")
+                        .OnDelete(DeleteBehavior.Cascade), //Idem qu'au dessus
+                    je =>
+                    {
+                        je.HasKey("TeamId", "BonusObjectId");
+                        je.ToTable("ScTeamBonusObjects");
+                    });
             
             entity.Property(e => e.TeamId)
                 .ValueGeneratedOnAdd();

@@ -5,6 +5,8 @@ public interface IBonusObjectRepository
     Task <List<BonusObject>> GetAllBonusObjectsAsync();
     Task <BonusObject?> GetBonusObjectByIdAsync(string objectId);
     Task AddBonusObjectAsync(BonusObject bonusObject);
-    void UpdateBonusObjectAsync(BonusObject bonusObject);
-    void DeleteBonusObject(string objectId);
+    Task UpdateBonusObjectNameAsync(BonusObject bonusObject);
+    Task UpdateBonusObjectPriceAsync(BonusObject bonusObject);
+    Task UpdateBonusObjectPerfBonusAsync(BonusObject bonusObject);
+    Task DeleteBonusObject(BonusObject bonusObject);
 }
