@@ -2,6 +2,7 @@
 using StarColonies.Domains;
 using StarColonies.Domains.interfaces;
 using StarColonies.Infrastructures.data;
+using StarColonies.Infrastructures.Entities;
 using StarColonies.Infrastructures.Mappers;
 
 namespace StarColonies.Infrastructures.Repositories;
@@ -21,7 +22,6 @@ public class MissionRepository : IMissionRepository
             .Include(e => e.MissionEnemies)
             .ToListAsync();
         
-        //pas sûre du return, je renvoie une liste possiblement vide, est-ce un problème?
         return entities.Select(MissionMapper.ToDomain).ToList();
     }
 
@@ -30,27 +30,54 @@ public class MissionRepository : IMissionRepository
         var entity = await _dbContext.ScMission
             .Include(e => e.MissionEnemies)
             .FirstOrDefaultAsync(m => m.MissionId == missionId);
-
         
-        //pas sûre du return, je renvoie une liste possiblement vide, est-ce un problème?
         return entity is null ? null : MissionMapper.ToDomain(entity);
-        
     }
-
-    public Task AddMissionAsync(Mission mission)
+    
+    private async Task<StarColoniesMission?> GetMissionEntityByIdAsync(string missionId)
     {
-        throw new NotImplementedException();
+        var entity = await _dbContext.ScMission
+            .Include(m=> m.MissionEnemies)
+            .FirstOrDefaultAsync(m => m.MissionId == missionId);
+        
+        return entity;
     }
 
-    public async void UpdateMissionAsync(Mission mission)
+    public async Task AddMissionAsync(Mission mission)
     {
         var entity = MissionMapper.ToEntity(mission);
-        _dbContext.ScMission.Add(entity);
+        await _dbContext.ScMission.AddAsync(entity);
         await _dbContext.SaveChangesAsync();
     }
 
-    public void DeleteMissionAsync(Mission mission)
+    public async Task UpdateMissionNameAsync(Mission mission)
     {
-        throw new NotImplementedException();
+        var missionDb = await GetMissionEntityByIdAsync(mission.MissionId);
+        if (missionDb == null) return;
+        
+        missionDb.Name = mission.Name;
+        
+        _dbContext.ScMission.Update(missionDb);
+        await _dbContext.SaveChangesAsync();
     }
+
+    public async Task UpdateMissionEnemiesAsync(Mission mission)
+    {
+        var missionDb = await GetMissionEntityByIdAsync(mission.MissionId);
+        if (missionDb == null) return;
+        
+        missionDb.MissionEnemies = mission.MissionEnemies.Select(EnemyMapper.ToEntity).ToList();
+        
+        _dbContext.ScMission.Update(missionDb);
+        await _dbContext.SaveChangesAsync();
+    }
+    
+
+    public async Task DeleteMissionAsync(Mission mission)
+    {
+        var entity = MissionMapper.ToEntity(mission);
+        _dbContext.ScMission.Remove(entity);
+        await _dbContext.SaveChangesAsync();
+    }
+
 }

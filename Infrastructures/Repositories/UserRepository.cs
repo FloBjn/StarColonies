@@ -51,13 +51,13 @@ public class UserRepository : IUserRepository
     public async Task AddAsync(User user)
     {
         var entity = UserMapper.ToEntity(user);
-        _context.ScUser.Add(entity);
+        await _context.ScUser.AddAsync(entity);
         await _context.SaveChangesAsync();
     }
 
     public async Task ModifyUserAsync(User user)
     {
-        Console.WriteLine("Userconnected : " + user == null);
+        //Console.WriteLine("Userconnected : " + user == null);
         var userDb = await GetUserEntityByIdAsync(user.Id);
         if (userDb == null) return;
         
@@ -65,13 +65,15 @@ public class UserRepository : IUserRepository
         userDb.Email = user.Email;
         userDb.BirthDate = user.BirthDate;
         
-        var result = await _userManager.UpdateAsync(userDb);
+        await _userManager.UpdateAsync(userDb);
         await _context.SaveChangesAsync();
     }
 
-    public void DeleteUserAsync(User user)
+    public async Task DeleteUserAsync(User user)
     {
-        throw new NotImplementedException();
+        var entity = UserMapper.ToEntity(user);
+        _context.ScUser.Remove(entity);
+        await _context.SaveChangesAsync();
     }
 
     public async Task<User?> GetUserConnectedAsync(ClaimsPrincipal user)

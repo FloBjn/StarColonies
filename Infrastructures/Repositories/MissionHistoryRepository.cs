@@ -32,6 +32,15 @@ public class MissionHistoryRepository : IMissionHistoryRepository
         return entity is null ? null : MissionHistoryMapper.ToDomain(entity);
     }
 
+    public async Task<IList<MissionHistory>> GetMissionsHistoryByTeamIdAsync(string teamId)
+    {
+        var entities = await _context.ScMissionHistory
+            .Where(mh => mh.TeamId == teamId)
+            .ToListAsync();
+        
+        return entities.Select(MissionHistoryMapper.ToDomain).ToList();
+    }
+
     public async Task AddMissionHistoryAsync(MissionHistory missionHistory)
     {
         var entity = MissionHistoryMapper.ToEntity(missionHistory);
