@@ -108,6 +108,10 @@ body {
   width: 40%;
 }
 
+.w-20{
+  width: 20%;
+}
+
 .changed-field {
   border: 2px solid #0d6efd !important; /* Bootstrap primary */
   transition: border-color 0.3s ease;

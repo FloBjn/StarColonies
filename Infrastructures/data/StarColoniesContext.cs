@@ -130,6 +130,12 @@ public class StarColoniesContext : IdentityDbContext<StarColoniesUser>
 
     private void AddInitialData(ModelBuilder builder)
     {
+        builder.Entity<StarColoniesTeam>().HasData(new List<StarColoniesTeam>
+        {
+            new StarColoniesTeam { TeamId = Guid.NewGuid().ToString(), Name = "Team Alpha", LevelMaxAuthorized = 5 },
+            new StarColoniesTeam { TeamId = Guid.NewGuid().ToString(), Name = "Team Beta", LevelMaxAuthorized = 3 }
+        });
+        
         builder.Entity<StarColoniesColon>().HasData(new List<StarColoniesColon>
         {
              new StarColoniesColon {ColonId = Guid.NewGuid().ToString(), Name = "Alex Striker", Level = 1, Force = 5, Stamina = 2, NumberResource = 0, JobName = 1},

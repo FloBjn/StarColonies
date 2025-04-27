@@ -7,31 +7,53 @@
 @inject SignInManager<StarColoniesUser> SignInManager
 
 @{
-    ViewData["Title"] = "Teams";
+    ViewData["Title"] = "Tes équipes";
 }
 <h1 class="text-center mb-4 w-100">Vos équipes</h1>
-<section class="w-100">
-    <div class="w-50">
-        <p>Choisir une équipe</p>
-        <form>
+<section class="w-100 d-flex">
+    <div class="w-50 align-items-baseline d-flex">
+        
+        <form class="w-100 me-auto">
             @* choix equipe *@
-            <div class="form-floating mb-3 w-100">
-                        <select asp-for="InputModel.TeamName" class="form-control" aria-required="true">
-                            <option value="">-- Choisir une profession --</option>
-                            @foreach (var teamName in Model.TeamsNames)
-                            {
-                                <option value="Ingénieur">@teamName</option>
-                            }
-                            <option value="Médecin">Equipe 2</option>
-                            <option value="Explorateur">Equipe 3</option>
-                        </select>
-                        <label asp-for="InputModel.TeamName" class="form-label text-black">Choisir une équipe</label>
-                        <span asp-validation-for="InputModel.TeamName" class="text-danger"></span>
-                    </div>
+            <label asp-for="InputModel.TeamName" class="form-label ">Choisir une équipe</label>
+            <select asp-for="InputModel.TeamName" class="form-control w-40" aria-required="true">
+                <option value="">-- Choisir une équipe --</option>
+                @foreach (var teamName in Model.TeamsNames)
+                {
+                    <option value="Ingénieur">@teamName</option>
+                }
+                <option value="Médecin">Equipe 2</option>
+                <option value="Explorateur">Equipe 3</option>
+            </select>
+            <span asp-validation-for="InputModel.TeamName" class="text-danger"></span>
         </form>
     </div>
     
-    <div class="w-50">
-        <a asp-area="" asp-page="/TeamCreation" class="btn btn-primary">Aller sur l'autre page</a>
+    <div class="w-50 align-items-baseline d-flex">
+        <a asp-area="" asp-page="/TeamUpdate" class="btn btn-success ms-auto w-auto">Créer une équipe</a>
     </div>
+</section>
+<section class="w-100 d-flex flex-wrap mt-3">
+    <h2 class="w-100 text-center text-decoration-underline">@Model.SelectionedTeam.Name</h2>
+    <div class="d-flex align-content-around w-100 mt-4 mb-5">
+        @foreach (var colon in Model.SelectionedTeam.ColonsTeam)
+        {
+            <article class="w-20 d-flex flex-column p-1 m-auto">
+                <h4 class="text-center mb-3">@colon.Name</h4>
+                @* ajouter contrainte en css *@
+                <img class="mx-auto" alt="Colon image"/>
+                <div class="w-auto mx-auto mt-3">
+                    <h5>Proffession : </h5>
+                    <p>@colon.JobName</p>
+                    <h5>Force : </h5>
+                    <p>@colon.Force</p>
+                    <h5>Endurance : </h5>
+                    <p>@colon.Stamina</p>
+                </div>
+                
+            </article>
+        }
+    </div>
+
+    <a asp-page="/TeamUpdate" asp-route-id="@Model.SelectionedTeam.TeamId" class="btn btn-primary ms-auto w-auto">Modifier l'équipe</a>
 </section>
