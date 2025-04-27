@@ -14,9 +14,10 @@ public class UserRepository : IUserRepository
     private readonly StarColoniesContext _dbContext;
     private readonly UserManager<StarColoniesUser> _userManager; 
     
-    public UserRepository(StarColoniesContext dbContext)
+    public UserRepository(UserManager<StarColoniesUser> userManager, StarColoniesContext dbContext)
     {
         _dbContext = dbContext;
+        _userManager = userManager;
     }
 
     public async Task<List<User>> GetAllAsync()
@@ -30,17 +31,17 @@ public class UserRepository : IUserRepository
         return entities.Select(UserMapper.ToDomain).ToList();
     }
     
-    public async Task<User> GetConnectedUser(ClaimsPrincipal user)
+    public async Task<User?> GetConnectedUser(ClaimsPrincipal user)
     {
         var userConnected = new User();
         
         var userDb = await _userManager.GetUserAsync(user);
-        if(userDb != null) userConnected = await GetUserByIdAsync(userDb.Id);
-
-        //Console.WriteLine("username : " + userConnected.Name);
-        //Console.WriteLine("userColon : " + userConnected.UserColon.Name);
-        //BirthDateFormatted = userConnected.BirthDate.ToString("yyyy-MM-dd");
-        return userConnected;
+        if (userDb != null)
+        {
+           return await GetUserByIdAsync(userDb.Id);
+        }
+        
+        return null;
     }
 
     public async Task<User?> GetUserByIdAsync(string userId)

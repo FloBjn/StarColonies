@@ -9,5 +9,5 @@ public interface IUserRepository
     Task AddAsync(User user);
     void ModifyUserAsync(User user);
     void DeleteUserAsync(User user);
-    Task<User> GetConnectedUser(ClaimsPrincipal user);
+    Task<User?> GetConnectedUser(ClaimsPrincipal user);
 }
