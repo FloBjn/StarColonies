@@ -37,7 +37,7 @@ namespace StarColonies.Web.Pages
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
         private readonly IWebHostEnvironment _webHostEnvironment;
-        private readonly AppDbContext _dbContext;
+        private readonly StarColoniesContext _dbContext;
         private readonly IUserRepository _userRepository;
         private readonly IColonRepository _colonRepository;
 
@@ -48,7 +48,7 @@ namespace StarColonies.Web.Pages
             ILogger<RegisterModel> logger,
             IEmailSender emailSender,
             IWebHostEnvironment webHostEnvironment,
-            AppDbContext dbContext,
+            StarColoniesContext dbContext,
             IUserRepository userRepository,
             IColonRepository colonRepository)
         {

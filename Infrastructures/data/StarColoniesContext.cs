@@ -48,9 +48,9 @@ public class StarColoniesContext : IdentityDbContext<StarColoniesUser>
 
         builder.Entity<StarColoniesUser>(entity =>
         {
-            entity.HasKey(scu => scu.UserId);
+            entity.HasKey(scu => scu.Id);
             
-            entity.Property(e => e.UserId)
+            entity.Property(e => e.Id)
                         .ValueGeneratedOnAdd();
             
             entity.HasOne(u => u.UserColon)
@@ -67,13 +67,6 @@ public class StarColoniesContext : IdentityDbContext<StarColoniesUser>
             entity.Property(e => e.EnemyId)
                 .ValueGeneratedOnAdd();
         });
-        builder.Entity<StarColoniesUser>().HasKey(scu => scu.Id);
-        builder.Entity<StarColoniesUser>()
-            .Property(e => e.Id)
-            .ValueGeneratedOnAdd();
-        builder.Entity<StarColoniesUser>()
-            .HasOne(u => u.UserColon);
-        
 
         builder.Entity<StarColoniesMission>(entity =>
         {

@@ -9,14 +9,14 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
-builder.Services.AddDbContext<AppDbContext>(options =>
+builder.Services.AddDbContext<StarColoniesContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DevConnexionString"));
 });
 
 builder.Services
     .AddDefaultIdentity<StarColoniesUser>(options => options.SignIn.RequireConfirmedAccount = false)
-    .AddEntityFrameworkStores<AppDbContext>();
+    .AddEntityFrameworkStores<StarColoniesContext>();
 
 builder.Services.AddTransient<ReverseProxyLinksMiddleware>();
 

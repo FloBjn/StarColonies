@@ -8,9 +8,9 @@ namespace StarColonies.Infrastructures.Repositories;
 
 public class UserRepository : IUserRepository
 {
-    private readonly AppDbContext _dbContext;
+    private readonly StarColoniesContext _dbContext;
 
-    public UserRepository(AppDbContext dbContext)
+    public UserRepository(StarColoniesContext dbContext)
     {
         _dbContext = dbContext;
     }

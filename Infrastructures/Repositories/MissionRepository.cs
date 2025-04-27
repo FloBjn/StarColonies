@@ -8,9 +8,9 @@ namespace StarColonies.Infrastructures.Repositories;
 
 public class MissionRepository : IMissionRepository
 {
-    private readonly AppDbContext _dbContext;
+    private readonly StarColoniesContext _dbContext;
 
-    public MissionRepository(AppDbContext dbContext)
+    public MissionRepository(StarColoniesContext dbContext)
     {
         _dbContext = dbContext;
     }
@@ -45,8 +45,8 @@ public class MissionRepository : IMissionRepository
     public async void UpdateMissionAsync(Mission mission)
     {
         var entity = MissionMapper.ToEntity(mission);
-        _context.ScMission.Add(entity);
-        await _context.SaveChangesAsync();
+        _dbContext.ScMission.Add(entity);
+        await _dbContext.SaveChangesAsync();
     }
 
     public void DeleteMissionAsync(Mission mission)
