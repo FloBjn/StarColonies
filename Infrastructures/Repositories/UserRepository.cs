@@ -42,4 +42,14 @@ public class UserRepository : IUserRepository
         _context.ScUser.Add(entity);
         await _context.SaveChangesAsync();
     }
+
+    public void ModifyUserAsync(User user)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void DeleteUserAsync(User user)
+    {
+        throw new NotImplementedException();
+    }
 }

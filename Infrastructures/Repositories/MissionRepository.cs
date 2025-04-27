@@ -38,4 +38,21 @@ public class MissionRepository : IMissionRepository
         return entity is null ? null : MissionMapper.ToDomain(entity);
         
     }
+
+    public Task AddMissionAsync(Mission mission)
+    {
+        throw new NotImplementedException();
+    }
+
+    public async void UpdateMissionAsync(Mission mission)
+    {
+        var entity = MissionMapper.ToEntity(mission);
+        _context.ScMission.Add(entity);
+        await _context.SaveChangesAsync();
+    }
+
+    public void DeleteMissionAsync(Mission mission)
+    {
+        throw new NotImplementedException();
+    }
 }

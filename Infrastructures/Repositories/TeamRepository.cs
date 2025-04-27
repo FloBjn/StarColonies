@@ -37,4 +37,14 @@ public class TeamRepository :ITeamRepository
         _context.ScTeam.Add(entity);
         await _context.SaveChangesAsync();
     }
+
+    public void UpdateTeamAsync(Team team)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void DeleteTeamAsync(Team team)
+    {
+        throw new NotImplementedException();
+    }
 }
