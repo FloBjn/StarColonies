@@ -44,7 +44,7 @@ public class ColonRepository : IColonRepository
         await _context.SaveChangesAsync();
     }
     
-    public async Task ModifyColonPerfAsync(Colon colon)
+    public async Task UpdateColonPerfAsync(Colon colon)
     {
         var colonDb = await GetColonEntityByIdAsync(colon.ColonId);
         if (colonDb == null) return;
@@ -55,7 +55,7 @@ public class ColonRepository : IColonRepository
         await _context.SaveChangesAsync();
     }
     
-    public async Task ModifyColonNameAsync(Colon colon)
+    public async Task UpdateColonNameAsync(Colon colon)
     {
         var colonDb = await GetColonEntityByIdAsync(colon.ColonId);
         if (colonDb == null) return;

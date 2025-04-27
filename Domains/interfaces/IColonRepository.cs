@@ -5,6 +5,6 @@ public interface IColonRepository
     Task <List<Colon>> GetAllColonsAsync();
     Task<Colon?> GetColonByIdAsync(string colonId);
     Task AddColonAsync(Colon colon);
-    Task ModifyColonPerfAsync(Colon colon);
-    Task ModifyColonNameAsync(Colon colon);
+    Task UpdateColonPerfAsync(Colon colon);
+    Task UpdateColonNameAsync(Colon colon);
 }

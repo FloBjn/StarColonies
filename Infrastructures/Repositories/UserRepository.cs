@@ -55,7 +55,7 @@ public class UserRepository : IUserRepository
         await _context.SaveChangesAsync();
     }
 
-    public async Task ModifyUserAsync(User user)
+    public async Task UpdateUserAsync(User user)
     {
         //Console.WriteLine("Userconnected : " + user == null);
         var userDb = await GetUserEntityByIdAsync(user.Id);
