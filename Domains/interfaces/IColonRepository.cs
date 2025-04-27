@@ -2,5 +2,8 @@
 
 public interface IColonRepository
 {
-    public Task<string> AddColonAsync(Colon colon);
+    Task <List<Colon>> GetAllColonsAsync();
+    Task<Colon?> GetColonByIdAsync(string colonId);
+    Task AddColonAsync(Colon colon);
+    void UpdateColonAsync(Colon colon);
 }

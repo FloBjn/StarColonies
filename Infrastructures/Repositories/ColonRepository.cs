@@ -1,4 +1,6 @@
 ﻿using StarColonies.Domains;
+using Microsoft.EntityFrameworkCore;
+using StarColonies.Domains;
 using StarColonies.Domains.interfaces;
 using StarColonies.Infrastructures.data;
 using StarColonies.Infrastructures.Mappers;
@@ -7,21 +9,36 @@ namespace StarColonies.Infrastructures.Repositories;
 
 public class ColonRepository : IColonRepository
 {
-    
-    private readonly AppDbContext _dbContext;
-
-    // Injecter le DbContext dans le repository
-    public ColonRepository(AppDbContext dbContext)
+    private readonly StarColoniesContext _context;
+    public ColonRepository(StarColoniesContext context)
     {
-        _dbContext = dbContext;
+        _context = context;
     }
-    public async Task<string> AddColonAsync(Colon colon)
+    public async Task<List<Colon>> GetAllColonsAsync()
     {
-        var starColoniesColon = ColonMapper.ToEntity(colon);
-        _dbContext.ScColon.Add(starColoniesColon);
-        
-        await _dbContext.SaveChangesAsync();
-        
-        return starColoniesColon.ColonId;
+        var entities = await _context.ScColon
+            .Include(c => c.JobName)
+            .Include(c => c.Teams)
+            .ToListAsync();
+        return entities.Select(ColonMapper.ToDomain).ToList();
+    }
+    public async Task<Colon?> GetColonByIdAsync(string colonId)
+    {
+        var entity = await _context.ScColon
+            .Include(c => c.JobName)
+            .Include(c => c.Teams)
+            .FirstOrDefaultAsync(c => c.ColonId == colonId);
+        return entity is null ? null : ColonMapper.ToDomain(entity);
+    }
+    public async Task AddColonAsync(Colon colon)
+    {
+        var entity = ColonMapper.ToEntity(colon);
+        _context.ScColon.Add(entity);
+        await _context.SaveChangesAsync();
+    }
+
+    public void UpdateColonAsync(Colon colon)
+    {
+        throw new NotImplementedException();
     }
 }

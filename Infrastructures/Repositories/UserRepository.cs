@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 using StarColonies.Domains;
 using StarColonies.Domains.interfaces;
 using StarColonies.Infrastructures.data;
@@ -42,5 +41,15 @@ public class UserRepository : IUserRepository
         var entity = UserMapper.ToEntity(user);
         _dbContext.ScUser.Add(entity);
         await _dbContext.SaveChangesAsync();
+    }
+
+    public void ModifyUserAsync(User user)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void DeleteUserAsync(User user)
+    {
+        throw new NotImplementedException();
     }
 }

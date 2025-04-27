@@ -19,7 +19,6 @@ public class MissionRepository : IMissionRepository
     {
         var entities = await _dbContext.ScMission
             .Include(e => e.MissionEnemies)
-            .ThenInclude(et => et.EnemyType)
             .ToListAsync();
         
         //pas sûre du return, je renvoie une liste possiblement vide, est-ce un problème?
@@ -30,12 +29,28 @@ public class MissionRepository : IMissionRepository
     {
         var entity = await _dbContext.ScMission
             .Include(e => e.MissionEnemies)
-            .ThenInclude(et => et.EnemyType)
             .FirstOrDefaultAsync(m => m.MissionId == missionId);
 
         
         //pas sûre du return, je renvoie une liste possiblement vide, est-ce un problème?
         return entity is null ? null : MissionMapper.ToDomain(entity);
         
+    }
+
+    public Task AddMissionAsync(Mission mission)
+    {
+        throw new NotImplementedException();
+    }
+
+    public async void UpdateMissionAsync(Mission mission)
+    {
+        var entity = MissionMapper.ToEntity(mission);
+        _context.ScMission.Add(entity);
+        await _context.SaveChangesAsync();
+    }
+
+    public void DeleteMissionAsync(Mission mission)
+    {
+        throw new NotImplementedException();
     }
 }

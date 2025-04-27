@@ -155,6 +155,94 @@ namespace StarColonies.Infrastructures.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("ScMissionEnemies", b =>
+                {
+                    b.Property<string>("MissionId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("EnemyId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("MissionId", "EnemyId");
+
+                    b.HasIndex("EnemyId");
+
+                    b.ToTable("ScMissionEnemies", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            MissionId = "5e8afb9a-063d-47a6-a897-9bcb6a319f45",
+                            EnemyId = "e1f69ce6-800a-4cc2-98b4-05ca6f5a062a"
+                        },
+                        new
+                        {
+                            MissionId = "5e8afb9a-063d-47a6-a897-9bcb6a319f45",
+                            EnemyId = "69a21f70-759d-4edd-b0f9-2fc0673f9192"
+                        });
+                });
+
+            modelBuilder.Entity("StarColonies.Infrastructures.Entities.StarColoniesBonusObject", b =>
+                {
+                    b.Property<string>("BonusObjectId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("BonusForce")
+                        .HasColumnType("int");
+
+                    b.Property<int>("BonusLevel")
+                        .HasColumnType("int");
+
+                    b.Property<int>("BonusStamina")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Price")
+                        .HasColumnType("int");
+
+                    b.Property<string>("StarColoniesTeamTeamId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("BonusObjectId");
+
+                    b.HasIndex("StarColoniesTeamTeamId");
+
+                    b.ToTable("ScBonusObject");
+
+                    b.HasData(
+                        new
+                        {
+                            BonusObjectId = "3779c08e-6145-4109-96fd-4aff7179a5cc",
+                            BonusForce = 0,
+                            BonusLevel = 1,
+                            BonusStamina = 0,
+                            Name = "Potion Mystérieuse",
+                            Price = 30
+                        },
+                        new
+                        {
+                            BonusObjectId = "733861f1-83ad-4336-9125-73263d5c5da1",
+                            BonusForce = 1,
+                            BonusLevel = 0,
+                            BonusStamina = 0,
+                            Name = "Barre protéinée",
+                            Price = 5
+                        },
+                        new
+                        {
+                            BonusObjectId = "3c94032b-fa6c-4743-8d11-480bae2f0c45",
+                            BonusForce = 0,
+                            BonusLevel = 0,
+                            BonusStamina = 1,
+                            Name = "Boisson énergétique",
+                            Price = 5
+                        });
+                });
+
             modelBuilder.Entity("StarColonies.Infrastructures.Entities.StarColoniesColon", b =>
                 {
                     b.Property<string>("ColonId")
@@ -167,9 +255,15 @@ namespace StarColonies.Infrastructures.Migrations
                     b.Property<int>("JobName")
                         .HasColumnType("int");
 
+                    b.Property<int>("Level")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("NumberResource")
+                        .HasColumnType("int");
 
                     b.Property<int>("Stamina")
                         .HasColumnType("int");
@@ -177,6 +271,48 @@ namespace StarColonies.Infrastructures.Migrations
                     b.HasKey("ColonId");
 
                     b.ToTable("ScColon");
+
+                    b.HasData(
+                        new
+                        {
+                            ColonId = "4b40cddf-b714-48aa-ac0d-442b1c0f4f88",
+                            Force = 5,
+                            JobName = 1,
+                            Level = 1,
+                            Name = "Alex Striker",
+                            NumberResource = 0,
+                            Stamina = 2
+                        },
+                        new
+                        {
+                            ColonId = "821a9092-90c7-42b9-b1a2-aa556a0f89c5",
+                            Force = 3,
+                            JobName = 0,
+                            Level = 1,
+                            Name = "Mira Nova",
+                            NumberResource = 0,
+                            Stamina = 4
+                        },
+                        new
+                        {
+                            ColonId = "c01445b1-bd43-4b4b-bd85-a0c3b8b63af3",
+                            Force = 2,
+                            JobName = 3,
+                            Level = 1,
+                            Name = "Elara Starfinder",
+                            NumberResource = 0,
+                            Stamina = 5
+                        },
+                        new
+                        {
+                            ColonId = "1d5195e9-c0c1-4794-9513-bcfd16800250",
+                            Force = 4,
+                            JobName = 2,
+                            Level = 1,
+                            Name = "Jason Blades",
+                            NumberResource = 0,
+                            Stamina = 3
+                        });
                 });
 
             modelBuilder.Entity("StarColonies.Infrastructures.Entities.StarColoniesEnemy", b =>
@@ -185,33 +321,128 @@ namespace StarColonies.Infrastructures.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<int>("EnemyTypeNameId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Force")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("StarColoniesMissionMissionId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("Stamina")
+                        .HasColumnType("int");
 
                     b.HasKey("EnemyId");
 
-                    b.HasIndex("StarColoniesMissionMissionId");
-
                     b.ToTable("ScEnemy");
-                });
 
-            modelBuilder.Entity("StarColonies.Infrastructures.Entities.StarColoniesEnemyType", b =>
-                {
-                    b.Property<string>("EnemyTypeId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("EnemyTypeId");
-
-                    b.ToTable("ScEnemyType");
+                    b.HasData(
+                        new
+                        {
+                            EnemyId = "f64e8288-051f-449d-a7e6-1e326690646c",
+                            EnemyTypeNameId = 0,
+                            Force = 2,
+                            Name = "Drone",
+                            Stamina = 2
+                        },
+                        new
+                        {
+                            EnemyId = "e1f69ce6-800a-4cc2-98b4-05ca6f5a062a",
+                            EnemyTypeNameId = 1,
+                            Force = 1,
+                            Name = "Anomalie",
+                            Stamina = 3
+                        },
+                        new
+                        {
+                            EnemyId = "79c856f1-f970-4027-8be9-c2b2a33067ba",
+                            EnemyTypeNameId = 2,
+                            Force = 4,
+                            Name = "Cryptoïde",
+                            Stamina = 12
+                        },
+                        new
+                        {
+                            EnemyId = "ee14a6df-ba7c-4a2f-8a35-50661d0f718a",
+                            EnemyTypeNameId = 3,
+                            Force = 7,
+                            Name = "Spectre",
+                            Stamina = 1
+                        },
+                        new
+                        {
+                            EnemyId = "b9215b7b-6bd1-45d9-8f90-e2050fc2de2b",
+                            EnemyTypeNameId = 0,
+                            Force = 1,
+                            Name = "Nanobot",
+                            Stamina = 2
+                        },
+                        new
+                        {
+                            EnemyId = "69a21f70-759d-4edd-b0f9-2fc0673f9192",
+                            EnemyTypeNameId = 4,
+                            Force = 4,
+                            Name = "Prédateur",
+                            Stamina = 3
+                        },
+                        new
+                        {
+                            EnemyId = "c974685a-4dc4-41b7-93a8-98d6b104715c",
+                            EnemyTypeNameId = 5,
+                            Force = 4,
+                            Name = "Chimère",
+                            Stamina = 4
+                        },
+                        new
+                        {
+                            EnemyId = "6f043d86-dfc7-4f03-adac-d246d9455131",
+                            EnemyTypeNameId = 2,
+                            Force = 5,
+                            Name = "Titan",
+                            Stamina = 3
+                        },
+                        new
+                        {
+                            EnemyId = "cdb8ad6a-1e13-49f2-b6d9-8bddeb41a71c",
+                            EnemyTypeNameId = 3,
+                            Force = 5,
+                            Name = "Entité",
+                            Stamina = 11
+                        },
+                        new
+                        {
+                            EnemyId = "3714e019-45aa-436c-94b2-2667b22ced5b",
+                            EnemyTypeNameId = 6,
+                            Force = 2,
+                            Name = "Mutant",
+                            Stamina = 4
+                        },
+                        new
+                        {
+                            EnemyId = "9e7b0b1a-d06a-4259-958a-78aae827b98d",
+                            EnemyTypeNameId = 2,
+                            Force = 9,
+                            Name = "Leviathan",
+                            Stamina = 7
+                        },
+                        new
+                        {
+                            EnemyId = "237e2cc8-67d7-44bb-a26a-0c2c94a8057b",
+                            EnemyTypeNameId = 2,
+                            Force = 20,
+                            Name = "Hégémon",
+                            Stamina = 20
+                        },
+                        new
+                        {
+                            EnemyId = "19a1300e-06f9-4c20-8262-32c4d3f33f22",
+                            EnemyTypeNameId = 0,
+                            Force = 20,
+                            Name = "Drone de combat",
+                            Stamina = 15
+                        });
                 });
 
             modelBuilder.Entity("StarColonies.Infrastructures.Entities.StarColoniesMission", b =>
@@ -227,6 +458,39 @@ namespace StarColonies.Infrastructures.Migrations
                     b.HasKey("MissionId");
 
                     b.ToTable("ScMission");
+
+                    b.HasData(
+                        new
+                        {
+                            MissionId = "5e8afb9a-063d-47a6-a897-9bcb6a319f45",
+                            Name = "Exploration de la base abandonnée"
+                        });
+                });
+
+            modelBuilder.Entity("StarColonies.Infrastructures.Entities.StarColoniesMissionHistory", b =>
+                {
+                    b.Property<string>("MissionHistoryId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<bool>("IsSuccess")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("MissionId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("TeamId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("MissionHistoryId");
+
+                    b.HasIndex("MissionId");
+
+                    b.HasIndex("TeamId");
+
+                    b.ToTable("ScMissionHistory");
                 });
 
             modelBuilder.Entity("StarColonies.Infrastructures.Entities.StarColoniesTeam", b =>
@@ -234,6 +498,9 @@ namespace StarColonies.Infrastructures.Migrations
                     b.Property<string>("TeamId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("LevelMaxAuthorized")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -246,7 +513,7 @@ namespace StarColonies.Infrastructures.Migrations
 
             modelBuilder.Entity("StarColonies.Infrastructures.Entities.StarColoniesUser", b =>
                 {
-                    b.Property<string>("Id")
+                    b.Property<string>("UserId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("nvarchar(450)");
 
@@ -261,7 +528,7 @@ namespace StarColonies.Infrastructures.Migrations
 
                     b.Property<string>("ColonId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -273,6 +540,9 @@ namespace StarColonies.Infrastructures.Migrations
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
+
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -303,15 +573,14 @@ namespace StarColonies.Infrastructures.Migrations
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
 
-                    b.Property<string>("UserColonColonId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
-                    b.HasKey("Id");
+                    b.HasKey("UserId");
+
+                    b.HasIndex("ColonId")
+                        .IsUnique();
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
@@ -320,8 +589,6 @@ namespace StarColonies.Infrastructures.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
-
-                    b.HasIndex("UserColonColonId");
 
                     b.ToTable("AspNetUsers", (string)null);
                 });
@@ -392,28 +659,53 @@ namespace StarColonies.Infrastructures.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("StarColonies.Infrastructures.Entities.StarColoniesEnemy", b =>
-                {
-                    b.HasOne("StarColonies.Infrastructures.Entities.StarColoniesMission", null)
-                        .WithMany("MissionEnemies")
-                        .HasForeignKey("StarColoniesMissionMissionId");
-                });
-
-            modelBuilder.Entity("StarColonies.Infrastructures.Entities.StarColoniesEnemyType", b =>
+            modelBuilder.Entity("ScMissionEnemies", b =>
                 {
                     b.HasOne("StarColonies.Infrastructures.Entities.StarColoniesEnemy", null)
-                        .WithOne("EnemyType")
-                        .HasForeignKey("StarColonies.Infrastructures.Entities.StarColoniesEnemyType", "EnemyTypeId")
+                        .WithMany()
+                        .HasForeignKey("EnemyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("StarColonies.Infrastructures.Entities.StarColoniesMission", null)
+                        .WithMany()
+                        .HasForeignKey("MissionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("StarColonies.Infrastructures.Entities.StarColoniesBonusObject", b =>
+                {
+                    b.HasOne("StarColonies.Infrastructures.Entities.StarColoniesTeam", null)
+                        .WithMany("TeamBonusObjects")
+                        .HasForeignKey("StarColoniesTeamTeamId");
+                });
+
+            modelBuilder.Entity("StarColonies.Infrastructures.Entities.StarColoniesMissionHistory", b =>
+                {
+                    b.HasOne("StarColonies.Infrastructures.Entities.StarColoniesMission", "Mission")
+                        .WithMany()
+                        .HasForeignKey("MissionId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("StarColonies.Infrastructures.Entities.StarColoniesTeam", "Team")
+                        .WithMany()
+                        .HasForeignKey("TeamId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Mission");
+
+                    b.Navigation("Team");
                 });
 
             modelBuilder.Entity("StarColonies.Infrastructures.Entities.StarColoniesUser", b =>
                 {
                     b.HasOne("StarColonies.Infrastructures.Entities.StarColoniesColon", "UserColon")
-                        .WithMany()
-                        .HasForeignKey("UserColonColonId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .WithOne()
+                        .HasForeignKey("StarColonies.Infrastructures.Entities.StarColoniesUser", "ColonId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("UserColon");
@@ -434,15 +726,9 @@ namespace StarColonies.Infrastructures.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("StarColonies.Infrastructures.Entities.StarColoniesEnemy", b =>
+            modelBuilder.Entity("StarColonies.Infrastructures.Entities.StarColoniesTeam", b =>
                 {
-                    b.Navigation("EnemyType")
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("StarColonies.Infrastructures.Entities.StarColoniesMission", b =>
-                {
-                    b.Navigation("MissionEnemies");
+                    b.Navigation("TeamBonusObjects");
                 });
 #pragma warning restore 612, 618
         }
