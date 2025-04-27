@@ -8,13 +8,17 @@ public class EnemyMapper
     public static Enemy ToDomain(StarColoniesEnemy entity) => new Enemy
     {
         Name = entity.Name,
-        EnemyType = EnemyTypeNameMapper.ToEnemyTypeName(entity.EnemyType)
+        Force = entity.Force,
+        Stamina = entity.Stamina,
+        EnemyTypeName = EnemyTypeNameMapper.ToEnemyTypeName(entity.EnemyTypeNameId)
 
     };
 
     public static StarColoniesEnemy ToEntity(Enemy enemy) => new StarColoniesEnemy
     {
         Name = enemy.Name,
-        EnemyType = EnemyTypeNameMapper.ToInt(enemy.EnemyType)
+        Force = enemy.Force,
+        Stamina = enemy.Stamina,
+        EnemyTypeNameId = EnemyTypeNameMapper.ToInt(enemy.EnemyTypeName)
     };
 }

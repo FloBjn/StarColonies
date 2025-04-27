@@ -115,7 +115,30 @@ public class StarColoniesContext : IdentityDbContext<StarColoniesUser>
                 .HasForeignKey(e => e.TeamId)
                 .OnDelete(DeleteBehavior.Restrict);
         });
+         
+    }
+
+    private void AddInitialData(ModelBuilder builder)
+    {
+        builder.Entity<StarColoniesColon>().HasData(new List<StarColoniesColon>
+        {
+             new StarColoniesColon {ColonId = new Guid().ToString(), Name = "Alex Striker", Level = 1, Force = 5, Stamina = 2, NumberResource = 0, JobName = 1}
+        });
         
+        builder.Entity<StarColoniesEnemy>().HasData(new List<StarColoniesEnemy>
+            {
+                new StarColoniesEnemy {EnemyId = new Guid().ToString(), Name = "Drone", EnemyTypeNameId = 0}
+            });
+        
+        builder.Entity<StarColoniesMission>().HasData(new List<StarColoniesMission>
+        {
+            new StarColoniesMission {MissionId = new Guid().ToString(),Name = "Exploration de la base abandonnée"}
+        });
+        
+        builder.Entity<StarColoniesBonusObject>().HasData(new List<StarColoniesBonusObject>
+        {
+            new StarColoniesBonusObject {BonusObjectId = new Guid().ToString(), Name = "Potion Mystérieuse", Price = 10, BonusLevel = 1, BonusForce = 0, BonusStamina = 0}
+        });
     }
     
 }
