@@ -22,15 +22,12 @@ public class ProfileModel : PageModel
     
     public async Task<IActionResult> OnGetAsync()
     {
-        Console.WriteLine($"IsAuthenticated: {User.Identity.IsAuthenticated}");
-        Console.WriteLine($"Name: {User.Identity.Name}");
-        Console.WriteLine($"Claims:");
-        foreach (var claim in User.Claims)
-        {
-            Console.WriteLine($" - {claim.Type}: {claim.Value}");
-        }
         UserConnected = await _userManager.GetUserAsync(User);
-        if (UserConnected != null) BirthDateFormatted = UserConnected.BirthDate.ToString("yyyy-MM-dd");
+        if (UserConnected != null)
+        {
+            Console.WriteLine("username : " + UserConnected.UserName);
+            BirthDateFormatted = UserConnected.BirthDate.ToString("yyyy-MM-dd");
+        }
 
         return Page();
     }

@@ -3,22 +3,21 @@ using StarColonies.Domains;
 using StarColonies.Domains.interfaces;
 using StarColonies.Infrastructures.data;
 using StarColonies.Infrastructures.Mappers;
-using AppContext = StarColonies.Infrastructures.data.AppContext;
 
 namespace StarColonies.Infrastructures.Repositories;
 
 public class MissionRepository : IMissionRepository
 {
-    private readonly AppContext _context;
+    private readonly AppDbContext _dbContext;
 
-    public MissionRepository(AppContext context)
+    public MissionRepository(AppDbContext dbContext)
     {
-        _context = context;
+        _dbContext = dbContext;
     }
     
     public async Task<List<Mission>> GetAllAsync()
     {
-        var entities = await _context.ScMission
+        var entities = await _dbContext.ScMission
             .Include(e => e.MissionEnemies)
             .ThenInclude(et => et.EnemyType)
             .ToListAsync();
@@ -29,7 +28,7 @@ public class MissionRepository : IMissionRepository
 
     public async Task<Mission?> GetByIdAsync(string missionId)
     {
-        var entity = await _context.ScMission
+        var entity = await _dbContext.ScMission
             .Include(e => e.MissionEnemies)
             .ThenInclude(et => et.EnemyType)
             .FirstOrDefaultAsync(m => m.MissionId == missionId);

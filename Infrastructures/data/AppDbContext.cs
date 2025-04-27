@@ -6,7 +6,7 @@ using StarColonies.Infrastructures.Entities;
 
 namespace StarColonies.Infrastructures.data;
 
-public class AppContext : IdentityDbContext<StarColoniesUser>
+public class AppDbContext : IdentityDbContext<StarColoniesUser>
 {
     public DbSet<StarColoniesColon> ScColon { get; set; }
     public DbSet<StarColoniesUser> ScUser { get; set; }
@@ -16,7 +16,7 @@ public class AppContext : IdentityDbContext<StarColoniesUser>
     public DbSet<StarColoniesTeam> ScTeam { get; set; }
     
 
-    public AppContext(DbContextOptions<AppContext> options)
+    public AppDbContext(DbContextOptions<AppDbContext> options)
         : base(options)
     {
     }

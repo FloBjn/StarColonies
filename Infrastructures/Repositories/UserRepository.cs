@@ -4,22 +4,21 @@ using StarColonies.Domains;
 using StarColonies.Domains.interfaces;
 using StarColonies.Infrastructures.data;
 using StarColonies.Infrastructures.Mappers;
-using AppContext = StarColonies.Infrastructures.data.AppContext;
 
 namespace StarColonies.Infrastructures.Repositories;
 
 public class UserRepository : IUserRepository
 {
-    private readonly AppContext _context;
+    private readonly AppDbContext _dbContext;
 
-    public UserRepository(AppContext context)
+    public UserRepository(AppDbContext dbContext)
     {
-        _context = context;
+        _dbContext = dbContext;
     }
 
     public async Task<List<User>> GetAllAsync()
     {
-        var entities = await _context.ScUser
+        var entities = await _dbContext.ScUser
             .Include(u => u.UserColon)
             .ThenInclude(c=> c.Teams)
             .ToListAsync();
@@ -30,7 +29,7 @@ public class UserRepository : IUserRepository
 
     public async Task<User?> GetUserByIdAsync(string userId)
     {
-        var entity = await _context.ScUser
+        var entity = await _dbContext.ScUser
             .Include(u => u.UserColon)
             .ThenInclude(c=> c.Teams)
             .FirstOrDefaultAsync(u => u.Id == userId);
@@ -41,7 +40,7 @@ public class UserRepository : IUserRepository
     public async Task AddAsync(User user)
     {
         var entity = UserMapper.ToEntity(user);
-        _context.ScUser.Add(entity);
-        await _context.SaveChangesAsync();
+        _dbContext.ScUser.Add(entity);
+        await _dbContext.SaveChangesAsync();
     }
 }

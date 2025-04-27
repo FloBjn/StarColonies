@@ -25,7 +25,6 @@ using StarColonies.Domains.interfaces;
 using StarColonies.Infrastructures.data;
 using StarColonies.Infrastructures.Entities;
 using StarColonies.Infrastructures.Mappers;
-using AppContext = StarColonies.Infrastructures.data.AppContext;
 
 namespace StarColonies.Web.Pages
 {
@@ -38,7 +37,7 @@ namespace StarColonies.Web.Pages
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
         private readonly IWebHostEnvironment _webHostEnvironment;
-        private readonly AppContext _context;
+        private readonly AppDbContext _dbContext;
         private readonly IUserRepository _userRepository;
         private readonly IColonRepository _colonRepository;
 
@@ -49,7 +48,7 @@ namespace StarColonies.Web.Pages
             ILogger<RegisterModel> logger,
             IEmailSender emailSender,
             IWebHostEnvironment webHostEnvironment,
-            AppContext context,
+            AppDbContext dbContext,
             IUserRepository userRepository,
             IColonRepository colonRepository)
         {
@@ -60,7 +59,7 @@ namespace StarColonies.Web.Pages
             _logger = logger;
             _emailSender = emailSender;
             _webHostEnvironment = webHostEnvironment;
-            _context = context;
+            _dbContext = dbContext;
             _userRepository = userRepository;
             _colonRepository = colonRepository;
         }
@@ -170,7 +169,7 @@ namespace StarColonies.Web.Pages
     if (ModelState.IsValid)
     {
         // 🛡️ Commencer une transaction sur ton DbContext
-        await using var transaction = await _context.Database.BeginTransactionAsync();
+        await using var transaction = await _dbContext.Database.BeginTransactionAsync();
 
         try
         {
@@ -183,8 +182,8 @@ namespace StarColonies.Web.Pages
             };
 
             var colonEntity = ColonMapper.ToEntity(colon);
-            _context.ScColon.Add(colonEntity);
-            await _context.SaveChangesAsync();
+            _dbContext.ScColon.Add(colonEntity);
+            await _dbContext.SaveChangesAsync();
             Console.Out.WriteLine($"Colon: {colonEntity.ColonId}");
 
             var user = new User
