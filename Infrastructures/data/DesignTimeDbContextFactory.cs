@@ -3,16 +3,16 @@ using Microsoft.EntityFrameworkCore.Design;
 
 namespace StarColonies.Infrastructures.data
 {
-    public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<StarColoniesContext>
+    public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<AppContext>
     {
-        public StarColoniesContext CreateDbContext(string[] args)
+        public AppContext CreateDbContext(string[] args)
         {
-            var optionsBuilder = new DbContextOptionsBuilder<StarColoniesContext>();
+            var optionsBuilder = new DbContextOptionsBuilder<AppContext>();
 
             // Utiliser la chaîne de connexion définie dans appsettings.json ou une chaîne de connexion hardcodée
-            optionsBuilder.UseSqlServer("Server=192.168.132.200,11433;Database=Q220191;User Id=Q220191;Password=0191;TrustServerCertificate=True;MultipleActiveResultSets=True");
+            optionsBuilder.UseSqlServer("Server=192.168.132.200,11433;Database=Q230243;User Id=Q230243;Password=0243;TrustServerCertificate=True;MultipleActiveResultSets=True");
 
-            return new StarColoniesContext(optionsBuilder.Options);
+            return new AppContext(optionsBuilder.Options);
         }
     }
 }

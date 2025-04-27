@@ -25,6 +25,7 @@ using StarColonies.Domains.interfaces;
 using StarColonies.Infrastructures.data;
 using StarColonies.Infrastructures.Entities;
 using StarColonies.Infrastructures.Mappers;
+using AppContext = StarColonies.Infrastructures.data.AppContext;
 
 namespace StarColonies.Web.Pages
 {
@@ -37,8 +38,9 @@ namespace StarColonies.Web.Pages
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
         private readonly IWebHostEnvironment _webHostEnvironment;
-        private readonly StarColoniesContext _context;
+        private readonly AppContext _context;
         private readonly IUserRepository _userRepository;
+        private readonly IColonRepository _colonRepository;
 
         public RegisterModel(
             UserManager<StarColoniesUser> userManager,
@@ -47,8 +49,9 @@ namespace StarColonies.Web.Pages
             ILogger<RegisterModel> logger,
             IEmailSender emailSender,
             IWebHostEnvironment webHostEnvironment,
-            StarColoniesContext context,
-            IUserRepository userRepository)
+            AppContext context,
+            IUserRepository userRepository,
+            IColonRepository colonRepository)
         {
             _userManager = userManager;
             _userStore = userStore;
@@ -59,6 +62,7 @@ namespace StarColonies.Web.Pages
             _webHostEnvironment = webHostEnvironment;
             _context = context;
             _userRepository = userRepository;
+            _colonRepository = colonRepository;
         }
 
         /// <summary>
@@ -158,93 +162,109 @@ namespace StarColonies.Web.Pages
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
         }
 
-        public async Task<IActionResult> OnPostAsync(string returnUrl = null)
-        {
-            returnUrl ??= Url.Content("~/");
-            ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+       public async Task<IActionResult> OnPostAsync(string returnUrl = null)
+{
+    returnUrl ??= Url.Content("~/");
+    ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 
-            if (ModelState.IsValid)
+    if (ModelState.IsValid)
+    {
+        // 🛡️ Commencer une transaction sur ton DbContext
+        await using var transaction = await _context.Database.BeginTransactionAsync();
+
+        try
+        {
+            var colon = new Colon
             {
-                var colon = new Colon
+                Name = Input.Name,
+                JobName = JobNameMapper.ToJobName(Input.Profession),
+                Force = Input.Force,
+                Stamina = Input.Endurance,
+            };
+
+            var colonEntity = ColonMapper.ToEntity(colon);
+            _context.ScColon.Add(colonEntity);
+            await _context.SaveChangesAsync();
+            Console.Out.WriteLine($"Colon: {colonEntity.ColonId}");
+
+            var user = new User
+            {
+                BirthDate = Input.BirthDate,
+                ColonId = colonEntity.ColonId,
+                UserColon = colon,
+            };
+
+            // Traitement de l'image avant la création de l'utilisateur
+            if (_webHostEnvironment.IsDevelopment())
+            {
+                await UploadImageDev(user);
+            }
+            else
+            {
+                await UploadImageProd(user);
+            }
+
+            var scUser = UserMapper.ToEntity(user);
+
+            Console.Out.WriteLine($"User: {scUser.ColonId}");
+
+            await _userStore.SetUserNameAsync(scUser, Input.Name, CancellationToken.None);
+            await _emailStore.SetEmailAsync(scUser, Input.Email, CancellationToken.None);
+
+            var result = await _userManager.CreateAsync(scUser, Input.Password);
+
+            if (result.Succeeded)
+            {
+                _logger.LogInformation("User created a new account with password.");
+
+                var userId = await _userManager.GetUserIdAsync(scUser);
+                var code = await _userManager.GenerateEmailConfirmationTokenAsync(scUser);
+                code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+                var callbackUrl = Url.Page(
+                    "/Account/ConfirmEmail",
+                    pageHandler: null,
+                    values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl },
+                    protocol: Request.Scheme);
+
+                await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
+                    $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+
+                // ✅ Si tout s'est bien passé : COMMIT
+                await transaction.CommitAsync();
+
+                if (_userManager.Options.SignIn.RequireConfirmedAccount)
                 {
-                    Name = Input.Name,
-                    JobName = JobNameMapper.ToJobName(Input.Profession),
-                    Force = Input.Force,
-                    Stamina = Input.Endurance,
-                };
-                
-                var user = new User
-                {
-                    BirthDate = Input.BirthDate,
-                    UserColon = colon,
-                };
-                
-                // Traitement de l'image avant la création de l'utilisateur
-                if (_webHostEnvironment.IsDevelopment())
-                {
-                    await UploadImageDev(user);
+                    return RedirectToPage("RegisterConfirmation", new { email = Input.Email, returnUrl = returnUrl });
                 }
                 else
                 {
-                    await UploadImageProd(user);
+                    await _signInManager.SignInAsync(scUser, isPersistent: false);
+                    return LocalRedirect(returnUrl);
                 }
-
-                // await _userRepository.AddAsync(user);
-                await _context.SaveChangesAsync();
-
-                var scUser = UserMapper.ToEntity(user);
-
-                await _userStore.SetUserNameAsync(scUser, Input.Name, CancellationToken.None);
-                await _emailStore.SetEmailAsync(scUser, Input.Email, CancellationToken.None);
-                var result = await _userManager.CreateAsync(scUser, Input.Password);
-
-                if (result.Succeeded)
-                {
-                    _logger.LogInformation("User created a new account with password.");
-                    
-                    Console.Out.Write("scUserId : " + scUser.Id);
-
-                    var userId = await _userManager.GetUserIdAsync(scUser);
-                    Console.Out.Write("userId : " + userId);
-
-                    var claims = new List<Claim>
-                    {
-                        new (ClaimTypes.NameIdentifier, userId), // Ajouter l'ID comme claim
-                    };
-                    await _userManager.AddClaimsAsync(scUser, claims);
-                    
-                    
-                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(scUser);
-                    code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-                    var callbackUrl = Url.Page(
-                        "/Account/ConfirmEmail",
-                        pageHandler: null,
-                        values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl },
-                        protocol: Request.Scheme);
-
-                    await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
-                        $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
-
-                    if (_userManager.Options.SignIn.RequireConfirmedAccount)
-                    {
-                        return RedirectToPage("RegisterConfirmation", new { email = Input.Email, returnUrl = returnUrl });
-                    }
-                    else
-                    {
-                        await _signInManager.SignInAsync(scUser, isPersistent: false);
-                        return LocalRedirect(returnUrl);
-                    }
-                }
-                
+            }
+            else
+            {
                 foreach (var error in result.Errors)
                 {
                     ModelState.AddModelError(string.Empty, error.Description);
                 }
-            }
 
-            // If we got this far, something failed, redisplay form
+                // ❌ S'il y a une erreur : ROLLBACK (automatique car pas CommitAsync appelé)
+                return Page();
+            }
+        }
+        catch (Exception ex)
+        {
+            // 🔥 En cas d'exception : rollback auto à la fin du using
+            _logger.LogError(ex, "Erreur lors de la création de l'utilisateur avec un colon associé.");
+            ModelState.AddModelError(string.Empty, "Une erreur est survenue lors de l'enregistrement.");
             return Page();
         }
+    }
+
+    // If we got this far, something failed, redisplay form
+    return Page();
+}
 
         private async Task UploadImageDev(User user)
         {

@@ -9,7 +9,8 @@ public static class UserMapper
     {
         Avatar = entity.Avatar,
         BirthDate = entity.BirthDate,
-        UserColon = ColonMapper.ToDomain(entity.UserColon)
+        UserColon = ColonMapper.ToDomain(entity.UserColon),
+        ColonId = entity.ColonId,
     };
 
     public static StarColoniesUser ToEntity(User user) => new StarColoniesUser
@@ -17,7 +18,7 @@ public static class UserMapper
         Avatar = user.Avatar,
         BirthDate = user.BirthDate,
         UserColon = ColonMapper.ToEntity(user.UserColon),
-        ColonId = ColonMapper.ToEntity(user.UserColon).ColonId
+        ColonId = user.ColonId,
         
     };
 }

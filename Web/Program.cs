@@ -4,25 +4,27 @@ using StarColonies.Infrastructures.data;
 using StarColonies.Infrastructures.Entities;
 using StarColonies.Infrastructures.Repositories;
 using StarColonies.Web.Middlewares;
+using AppContext = StarColonies.Infrastructures.data.AppContext;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
-builder.Services.AddDbContext<StarColoniesContext>(options =>
+builder.Services.AddDbContext<AppContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DevConnexionString"));
 });
 
 builder.Services
     .AddDefaultIdentity<StarColoniesUser>(options => options.SignIn.RequireConfirmedAccount = false)
-    .AddEntityFrameworkStores<StarColoniesContext>();
+    .AddEntityFrameworkStores<AppContext>();
 
 builder.Services.AddTransient<ReverseProxyLinksMiddleware>();
 
 //Interfaces
 builder.Services.AddScoped<IMissionRepository, MissionRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IColonRepository, ColonRepository>();
 
 var app = builder.Build();
 

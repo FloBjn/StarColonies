@@ -4,14 +4,15 @@ using StarColonies.Domains;
 using StarColonies.Domains.interfaces;
 using StarColonies.Infrastructures.data;
 using StarColonies.Infrastructures.Mappers;
+using AppContext = StarColonies.Infrastructures.data.AppContext;
 
 namespace StarColonies.Infrastructures.Repositories;
 
 public class UserRepository : IUserRepository
 {
-    private readonly StarColoniesContext _context;
+    private readonly AppContext _context;
 
-    public UserRepository(StarColoniesContext context)
+    public UserRepository(AppContext context)
     {
         _context = context;
     }

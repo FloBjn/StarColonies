@@ -3,14 +3,15 @@ using StarColonies.Domains;
 using StarColonies.Domains.interfaces;
 using StarColonies.Infrastructures.data;
 using StarColonies.Infrastructures.Mappers;
+using AppContext = StarColonies.Infrastructures.data.AppContext;
 
 namespace StarColonies.Infrastructures.Repositories;
 
 public class MissionRepository : IMissionRepository
 {
-    private readonly StarColoniesContext _context;
+    private readonly AppContext _context;
 
-    public MissionRepository(StarColoniesContext context)
+    public MissionRepository(AppContext context)
     {
         _context = context;
     }
