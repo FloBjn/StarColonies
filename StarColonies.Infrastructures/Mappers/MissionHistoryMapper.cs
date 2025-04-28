@@ -1,4 +1,5 @@
 ﻿using StarColonies.Domains;
+using StarColonies.Infrastructures.data;
 using StarColonies.Infrastructures.Entities;
 
 namespace StarColonies.Infrastructures.Mappers;
@@ -15,8 +16,31 @@ public class MissionHistoryMapper
         IsSuccess = entity.IsSuccess,
     };
 
-    public static StarColoniesMissionHistory ToEntity(MissionHistory missionHistory) => new StarColoniesMissionHistory
+    public static StarColoniesMissionHistory ToEntity(MissionHistory missionHistory, StarColoniesContext context)
     {
+        var missionEntity = MissionMapper.ToEntity(missionHistory.Mission, context);
+
+        var trackedMission = context.ChangeTracker
+        .Entries<StarColoniesMission>()
+        .FirstOrDefault(e => e.Entity.MissionId == missionEntity.MissionId)
+        ?.Entity;
+        
+        
+        var teamEntity = TeamMapper.ToEntity(missionHistory.Team, context);
+
+        var trackedTeam = context.ChangeTracker
+        .Entries<StarColoniesTeam>()
+        .FirstOrDefault(e => e.Entity.TeamId == teamEntity.TeamId)
+        ?.Entity;
+
+        return new StarColoniesMissionHistory
+        {
+            Mission = trackedMission ?? missionEntity,
+            Team = trackedTeam ?? teamEntity,
+            IsSuccess = missionHistory.IsSuccess,
+        };        
+        
+    }
         MissionHistoryId = missionHistory.MissionHistoryId,
         MissionId = missionHistory.MissionId,
         Mission = MissionMapper.ToEntity(missionHistory.Mission),

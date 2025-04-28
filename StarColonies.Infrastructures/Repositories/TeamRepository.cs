@@ -44,7 +44,7 @@ public class TeamRepository :ITeamRepository
 
     public async Task AddTeamAsync(Team team)
     {
-        var entity = TeamMapper.ToEntity(team);
+        var entity = TeamMapper.ToEntity(team, _context);
         _context.ScTeam.Add(entity);
         await _context.SaveChangesAsync();
     }
@@ -65,13 +65,10 @@ public class TeamRepository :ITeamRepository
         var teamDb = await GetTeamEntityByIdAsync(team.TeamId);
         if (teamDb == null) return;
         
-        foreach (var colon in teamDb.ColonsTeam)
-        {
-            _context.Entry(colon).State = EntityState.Detached;
-        }
-        
-        teamDb.ColonsTeam = team.ColonsTeam.Select(ColonMapper.ToEntity).ToList();
-        
+        teamDb.ColonsTeam = team.ColonsTeam
+            .Select(colon => ColonMapper.ToEntity(colon, _context))
+            .ToList();
+    
         _context.ScTeam.Update(teamDb);
         await _context.SaveChangesAsync();
     }
@@ -121,7 +118,7 @@ public class TeamRepository :ITeamRepository
 
     public async Task DeleteTeamAsync(Team team)
     {
-        var entity = TeamMapper.ToEntity(team);
+        var entity = TeamMapper.ToEntity(team, _context);
         _context.ScTeam.Remove(entity);
         await _context.SaveChangesAsync();
     }

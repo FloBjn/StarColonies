@@ -1,4 +1,6 @@
-﻿using StarColonies.Domains;
+﻿using Microsoft.EntityFrameworkCore;
+using StarColonies.Domains;
+using StarColonies.Infrastructures.data;
 using StarColonies.Infrastructures.Entities;
 
 namespace StarColonies.Infrastructures.Mappers;
@@ -17,15 +19,27 @@ public static class UserMapper
         Email = entity.Email,
     };
 
-    public static StarColoniesUser ToEntity(User user) => new StarColoniesUser
+    
+    public static StarColoniesUser ToEntity(User user, StarColoniesContext context)
     {
-        Avatar = user.Avatar,
-        BirthDate = user.BirthDate,
-        IsAdmin = user.IsAdmin,
-        UserColon = ColonMapper.ToEntity(user.UserColon),
-        ColonId = user.ColonId,
-        UserName = user.Name,
-        Id = user.Id,
-        Email = user.Email,
-    };
+        var colonEntity = ColonMapper.ToEntity(user.UserColon, context);
+
+        var trackedColon = context.ChangeTracker
+            .Entries<StarColoniesColon>()
+            .FirstOrDefault(e => e.Entity.ColonId == colonEntity.ColonId)
+            ?.Entity;
+
+        return new StarColoniesUser
+        {
+            Id = user.Id,
+            Avatar = user.Avatar,
+            BirthDate = user.BirthDate,
+            IsAdmin = user.IsAdmin,
+            UserName = user.Name,
+            Email = user.Email,
+            
+            ColonId = user.UserColon.ColonId,
+            UserColon = trackedColon ?? colonEntity
+        };
+    }
 }
