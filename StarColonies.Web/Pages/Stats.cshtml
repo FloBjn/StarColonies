@@ -1,0 +1,89 @@
+﻿@page
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Newtonsoft.Json
+@using StarColonies.Infrastructures.Entities
+@model Stats
+
+@inject SignInManager<StarColoniesUser> SignInManager
+
+@{
+    ViewData["Title"] = "Statistiques Globales";
+}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<h1 class="text-center w-100">Statistiques de la colonie</h1>
+
+<section class="d-flex flex-wrap w-100 mt-4">
+    @{
+        Console.WriteLine(Model.MissionsList.Count);
+    }
+    @for (var i = 0; i < Model.MissionsList.Count; i++)
+    {
+        var mission = Model.MissionsList[i];
+        <div class="w-75 d-flex mb-3 align-items-center mx-auto">
+            @*partie texte*@
+            <div class="d-flex w-75 flex-wrap">
+                <h4 class="w-100">@mission.Name (@mission.Level)</h4>
+                @{
+                    var noms = mission.MissionEnemies.Select(e => $"{e.Name} ({e.EnemyTypeName})").ToList();
+                    var chaine = string.Join(", ", noms);
+                    var idGraph = $"myPieChart{i}";
+                }
+                <p>@chaine</p>
+            </div>
+            @*partie graph*@
+            <div class="w-25">
+                <canvas id="@idGraph" width="200" height="200" class="mx-auto"></canvas>
+                <script>
+                    if (!window.graphsToLoad) { window.graphsToLoad = []; }
+                    window.graphsToLoad.push({
+                        dataSet: @Html.Raw(JsonConvert.SerializeObject(Model.DataSets[i])),
+                        idGraph: "@idGraph"
+                    });
+                </script>
+            </div>
+        </div>
+    }
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+
+</section>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const labels = @Html.Raw(JsonConvert.SerializeObject(Model.Labels));
+
+        function setGraph(dataSet, idGraph) {
+            const ctx = document.getElementById(idGraph).getContext('2d');
+            new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: '',
+                        data: dataSet,
+                        backgroundColor: [
+                            'rgba(54, 162, 235, 0.6)',
+                            'rgba(255, 99, 132, 0.6)',
+                            'rgba(255, 206, 86, 0.6)',
+                            'rgba(75, 192, 192, 0.6)',
+                            'rgba(153, 102, 255, 0.6)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true
+                }
+            });
+        }
+
+        if (window.graphsToLoad) {
+            window.graphsToLoad.forEach(function (item) {
+                setGraph(item.dataSet, item.idGraph);
+            });
+        }
+    });
+    
+</script>

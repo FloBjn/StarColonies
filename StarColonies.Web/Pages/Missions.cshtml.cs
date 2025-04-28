@@ -38,6 +38,12 @@ public class Missions : PageModel
                 HttpContext.Session.SetString("MissionId", MissionId);
                 return RedirectToPage("/ModifyMission");
             case "Delete":
+                var mission = await _missionRepository.GetByIdAsync(MissionId);
+                if (mission != null)
+                {
+                    _missionRepository.DeleteMissionAsync(await _missionRepository.GetByIdAsync(MissionId));
+                }
+                return RedirectToPage("/Missions");
                 break;
         }
         
