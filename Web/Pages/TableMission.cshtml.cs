@@ -8,14 +8,19 @@ public class TableMission : PageModel
 {
     private readonly ITeamRepository _teamRepository;
     private readonly IMissionRepository _missionRepository;
+    private readonly IUserRepository _userRepository;
+    private readonly IColonRepository _colonRepository;
     public Team? Team { get; set; }
-    
+    public Colon? UserColon { get; set; }
     public String TeamId { get; set; }
     
-    public TableMission(ITeamRepository teamRepository, IMissionRepository missionRepository)
+    public TableMission(ITeamRepository teamRepository, IMissionRepository missionRepository,IUserRepository userRepository,IColonRepository colonRepository)
     {
         _teamRepository = teamRepository;
         _missionRepository = missionRepository;
+        _userRepository = userRepository;
+        _colonRepository = colonRepository;
+        
     }
     public async Task<List<Mission>> GetAllMissions()
     {
@@ -30,6 +35,12 @@ public class TableMission : PageModel
         if (Team == null)
         {
             return Redirect("/Error"); 
+        }
+        await SetConnectedUser();
+    
+        if (UserColon == null)
+        {
+            return Redirect("/Error");
         }
         
         return Page();
@@ -46,6 +57,12 @@ public class TableMission : PageModel
         {
             return Redirect("/Error"); 
         }
+        await SetConnectedUser();
+    
+        if (UserColon == null)
+        {
+            return Redirect("/Error");
+        }
 
         var mission = await _missionRepository.GetByIdAsync(missionId);
         if (mission == null)
@@ -53,18 +70,49 @@ public class TableMission : PageModel
             TempData["Error"] = "Cette mission n'existe pas.";
             return RedirectToPage(new { TeamId });
         }
-
-        // Vérifier si l'équipe a le niveau requis
-        if (true)
+        //TODO LA LOGIQUE DE CECI
+        if (!(mission.Level < Team.LevelMaxAuthorized))
         {
-            TempData["Error"] = "Votre équipe n'a pas le niveau requis pour cette mission.";
+            TempData["Error"] = "Votre equipe doit d'abord surmonte une mission plus simple.";
+            return RedirectToPage(new { TeamId });
+        }
+        if (mission.ChallengesOvercome(Team))
+        {
+            Team.LevelMaxAuthorized = mission.Level;
+            await _teamRepository.UpdateTeamMaxLvlMissionAsync(Team);
+            TempData["Error"] = "Vous n'avez pas su surmontés les defis";
             return RedirectToPage(new { TeamId });
         }
 
-        // TODO: Ajouter la logique pour lancer la mission
-        // Par exemple, créer un combat, rediriger vers l'écran de combat, etc.
+        if (mission.ChallengesOvercome(Team))
+        {
+            Team.LevelMaxAuthorized = mission.Level;
+            await _teamRepository.UpdateTeamMaxLvlMissionAsync(Team);
+            TempData["Error"] = "Votre equipe a peri durant la mission";
+            return RedirectToPage(new { TeamId });
+        }
+        UserColon.AddResource(mission.GetReward());
+        await _colonRepository.UpdateColonNumberResource(UserColon);
 
+        foreach (var colon in Team.ColonsTeam )
+        {
+            colon.LevelUp();
+            await _colonRepository.UpdateColonPerfAsync(colon);
+        }
+
+        Team.LevelMaxAuthorized = 0;
+        await _teamRepository.UpdateTeamMaxLvlMissionAsync(Team);
+        //TODO SUPPRIMER TOUS LES OBJECT DE L'EQUIPE
+        
         TempData["Success"] = $"Mission {mission.Name} lancée avec succès!";
         return RedirectToPage(new { TeamId });
+    }
+    private async Task SetConnectedUser()
+    {
+        var userConnected = await _userRepository.GetUserConnectedAsync(User);
+        if (userConnected != null)
+        {
+            UserColon = await _colonRepository.GetColonByIdAsync(userConnected.ColonId);
+        }
     }
 }

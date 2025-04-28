@@ -45,6 +45,6 @@ public class Mission
 
     public int GetReward()
     {
-        return new Random().Next(1,3);
+        return new Random().Next(1,3)+Level;
     }
 }

@@ -1,6 +1,13 @@
 ﻿@page
 @model TableMission
-<h1>Tableau des missions</h1>
+<h1>Tableau des missions </h1>
+
+<p>Level de la mission la plus haute autorisé :
+    @if(Model.Team.LevelMaxAuthorized == 0) {
+    @:/
+    } else {
+    @Model.Team.LevelMaxAuthorized
+    }</p>
 <div class="missions">
     @foreach (var mission in await @Model.GetAllMissions())
     {
@@ -57,3 +64,69 @@
         }
     });
 </script>
+<style>
+    .missions {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+        margin-top: 40px;
+    }
+
+    details.mission-block {
+        background-color: #15181B;
+        border: 1px solid #ddd;
+        border-radius: 12px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        padding: 0;
+        width: 100%;
+        max-width: 600px;
+        color: #eee;
+        overflow: hidden;
+    }
+
+    summary.mission-header {
+        cursor: pointer;
+        font-size: 18px;
+        padding: 20px;
+        text-align: center;
+        list-style: none;
+        user-select: none;
+    }
+
+    summary.mission-header::-webkit-details-marker {
+        display: none;
+    }
+
+    .mission-details {
+        padding: 0 20px 20px 20px;
+        font-size: 16px;
+    }
+
+    .mission-details ul {
+        padding-left: 20px;
+    }
+
+    .mission-details li {
+        margin-bottom: 8px;
+    }
+
+    button {
+        margin-top: 15px;
+        padding: 8px 16px;
+        border: none;
+        background-color: #28a745;
+        color: white;
+        border-radius: 8px;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background-color: #218838;
+    }
+
+    .mission-details form {
+        display: flex;
+        justify-content: center;
+    }
+</style>
