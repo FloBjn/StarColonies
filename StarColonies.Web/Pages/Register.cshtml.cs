@@ -181,7 +181,7 @@ namespace StarColonies.Web.Pages
                 Stamina = Input.Endurance,
             };
 
-            var colonEntity = ColonMapper.ToEntity(colon);
+            var colonEntity = ColonMapper.ToEntity(colon, _dbContext);
             /*_dbContext.ScColon.Add(colonEntity);*/
             await _colonRepository.AddColonAsync(colon);
             await _dbContext.SaveChangesAsync();
@@ -204,7 +204,7 @@ namespace StarColonies.Web.Pages
                 await UploadImageProd(user);
             }
 
-            var scUser = UserMapper.ToEntity(user);
+            var scUser = UserMapper.ToEntity(user, _dbContext);
 
             Console.Out.WriteLine($"User: {scUser.ColonId}");
 
@@ -229,7 +229,7 @@ namespace StarColonies.Web.Pages
                 await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
                     $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
 
-                // ✅ Si tout s'est bien passé : COMMIT
+                //Si tout s'est bien passé : COMMIT
                 await transaction.CommitAsync();
 
                 if (_userManager.Options.SignIn.RequireConfirmedAccount)

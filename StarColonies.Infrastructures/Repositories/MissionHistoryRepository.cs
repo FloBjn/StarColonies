@@ -7,11 +7,18 @@ using StarColonies.Infrastructures.Mappers;
 
 namespace StarColonies.Infrastructures.Repositories;
 
-public class MissionHistoryRepository(StarColoniesContext context) : IMissionHistoryRepository
+public class MissionHistoryRepository : IMissionHistoryRepository
 {
+    private readonly StarColoniesContext _context;
+    
+    public MissionHistoryRepository(StarColoniesContext context)
+    {
+        _context = context;
+    }
+    
     public async Task<IList<MissionHistory>> GetMissionsHistoryAsync()
     {
-        var entities = await context.ScMissionHistory
+        var entities = await _context.ScMissionHistory
             .Include(m => m.Mission)
             .Include(m => m.Team)
             .ToListAsync();
@@ -19,7 +26,7 @@ public class MissionHistoryRepository(StarColoniesContext context) : IMissionHis
     }
     public async Task<MissionHistory?> GetMissionHistoryByIdAsync(string missionHistoryId)
     {
-        var entity = await context.ScMissionHistory
+        var entity = await _context.ScMissionHistory
             .Include(m => m.Mission)
             .Include(m => m.Team)
             .FirstOrDefaultAsync(m=> m.MissionHistoryId == missionHistoryId);
@@ -28,7 +35,7 @@ public class MissionHistoryRepository(StarColoniesContext context) : IMissionHis
 
     public async Task<IList<MissionHistory>> GetMissionsHistoryByTeamIdAsync(string teamId)
     {
-        var entities = await context.ScMissionHistory
+        var entities = await _context.ScMissionHistory
             .Where(mh => mh.TeamId == teamId)
             .ToListAsync();
         
@@ -37,15 +44,17 @@ public class MissionHistoryRepository(StarColoniesContext context) : IMissionHis
 
     public async Task AddMissionHistoryAsync(MissionHistory missionHistory)
     {
+        var entity = MissionHistoryMapper.ToEntity(missionHistory, _context);
+        _context.ScMissionHistory.Add(entity);
+        await _context.SaveChangesAsync();
+        
+        /*
         var entity = new StarColoniesMissionHistory() 
         {
             MissionHistoryId = missionHistory.MissionHistoryId,
             MissionId = missionHistory.MissionId, // Juste l'ID
             TeamId = missionHistory.TeamId,       // Juste l'ID
             IsSuccess = missionHistory.IsSuccess,
-        };
-    
-        context.ScMissionHistory.Add(entity);
-        await context.SaveChangesAsync();
+        };*/
     }
 }

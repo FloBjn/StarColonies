@@ -1,4 +1,5 @@
 ﻿using StarColonies.Domains;
+using StarColonies.Infrastructures.data;
 using StarColonies.Infrastructures.Entities;
 
 namespace StarColonies.Infrastructures.Mappers;
@@ -21,21 +22,37 @@ public class ColonMapper
         }).ToList()
     };
 
-    public static StarColoniesColon ToEntity(Colon colon) => new StarColoniesColon
+    public static StarColoniesColon ToEntity(Colon colon, StarColoniesContext context)
     {
-        ColonId = colon.ColonId,
-        Name = colon.Name,
-        Level = colon.Level,
-        Force = colon.Force,
-        Stamina = colon.Stamina,
-        NumberResource = colon.NumberResource,
-        JobName = JobNameMapper.ToInt(colon.JobName),
-        // posait probleme
-        // Teams = colon.Teams.Select(team => new StarColoniesTeam
-        // {
-        //     TeamId = team.TeamId,
-        //     Name = team.Name,
-        //     LevelMaxAuthorized = team.LevelMaxAuthorized
-        // }).ToList()
-    };
+        var entity = new StarColoniesColon
+        {
+            ColonId = colon.ColonId,
+            Name = colon.Name,
+            Level = colon.Level,
+            Force = colon.Force,
+            Stamina = colon.Stamina,
+            NumberResource = colon.NumberResource,
+            JobName = JobNameMapper.ToInt(colon.JobName),
+            Teams = new List<StarColoniesTeam>()
+        };
+    
+        foreach (var currentTeam in colon.Teams)
+        {
+            var bonusEntity = TeamMapper.ToEntity(currentTeam, context);
+        
+            var trackedBonus = context.ChangeTracker
+                .Entries<StarColoniesTeam>()
+                .FirstOrDefault(e => e.Entity.TeamId == currentTeam.TeamId)?.Entity;
+
+            if (trackedBonus != null)
+                entity.Teams.Add(trackedBonus);
+            else
+            {
+                context.Attach(bonusEntity);
+                entity.Teams.Add(bonusEntity);
+            }
+        }
+
+        return entity;
+    }
 }
