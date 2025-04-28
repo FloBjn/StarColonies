@@ -15,9 +15,6 @@
 <h1 class="text-center w-100">Statistiques de la colonie</h1>
 
 <section class="d-flex flex-wrap w-100 mt-4">
-    @{
-        Console.WriteLine(Model.MissionsList.Count);
-    }
     @for (var i = 0; i < Model.MissionsList.Count; i++)
     {
         var mission = Model.MissionsList[i];
@@ -35,13 +32,16 @@
             @*partie graph*@
             <div class="w-25">
                 <canvas id="@idGraph" width="200" height="200" class="mx-auto"></canvas>
-                <script>
+                @if (Model.DataSets[i][0] != 0 && Model.DataSets[i][1] != 0)
+                {
+                    <script>
                     if (!window.graphsToLoad) { window.graphsToLoad = []; }
                     window.graphsToLoad.push({
                         dataSet: @Html.Raw(JsonConvert.SerializeObject(Model.DataSets[i])),
                         idGraph: "@idGraph"
                     });
                 </script>
+                }
             </div>
         </div>
     }

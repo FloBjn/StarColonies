@@ -21,6 +21,8 @@ public class Statistics
         {
             return null;
         }
+        Console.WriteLine("succes :" + numberOfTimeSucceed);
+        Console.WriteLine("timeplayed :" + numberOfTimePlayed);
         return numberOfTimeSucceed *100/ numberOfTimePlayed;
     }
 
