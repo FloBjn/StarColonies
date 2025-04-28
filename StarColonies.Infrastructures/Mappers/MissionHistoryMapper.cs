@@ -35,17 +35,13 @@ public class MissionHistoryMapper
 
         return new StarColoniesMissionHistory
         {
+            MissionHistoryId = missionHistory.MissionHistoryId,
+            MissionId = missionHistory.MissionId,
+            TeamId = missionHistory.TeamId,
             Mission = trackedMission ?? missionEntity,
             Team = trackedTeam ?? teamEntity,
             IsSuccess = missionHistory.IsSuccess,
         };        
         
     }
-        MissionHistoryId = missionHistory.MissionHistoryId,
-        MissionId = missionHistory.MissionId,
-        Mission = MissionMapper.ToEntity(missionHistory.Mission),
-        TeamId = missionHistory.TeamId,
-        Team = TeamMapper.ToEntity(missionHistory.Team),
-        IsSuccess = missionHistory.IsSuccess,
-    };
 }

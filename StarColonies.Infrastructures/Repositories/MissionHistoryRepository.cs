@@ -47,15 +47,14 @@ public class MissionHistoryRepository : IMissionHistoryRepository
         var entity = MissionHistoryMapper.ToEntity(missionHistory, _context);
         _context.ScMissionHistory.Add(entity);
         await _context.SaveChangesAsync();
+        
+        /*
         var entity = new StarColoniesMissionHistory() 
         {
             MissionHistoryId = missionHistory.MissionHistoryId,
             MissionId = missionHistory.MissionId, // Juste l'ID
             TeamId = missionHistory.TeamId,       // Juste l'ID
             IsSuccess = missionHistory.IsSuccess,
-        };
-    
-        context.ScMissionHistory.Add(entity);
-        await context.SaveChangesAsync();
+        };*/
     }
 }
