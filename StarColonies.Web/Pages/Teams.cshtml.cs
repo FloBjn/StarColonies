@@ -48,6 +48,7 @@ public class TeamsModel : PageModel
                 return RedirectToPage("/UpdateTeam");
             case "Get":
                 SelectionedTeam = await _teamRepository.GetByIdAsync(InputModel.TeamId);
+                if (SelectionedTeam == null) return RedirectToPage("/Teams");
                 InputModel.TeamId = SelectionedTeam.TeamId;
                 Console.WriteLine("teamfind : " + SelectionedTeam.TeamId);
                 

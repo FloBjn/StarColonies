@@ -13,66 +13,71 @@ public class UpdateTeam : PageModel
 {
     private readonly ITeamRepository _teamRepository;
     private readonly IUserRepository _userRepository;
-    private readonly StarColoniesContext _context;
-    public bool IsCreatingTeam { get; set; } = false;
+    
     public required Team? ModifyingTeam {get; set;}
     [BindProperty] 
     public required InputColonModel ColonModelList { get; set; } = new();
     [BindProperty]
-    public required InputTeamModel InputTeamInfosModel {get; set;}
+    public required InputTeamModel InputTeamInfosModel {get; set;} = new();
     public required User? UserConnected { get; set; }
     public required string IdModifyingTeam { get; set; }
+    [BindProperty]
+    public string Action { get; set; }
     
-    public UpdateTeam(ITeamRepository teamRepository, IUserRepository userRepository, StarColoniesContext context)
+    public UpdateTeam(ITeamRepository teamRepository, IUserRepository userRepository)
     {
         _teamRepository = teamRepository;
         _userRepository = userRepository;
-        _context = context;
+        
     }
     
-    public async Task OnGetAsync()
+    public async Task<IActionResult> OnGetAsync()
     {
         await SetConnectedUser();
         var monId = HttpContext.Session.GetString("SelectedId");
         Console.WriteLine(monId);
         if (!string.IsNullOrEmpty(monId))
+        {
             ModifyingTeam = await _teamRepository.GetByIdAsync(monId);
+            if (ModifyingTeam == null)
+            {
+                return Page();
+            }
+            IdModifyingTeam = monId;
+        }
         
-        
-        IdModifyingTeam = monId;
-        
+        return Page();
     }
     
     public async Task<IActionResult> OnPostAsync()
     {
         await SetConnectedUser();
-        Console.WriteLine("quoi : on postColon");
-        Console.WriteLine(UserConnected.Name);
-        if (IsCreatingTeam)
-        {
-            
-        }
-        else
-        {
-            ModifyingTeam = await _teamRepository.GetByIdAsync(ColonModelList.TeamId);
-        }
-        
-        
+       
+        ModifyingTeam = await _teamRepository.GetByIdAsync(ColonModelList.TeamId);
         
         ModelState.Clear();
-        
-        if (!TryValidateModel(ColonModelList) || !HasModelChanged(ColonModelList))
-        {
-            Console.WriteLine("hasChanged : " + HasModelChanged(ColonModelList));
-            // Console.WriteLine("prof : " + CheckProfConstraint());
-            return Page(); // Retourne la page si le modèle Colon n'est pas valide
-        }
-            
-        Console.WriteLine("quoi : on submitColon" + ModifyingTeam.Name);
-        // Logique pour soumettre le formulaire de colon ici...
-        await UpdateColon(ColonModelList);
-        
 
+        switch (Action)
+        {
+            case "ModifyInfos":
+                if (!TryValidateModel(InputTeamInfosModel))
+                {
+                    return Page();
+                }
+                ModifyingTeam.Name = InputTeamInfosModel.TeamName;
+                await _teamRepository.UpdateTeamNameAsync(ModifyingTeam);
+                break;
+            case "ModifyColon":
+                if (!TryValidateModel(ColonModelList) || !HasModelChanged(ColonModelList))
+                {
+                    return Page(); 
+                }
+        
+                await UpdateColon(ColonModelList);
+                break;
+            default: return Page();
+        }
+        
         return Page();
     }
 

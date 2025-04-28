@@ -16,6 +16,8 @@
     <form class="w-50 d-flex flex-wrap mx-auto" id="formInfos" method="post" asp-page-handler="SubmitTeam">
         <div class="d-flex w-100 align-items-end mb-3">
             @* Nom équipe *@
+            <input type="hidden" asp-for="@Model.Action" value="ModifyInfos"/>
+            <input type="hidden" asp-for="ColonModelList.TeamId" value="@Model.ModifyingTeam.TeamId"/>
             <div class="form-floating mb-3 w-auto me-5">
                 <input asp-for="InputTeamInfosModel.TeamName" class="form-control" autocomplete="username" aria-required="true" value="@Model.ModifyingTeam?.Name"/>
                 <label asp-for="InputTeamInfosModel.TeamName" class="form-label text-black">Nom de l'équipe</label>
@@ -69,6 +71,7 @@
                             @* <input type="hidden" asp-for="ColonModelList.ColonId" value="@Model.ColonModelList.ColonId"/> *@
                             <input type="hidden" asp-for="ColonModelList.TeamId" value="@Model.ModifyingTeam.TeamId"/>
                             <input type="hidden" asp-for="ColonModelList.Index" value="@i"/>
+                            <input type="hidden" asp-for="@Model.Action" value="ModifyColons"/>
                             @* Nom *@
                             <div class="form-floating mb-3 w-100">
                                 <input asp-for="ColonModelList.Name" class="form-control" autocomplete="username" aria-required="true" value="@Model.ColonModelList.Name"/>

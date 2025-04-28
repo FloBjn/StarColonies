@@ -32,7 +32,7 @@
     <div class="w-50 align-items-baseline d-flex flex-wrap">
         <form class="w-100 ms-auto d-flex" method="post">
             <input type="hidden" asp-for="RedirectAction" value="Create"/>
-            <button type="submit" asp-page="/TeamUpdate" class="btn btn-success ms-auto w-auto">Créer une équipe</button>
+            <button type="submit" asp-page="/TeamUpdate" class="btn btn-success ms-auto mt-auto w-auto">Créer une équipe</button>
         </form>
     </div>
 </section>
@@ -46,8 +46,6 @@
                 {
                     <article class="w-20 d-flex flex-column p-1 m-auto">
                         <h4 class="text-center mb-3">@colon.Name</h4>
-                        @* ajouter contrainte en css *@
-                        <img class="mx-auto" alt="Colon image"/>
                         <div class="w-auto mx-auto mt-3">
                             <h5>Proffession : </h5>
                             <p>@colon.JobName</p>
