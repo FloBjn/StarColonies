@@ -76,6 +76,38 @@ public class TeamRepository :ITeamRepository
         await _context.SaveChangesAsync();
     }
 
+    public async Task UpdateTeamObjectsAsync(Team team)
+    {
+        var teamDb = await GetTeamEntityByIdAsync(team.TeamId);
+        if (teamDb == null) return;
+        
+        teamDb.TeamBonusObjects.Clear();
+        
+        foreach (var bonusObject in team.TeamBonusObjects)
+        {
+            var bonusEntity = BonusObjectMapper.ToEntity(bonusObject);
+        
+            // Regarde si l'objet exite déjà ou pas dans la liste
+            if (!teamDb.TeamBonusObjects.Any(bo => bo.BonusObjectId == bonusEntity.BonusObjectId))
+            {
+                _context.Attach(bonusEntity); // Indique à Entity Framework que l'object/le lien exite déjà dans la base de donnée, pas besoin d'en rajouter un nouveau
+                teamDb.TeamBonusObjects.Add(bonusEntity);  // Ajoute à la collection, à l'update, ça rajoutera juste ceux là, pas tout. Ca évite les doublons
+            }
+        }
+        
+        _context.ScTeam.Update(teamDb);
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task DeleteTeamObjectsAsync(Team team)
+    {
+        var teamDb = await GetTeamEntityByIdAsync(team.TeamId);;
+        if (teamDb == null) return;
+        
+        teamDb.TeamBonusObjects.Clear();
+        await _context.SaveChangesAsync();
+    }
+
     public async Task UpdateTeamNameAsync(Team team)
     {
         var teamDb = await GetTeamEntityByIdAsync(team.TeamId);
