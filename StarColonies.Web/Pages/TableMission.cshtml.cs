@@ -89,7 +89,6 @@ public class TableMission : PageModel
         
         //Vérifie si l'équipe a réussi la mission
         if (!mission.IsChallengesOvercomed(Team) || !mission.IsTeamAlive(Team))
-        
         {
             Team.LevelMaxAuthorized = mission.Level;
             await _teamRepository.UpdateTeamMaxLvlMissionAsync(Team);
