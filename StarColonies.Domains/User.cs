@@ -7,6 +7,7 @@ public class User
     public string Name { get; set; }
     public string? Avatar { get; set; }
     public DateOnly BirthDate { get; set; }
+    public bool IsAdmin { get; set; }
 
     public string ColonId {get; set;}
     public Colon UserColon { get; set; } = default!;

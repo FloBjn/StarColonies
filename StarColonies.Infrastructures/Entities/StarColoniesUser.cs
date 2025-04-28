@@ -6,6 +6,7 @@ public class StarColoniesUser : IdentityUser
 {
     public string? Avatar { get; set; }
     public required DateOnly BirthDate { get; set; }
+    public bool IsAdmin { get; set; }
     
     public required string ColonId { get; set; }
     

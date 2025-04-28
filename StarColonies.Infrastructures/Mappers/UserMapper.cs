@@ -9,6 +9,7 @@ public static class UserMapper
     {
         Avatar = entity.Avatar,
         BirthDate = entity.BirthDate,
+        IsAdmin = entity.IsAdmin,
         UserColon = ColonMapper.ToDomain(entity.UserColon),
         ColonId = entity.ColonId,
         Name = entity.UserName,
@@ -20,6 +21,7 @@ public static class UserMapper
     {
         Avatar = user.Avatar,
         BirthDate = user.BirthDate,
+        IsAdmin = user.IsAdmin,
         UserColon = ColonMapper.ToEntity(user.UserColon),
         ColonId = user.ColonId,
         UserName = user.Name,

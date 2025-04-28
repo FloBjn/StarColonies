@@ -1,19 +1,35 @@
-@using Microsoft.AspNetCore.Identity
 @using Microsoft.AspNetCore.Mvc.TagHelpers
-@using StarColonies.Infrastructures.Entities
-@inject SignInManager<StarColoniesUser> SignInManager
+@using StarColonies.Domains.interfaces
+@inject IUserRepository CurrentUser
+
+@{
+    var currentUser = await CurrentUser.GetUserConnectedAsync(User);
+}
 
 <ul class="navbar-nav flex-row justify-content-evenly w-100 align-items-center">
     <!-- Partie à gauche du logo -->
-    @if (SignInManager.IsSignedIn(User))
+    @if (currentUser is not null)
     {
-        <li class="nav-item">
-            <a class="nav-link text-white fs-5 fw-bold" id="dashboard" asp-area="" asp-page="/Dashboard">Dashboard</a>
-        </li>
+        @if (currentUser.IsAdmin)
+        {
+            <li class="nav-item">
+                <a class="nav-link text-white fs-5 fw-bold" id="dashboard" asp-area="" asp-page="">Bonus</a>
+            </li>
 
-        <li class="nav-item">
-            <a class="nav-link text-white fs-5 fw-bold" id="team" asp-area="" asp-page="/Teams">équipe</a>
-        </li>
+            <li class="nav-item">
+                <a class="nav-link text-white fs-5 fw-bold" id="team" asp-area="" asp-page="">Mission</a>
+            </li> 
+        }
+        else
+        {
+            <li class="nav-item">
+                <a class="nav-link text-white fs-5 fw-bold" id="dashboard" asp-area="" asp-page="/Dashboard">Dashboard</a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link text-white fs-5 fw-bold" id="team" asp-area="" asp-page="/Teams">équipe</a>
+            </li>
+        }
     }
     else
     {
@@ -34,15 +50,28 @@
 
 <ul class="navbar-nav flex-row justify-content-evenly w-100 align-items-center">
     <!-- Partie à droite du logo -->
-    @if (SignInManager.IsSignedIn(User))
+    @if (currentUser is not null)
     {
-        <li class="nav-item">
-            <a class="nav-link text-white fs-5 fw-bold" id="stats" asp-area="" asp-page="">Statistiques</a>
-        </li>
+        @if (currentUser.IsAdmin)
+        {
+            <li class="nav-item">
+                <a class="nav-link text-white fs-5 fw-bold" id="stats" asp-area="" asp-page="">Message</a>
+            </li>
 
-        <li class="nav-item">
-            <a class="nav-link text-white fs-5 fw-bold" id="profile" asp-area="" asp-page="/Profile">Profil</a>
-        </li>
+            <li class="nav-item">
+                <a class="nav-link text-white fs-5 fw-bold" id="profile" asp-area="" asp-page="/Profile">Profil</a>
+            </li>
+        }
+        else
+        {
+            <li class="nav-item">
+                <a class="nav-link text-white fs-5 fw-bold" id="stats" asp-area="" asp-page="">Statistiques</a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link text-white fs-5 fw-bold" id="profile" asp-area="" asp-page="/Profile">Profil</a>
+            </li>
+        }
     }
     else
     {
