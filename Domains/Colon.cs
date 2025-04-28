@@ -24,5 +24,10 @@ public class Colon
     }
     public JobName JobName { get; set; }
     public IList<Team> Teams { get; set; } = new List<Team>();
+
+    public void LevelUp()
+    {
+        Level++;
+    }
     
 }

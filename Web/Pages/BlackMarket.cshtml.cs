@@ -21,7 +21,7 @@ public class BlackMarket : PageModel
         _teamRepository = teamRepository;
         _colonRepository = colonRepository;
     }
-    public async Task<List<BonusObject>> GetAllMissions()
+    public async Task<List<BonusObject>> GetAllBonusObjects()
     {
         return await _bonusObjectRepository.GetAllBonusObjectsAsync();
     }
@@ -89,6 +89,7 @@ public class BlackMarket : PageModel
 
         UserColon.SubtractResource(bonus.Price);
         await _colonRepository.UpdateColonNumberResource(UserColon);
+        //TODO Ajouter Les objects a la team
         TempData["Success"] = bonus.Name+" purchase successful!";
         return RedirectToPage(new { TeamId });
     }
