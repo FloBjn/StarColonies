@@ -45,8 +45,8 @@ public class BonusObjectRepository : IBonusObjectRepository
         var bonusObjectDb = await GetBonusObjectEntityByIdAsync(bonusObject.BonusObjectId);
         if (bonusObjectDb == null) return;
         
-        bonusObjectDb.Name = bonusObjectDb.Name;
-        
+        bonusObjectDb.Name = bonusObject.Name;
+    
         _context.ScBonusObject.Update(bonusObjectDb);
         await _context.SaveChangesAsync();
     }
@@ -55,9 +55,10 @@ public class BonusObjectRepository : IBonusObjectRepository
     {
         var bonusObjectDb = await GetBonusObjectEntityByIdAsync(bonusObject.BonusObjectId);
         if (bonusObjectDb == null) return;
+    
         
-        bonusObjectDb.Price = bonusObjectDb.Price;
-        
+        bonusObjectDb.Price = bonusObject.Price;
+    
         _context.ScBonusObject.Update(bonusObjectDb);
         await _context.SaveChangesAsync();
     }
@@ -67,10 +68,10 @@ public class BonusObjectRepository : IBonusObjectRepository
         var bonusObjectDb = await GetBonusObjectEntityByIdAsync(bonusObject.BonusObjectId);
         if (bonusObjectDb == null) return;
         
-        bonusObjectDb.BonusLevel = bonusObjectDb.BonusLevel;
-        bonusObjectDb.BonusForce = bonusObjectDb.BonusForce;
-        bonusObjectDb.BonusStamina = bonusObjectDb.BonusStamina;
-        
+        bonusObjectDb.BonusLevel = bonusObject.BonusLevel;
+        bonusObjectDb.BonusForce = bonusObject.BonusForce;
+        bonusObjectDb.BonusStamina = bonusObject.BonusStamina;
+    
         _context.ScBonusObject.Update(bonusObjectDb);
         await _context.SaveChangesAsync();
     }
@@ -89,5 +90,19 @@ public class BonusObjectRepository : IBonusObjectRepository
             _context.ScBonusObject.Remove(entity);
             await _context.SaveChangesAsync();
         }
+    }
+    public async Task UpdateBonusObjectAsync(BonusObject bonusObject)
+    {
+        var bonusObjectDb = await GetBonusObjectEntityByIdAsync(bonusObject.BonusObjectId);
+        if (bonusObjectDb == null) return;
+        
+        bonusObjectDb.Name = bonusObject.Name;
+        bonusObjectDb.Price = bonusObject.Price;
+        bonusObjectDb.BonusLevel = bonusObject.BonusLevel;
+        bonusObjectDb.BonusForce = bonusObject.BonusForce;
+        bonusObjectDb.BonusStamina = bonusObject.BonusStamina;
+    
+        _context.ScBonusObject.Update(bonusObjectDb);
+        await _context.SaveChangesAsync();
     }
 }

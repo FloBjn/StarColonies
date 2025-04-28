@@ -1,14 +1,13 @@
 ﻿@page
-@model TableBonusObject
+@model StarColonies.Web.Pages.TableBonusObject
 
-<h2>Liste des objets bonus 
-    <a href="/CreateObjectBonus" class="btn btn-primary">Ajouter</a>
+<h2>Liste des objets bonus
+    <a asp-page="/CreateObjectBonus" class="btn btn-primary">Ajouter</a>
 </h2>
 
 <table class="table">
     <thead>
     <tr>
-        <th>ID</th>
         <th>Nom</th>
         <th>Prix</th>
         <th>Niveau</th>
@@ -18,22 +17,21 @@
     </tr>
     </thead>
     <tbody>
-    @foreach (var obj in await Model.GetAllBonusObejcts())
+    @foreach (var obj in await Model.GetAllBonusObejcts() )
     {
-        <tr>
-            <td>@obj.BonusObjectId</td>
-            <td>@obj.Name</td>
-            <td>@obj.Price</td>
-            <td>@obj.BonusLevel</td>
-            <td>@obj.BonusForce</td>
-            <td>@obj.BonusStamina</td>
-            <td>
-                <a href="/ModifierBonusObject/@obj.BonusObjectId" class="btn btn-sm btn-warning">Modifier</a>
-                <form method="post" asp-page-handler="Delete" asp-route-id="@obj.BonusObjectId" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet objet?');" style="display: inline;">
-                    <button type="submit" class="btn btn-sm btn-danger">Supprimer</button>
-                </form>
-            </td>
-        </tr>
+    <tr>
+        <td>@obj.Name</td>
+        <td>@obj.Price</td>
+        <td>@obj.BonusLevel</td>
+        <td>@obj.BonusForce</td>
+        <td>@obj.BonusStamina</td>
+        <td>
+            <a asp-page="/UpdateObjectBonus" asp-route-id="@obj.BonusObjectId" class="btn btn-sm btn-warning">Modifier</a>
+            <form method="post" asp-page-handler="Delete" asp-route-id="@obj.BonusObjectId" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet objet?');" style="display: inline;">
+                <button type="submit" class="btn btn-sm btn-danger">Supprimer</button>
+            </form>
+        </td>
+    </tr>
     }
     </tbody>
 </table>
