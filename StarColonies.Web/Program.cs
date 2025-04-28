@@ -34,6 +34,7 @@ builder.Services.AddScoped<IMissionHistoryRepository, MissionHistoryRepository>(
 builder.Services.AddScoped<IMissionRepository, MissionRepository>();
 builder.Services.AddScoped<ITeamRepository, TeamRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IEnemyRepository, EnemyRepository>();
 
 var app = builder.Build();
 

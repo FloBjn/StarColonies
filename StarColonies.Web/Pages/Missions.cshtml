@@ -1,0 +1,155 @@
+﻿@page
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using StarColonies.Infrastructures.Entities
+@model Missions
+
+@inject SignInManager<StarColoniesUser> SignInManager
+
+@{
+    ViewData["Title"] = "Gérer les missions";
+}
+
+<h1 class="w-100 text-center">Gérer les missions de la colonie</h1>
+<div class="w-100 d-flex">
+    <a asp-page="/CreateMission" class="btn btn-success w-auto ms-auto">Créer une mission</a>
+</div>
+<section class="w-100 d-flex flex-wrap">
+    <div class="missions w-100">
+        @foreach (var mission in Model.MissionsList)
+        {
+            <details class="mission-block" id="mission-@mission.MissionId">
+                <summary class="mission-header">
+                    <strong>@mission.Name</strong> — Niveau : @mission.Level
+                </summary>
+                <div class="mission-details">
+                    <ul class="monsters-list">
+                        @foreach (var monstre in mission.MissionEnemies)
+                        {
+                            <li><strong>@monstre.Name</strong> — Force : @monstre.Force, Endurance : @monstre.Stamina</li>
+                        }
+                    </ul>
+                </div>
+                <div class="w-100 d-flex">
+                    <form method="post" class="m-2">
+                        <button type="button" id="deleteBtn" class="btn btn-danger">Supprimer</button>
+                    </form>
+                    <form method="get" class="m-1 ms-auto" asp-page="/ModifyMission">
+                        @{ Console.WriteLine("test " + mission.MissionId);}
+                        <input type="hidden" name="id" value="@mission.MissionId" />
+                        <input type="hidden" asp-for="@Model.Action" value="Modify"/>
+                        <button type="submit" asp-page="/ModifyMission" class="btn btn-success">Modifier</button>
+
+                    </form>
+                </div>
+                
+                <div id="avatarPopup" class="position-fixed top-0 start-0 w-100 h-100 bg-dark bg-opacity-50 d-flex justify-content-center align-items-center"
+                     style="z-index: 1050;" hidden>
+                    <form method="post" class="p-0 w-auto ">
+                        <p>Voulez-vous vraiment supprimer la mission ?</p>
+                        <input type="hidden" name="missionId" value="@mission.MissionId" />
+                        <input type="hidden" asp-for="@Model.Action" value="Delete"/>
+                        <button type="button" id="closeBtn" asp-page="/Missions" class="btn btn-danger w-auto">Annuler</button>
+                        <button type="submit" id="confirmBtn" asp-page="/Missions" class="btn btn-primary w-auto ms-auto">Supprimer</button>
+
+                    </form>
+                </div>
+            </details>
+        }
+    </div>
+
+
+</section>
+<script>
+    const popup = document.getElementById("avatarPopup");
+    const openBtn = document.getElementById("deleteBtn");
+    const cancelBtn = document.getElementById("closeBtn");
+    if (openBtn && popup && cancelBtn) {
+        // Initialement, on cache le popup avec visibility et opacity
+        popup.style.visibility = 'hidden';
+        popup.style.opacity = '0';
+
+        // Affichage du popup avec une transition de 0.3 secondes
+        openBtn.addEventListener('click', () => {
+            popup.style.visibility = 'visible';
+            popup.style.opacity = '1'; // Affichage fluide
+        });
+
+        // Fermeture du popup
+        cancelBtn.addEventListener('click', () => {
+            popup.style.visibility = 'hidden';
+            popup.style.opacity = '0'; // Cache le popup
+        });
+    }
+</script>
+<style>
+    .bg-dark{
+        background: black;
+    }
+    .mission-image {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .mission-img {
+        width: 120px;
+        height: auto;
+        border-radius: 12px;
+        margin-bottom: 10px;
+    }
+
+    .missions {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+        margin-top: 20px;
+    }
+
+    details.mission-block {
+        background-color: #15181B;
+        border: 1px solid #ddd;
+        border-radius: 12px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        padding: 0;
+        width: 100%;
+        max-width: 600px;
+        color: #eee;
+        overflow: hidden;
+    }
+
+    summary.mission-header {
+        cursor: pointer;
+        font-size: 18px;
+        padding: 20px;
+        text-align: center;
+        list-style: none;
+        user-select: none;
+    }
+
+    summary.mission-header::-webkit-details-marker {
+        display: none;
+    }
+
+    .mission-details {
+        padding: 0 20px 20px 20px;
+        font-size: 16px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .monsters-list {
+        padding: 0;
+        margin: 0;
+        width: 100%;
+        max-width: 400px;
+        text-align: center;
+        list-style: none;
+    }
+
+    .monsters-list li {
+        margin-bottom: 8px;
+        padding: 5px 0;
+    }
+</style>

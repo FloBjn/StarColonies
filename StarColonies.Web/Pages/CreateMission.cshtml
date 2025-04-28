@@ -1,0 +1,36 @@
+﻿@page
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using StarColonies.Domains
+@using StarColonies.Infrastructures.Entities
+@using StarColonies.Infrastructures.Mappers
+@using Index = Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.Blazor.Index
+@model CreateMissionModel
+
+@inject SignInManager<StarColoniesUser> SignInManager
+
+@{
+    ViewData["Title"] = "Gérer les missions";
+}
+
+<div class="container">
+    <h1>Create New Mission</h1>
+
+    <form method="post">
+        <div class="form-floating mb-3 w-100 d-flex flex-wrap">
+            <input asp-for="InputModelInfos.MissionName" class="form-control" autocomplete="username" aria-required="true" />
+            <label asp-for="InputModelInfos.MissionName" class="form-label">Nom de la mission</label>
+            <span asp-validation-for="InputModelInfos.MissionName" class="text-danger"></span>
+        </div>
+        
+        @for (var i = 0; i < Model.Enemies.Count; i++)
+        {
+            <div class="form-floating mb-3 w-100">
+                <input asp-for="InputModelInfos.SelectedEnemiesId[i]" class="form-check-input" type="checkbox" value="@Model.Enemies[i].EnemyId" />
+                <label asp-for="InputModelInfos.SelectedEnemiesId[i]" class="form-label text-black">@Model.Enemies[i].Name , Force : @Model.Enemies[i].Force , Endurance : @Model.Enemies[i].Stamina</label>
+                <span asp-validation-for="InputModelInfos.SelectedEnemiesId[i]" class="text-danger"></span>
+            </div>
+        }
+        <button type="submit" asp-page="/CreateMission" class="btn btn-primary"></button>
+    </form>
+</div>
