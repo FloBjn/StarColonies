@@ -38,16 +38,16 @@
             </thead>
             <tbody>
             @{
-            int rank = 1;
-            foreach (var item in classement)
-            {
-            <tr>
-                <th scope="row">@rank</th>
-                <td>@item.Key</td>
-                <td>@item.Value</td>
-            </tr>
-            rank++;
-            }
+                int rank = 1;
+                foreach (var item in classement)
+                {
+                    <tr>
+                        <th scope="row">@rank</th>
+                        <td>@item.Key</td>
+                        <td>@item.Value</td>
+                    </tr>
+                    rank++;
+                }
             }
             </tbody>
         </table>
