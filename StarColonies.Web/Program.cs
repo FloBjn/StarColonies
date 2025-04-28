@@ -11,7 +11,15 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddDbContext<StarColoniesContext>(options =>
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DevConnexionString"));
+    if (builder.Environment.IsDevelopment())
+    {
+        options.UseSqlServer(builder.Configuration.GetConnectionString("DevConnexionString"));
+    }
+    else if(builder.Environment.IsProduction())
+    {
+        options.UseSqlServer(builder.Configuration.GetConnectionString("ProdConnexionString"));
+    }
+    
 });
 
 builder.Services
