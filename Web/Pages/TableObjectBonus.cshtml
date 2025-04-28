@@ -1,0 +1,37 @@
+﻿@page
+@model StarColonies.Web.Pages.TableObjectBonus
+
+<h2>Liste des objets bonus
+    <a href="/PageAddObjectBonus" class="btn btn-primary">Ajouter</a>
+</h2>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Nom</th>
+        <th>Prix</th>
+        <th>Niveau</th>
+        <th>Force</th>
+        <th>Endurance</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var obj in await Model.GetAllBonusObejcts())
+    {
+    <tr>
+        <td>@obj.BonusObjectId</td>
+        <td>@obj.Name</td>
+        <td>@obj.Price</td>
+        <td>@obj.BonusLevel</td>
+        <td>@obj.BonusForce</td>
+        <td>@obj.BonusStamina</td>
+        <td>
+            <a href="/ModifierBonusObject/@obj.BonusObjectId" class="btn btn-sm btn-warning">Modifier</a>
+            <a href="/SupprimerBonusObject/@obj.BonusObjectId" class="btn btn-sm btn-danger">Supprimer</a>
+        </td>
+    </tr>
+    }
+    </tbody>
+</table>
