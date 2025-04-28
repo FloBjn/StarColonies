@@ -72,7 +72,7 @@ public class TableMission : PageModel
             TempData["Error"] = "Cette mission n'existe pas.";
             return RedirectToPage(new { TeamId });
         }
-        if (Team.LevelMaxAuthorized!=0 && Team.LevelMaxAuthorized < mission.Level)
+        if (Team.LevelMaxAuthorized!=0 && Team.LevelMaxAuthorized < mission.Level && Team.LevelMaxAuthorized!=1)
         {
             TempData["Error"] = "Votre equipe doit d'abord surmonte une mission plus simple.";
             return RedirectToPage(new { TeamId });
@@ -89,6 +89,7 @@ public class TableMission : PageModel
         
         //Vérifie si l'équipe a réussi la mission
         if (!mission.IsChallengesOvercomed(Team) || !mission.IsTeamAlive(Team))
+        
         {
             Team.LevelMaxAuthorized = mission.Level;
             await _teamRepository.UpdateTeamMaxLvlMissionAsync(Team);

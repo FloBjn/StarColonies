@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using StarColonies.Domains;
 using StarColonies.Domains.interfaces;
 using StarColonies.Infrastructures.data;
+using StarColonies.Infrastructures.Entities;
 using StarColonies.Infrastructures.Mappers;
 
 namespace StarColonies.Infrastructures.Repositories;
@@ -36,7 +37,14 @@ public class MissionHistoryRepository(StarColoniesContext context) : IMissionHis
 
     public async Task AddMissionHistoryAsync(MissionHistory missionHistory)
     {
-        var entity = MissionHistoryMapper.ToEntity(missionHistory);
+        var entity = new StarColoniesMissionHistory() 
+        {
+            MissionHistoryId = missionHistory.MissionHistoryId,
+            MissionId = missionHistory.MissionId, // Juste l'ID
+            TeamId = missionHistory.TeamId,       // Juste l'ID
+            IsSuccess = missionHistory.IsSuccess,
+        };
+    
         context.ScMissionHistory.Add(entity);
         await context.SaveChangesAsync();
     }

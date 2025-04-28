@@ -11,4 +11,5 @@ public interface ITeamRepository
     Task UpdateTeamObjectsAsync(Team team);
     Task DeleteTeamObjectsAsync(Team team);
     Task DeleteTeamAsync(Team team);
+    Task AddBonusObjectToTeamAsync(string teamId, string bonusObjectId);
 }

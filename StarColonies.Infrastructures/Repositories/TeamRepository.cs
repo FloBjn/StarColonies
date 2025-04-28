@@ -125,4 +125,23 @@ public class TeamRepository :ITeamRepository
         _context.ScTeam.Remove(entity);
         await _context.SaveChangesAsync();
     }
+    public async Task AddBonusObjectToTeamAsync(string teamId, string bonusObjectId)
+    {
+        var team = await _context.ScTeam
+            .Include(t => t.TeamBonusObjects)
+            .FirstOrDefaultAsync(t => t.TeamId == teamId);
+
+        if (team == null) return;
+        
+        var bonusObject = await _context.ScBonusObject
+            .FirstOrDefaultAsync(b => b.BonusObjectId == bonusObjectId);
+
+        if (bonusObject == null) return;
+        
+        if (!team.TeamBonusObjects.Any(b => b.BonusObjectId == bonusObjectId))
+        {
+            team.TeamBonusObjects.Add(bonusObject);
+            await _context.SaveChangesAsync();
+        }
+    }
 }
