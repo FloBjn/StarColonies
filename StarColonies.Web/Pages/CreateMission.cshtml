@@ -12,7 +12,7 @@
 ViewData["Title"] = "Create your mission";
 }
 
-<div class="container">
+<div class="container mission-creation-container">
     <h1>Create New Mission</h1>
 
     <form method="post">
@@ -44,8 +44,7 @@ ViewData["Title"] = "Create your mission";
     </form>
 </div>
 <style>
-    /* Mission Creation Page */
-    .container {
+    .mission-creation-container {
         max-width: 1200px;
         margin: 2rem auto;
         padding: 2rem;
@@ -56,7 +55,7 @@ ViewData["Title"] = "Create your mission";
         border: 1px solid rgba(255, 255, 255, 0.1);
     }
 
-    h1 {
+    .mission-creation-container h1 {
         color: #fff;
         text-align: center;
         margin-bottom: 2rem;
@@ -66,17 +65,17 @@ ViewData["Title"] = "Create your mission";
         text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
     }
 
-    form {
+    .mission-creation-container form {
         display: flex;
         flex-direction: column;
         gap: 1.5rem;
     }
 
-    .form-floating {
+    .mission-creation-container .form-floating {
         position: relative;
     }
 
-    .form-control {
+    .mission-creation-container .form-control {
         background-color: #0C0F12;
         border: 1px solid #391C3B;
         color: #fff;
@@ -85,19 +84,13 @@ ViewData["Title"] = "Create your mission";
         transition: all 0.3s ease;
     }
 
-    .form-control:focus {
+    .mission-creation-container .form-control:focus {
         background-color: #0C0F12;
         color: #fff;
         border-color: #6a3093;
         box-shadow: 0 0 0 0.25rem rgba(106, 48, 147, 0.25);
     }
-
-    .form-label {
-        color: #aaa;
-        transition: all 0.3s ease;
-    }
-
-    .form-check-input {
+    .mission-creation-container .form-check-input {
         width: 1.2em;
         height: 1.2em;
         margin-right: 0.5rem;
@@ -105,18 +98,18 @@ ViewData["Title"] = "Create your mission";
         border: 1px solid #6a3093;
     }
 
-    .form-check-input:checked {
+    .mission-creation-container .form-check-input:checked {
         background-color: #6a3093;
         border-color: #6a3093;
     }
 
-    .text-danger {
+    .mission-creation-container .text-danger {
         color: #dc3545;
         font-size: 0.9rem;
         margin-top: 0.5rem;
     }
 
-    .btn-primary {
+    .mission-creation-container.btn-primary {
         background-color: #391C3B;
         border: none;
         padding: 0.8rem 2rem;
@@ -128,21 +121,21 @@ ViewData["Title"] = "Create your mission";
         margin-top: 1rem;
     }
 
-    .btn-primary:hover {
+    .mission-creation-container .btn-primary:hover {
         background-color: #4d2554;
         transform: translateY(-2px);
         box-shadow: 0 5px 15px rgba(57, 28, 59, 0.4);
     }
 
-   
-    .enemy-selection {
+
+    .mission-creation-container .enemy-selection {
         display: flex;
         flex-wrap: wrap;
         gap: 1rem;
         margin-top: 1rem;
     }
 
-    .enemy-item {
+    .mission-creation-container .enemy-item {
         flex: 1 1 calc(33% - 1rem);
         min-width: 250px;
         background-color: #1E2124;
@@ -152,19 +145,19 @@ ViewData["Title"] = "Create your mission";
         transition: all 0.3s ease;
     }
 
-    .enemy-item:hover {
+    .mission-creation-container .enemy-item:hover {
         background-color: #25282B;
         transform: translateY(-3px);
         box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
     }
 
-    .enemy-name {
+    .mission-creation-container .enemy-name {
         font-weight: bold;
         color: #fff;
         margin-bottom: 0.5rem;
     }
 
-    .enemy-stats {
+    .mission-creation-container .enemy-stats {
         display: flex;
         justify-content: space-between;
         color: #aaa;
