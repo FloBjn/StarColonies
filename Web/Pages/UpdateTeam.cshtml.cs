@@ -220,6 +220,7 @@ public class UpdateTeam : PageModel
         
         [Display(Name = "Banner")]
         [DataType(DataType.ImageUrl)]
+        
         public IFormFile? Banner { get; set; }
 
     }

@@ -54,7 +54,7 @@ public class TeamsModel : PageModel
         {
             case "Create":
                 HttpContext.Session.SetString("SelectedId", "");
-                return RedirectToPage("/UpdateTeam");
+                return RedirectToPage("/CreateTeam");
             case "Modify":
                 HttpContext.Session.SetString("SelectedId", SelectionedTeam.TeamId);
                 return RedirectToPage("/UpdateTeam");
