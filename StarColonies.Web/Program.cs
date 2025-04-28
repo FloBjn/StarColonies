@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using StarColonies.Domains;
 using StarColonies.Domains.interfaces;
 using StarColonies.Infrastructures.data;
 using StarColonies.Infrastructures.Entities;

@@ -13,7 +13,7 @@ public class UserRepository : IUserRepository
 {
     private readonly StarColoniesContext _context;
     private readonly UserManager<StarColoniesUser> _userManager;
-
+    
     public UserRepository(StarColoniesContext dbContext, UserManager<StarColoniesUser> userManager)
     {
         _context = dbContext;
