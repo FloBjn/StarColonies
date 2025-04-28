@@ -128,7 +128,7 @@ namespace StarColonies.Web.Pages
                     if (result.Succeeded)
                     {
                         _logger.LogInformation("User logged in.");
-                        return RedirectToPage("/Dashboard");
+                        return RedirectToPage("/Index");
                     }
 
                     if (result.RequiresTwoFactor)
