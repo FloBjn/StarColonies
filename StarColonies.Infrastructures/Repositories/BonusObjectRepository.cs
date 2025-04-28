@@ -81,4 +81,13 @@ public class BonusObjectRepository : IBonusObjectRepository
         _context.ScBonusObject.Remove(entity);
         await _context.SaveChangesAsync();
     }
+    public async Task DeleteBonusObjectAsync(string id)
+    {
+        var entity = await _context.ScBonusObject.FindAsync(id);
+        if (entity != null)
+        {
+            _context.ScBonusObject.Remove(entity);
+            await _context.SaveChangesAsync();
+        }
+    }
 }

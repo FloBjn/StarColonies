@@ -9,4 +9,5 @@ public interface IBonusObjectRepository
     Task UpdateBonusObjectPriceAsync(BonusObject bonusObject);
     Task UpdateBonusObjectPerfBonusAsync(BonusObject bonusObject);
     Task DeleteBonusObject(BonusObject bonusObject);
+    Task DeleteBonusObjectAsync(string id);
 }
