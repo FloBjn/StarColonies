@@ -16,7 +16,7 @@ public class Mission
         }
     }
 
-    public bool ChallengesOvercome(Team team)
+    public bool IsChallengesOvercomed(Team team)
     {
         int bonusLevel = team.GetLevelBonusOfObject();
         int bonusForce = team.GetForceBonusOfObject();
@@ -27,9 +27,13 @@ public class Mission
             forceTeam += colon.Force+bonusLevel;
         }
         forceTeam += bonusForce;
-        return (forceTeam *2.5)- (forceEnnemies * 1.5)>0;
+        
+        var rndFactorEnemy = new Random().NextDouble()*2 +1;
+        var rdFactorTeam = new Random().NextDouble()*3 + 1;
+        
+        return (forceTeam * rdFactorTeam) - (forceEnnemies * rndFactorEnemy) > 0;
     }
-    public bool TeamIsAlive(Team team)
+    public bool IsTeamAlive(Team team)
     {
         int bonusLevel = team.GetLevelBonusOfObject();
         int bonusStamina = team.GetStaminaBonusOfObject();
@@ -40,7 +44,11 @@ public class Mission
             forceTeam += colon.Force+bonusLevel;
         }
         forceTeam += bonusStamina;
-        return (forceTeam *2.5)- (forceEnnemies * 1.5)>0;
+
+        var rndFactorEnemy = new Random().NextDouble()+1;
+        var rdFactorTeam = new Random().NextDouble()*3 + 1;
+
+        return (forceTeam * rdFactorTeam)- (forceEnnemies * rndFactorEnemy) > 0;
     }
 
     public int GetReward()

@@ -86,10 +86,10 @@ public class BlackMarket : PageModel
             TempData["Error"] = "You already own this item.";
             return RedirectToPage(new { TeamId });
         }
-
+        
         UserColon.SubtractResource(bonus.Price);
         await _colonRepository.UpdateColonNumberResource(UserColon);
-        //TODO Ajouter Les objects a la team
+        await _teamRepository.AddBonusObjectToTeamAsync(Team.TeamId, bonus.BonusObjectId);
         TempData["Success"] = bonus.Name+" purchase successful!";
         return RedirectToPage(new { TeamId });
     }

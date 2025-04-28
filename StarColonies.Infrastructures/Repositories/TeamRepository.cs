@@ -76,6 +76,38 @@ public class TeamRepository :ITeamRepository
         await _context.SaveChangesAsync();
     }
 
+    public async Task UpdateTeamObjectsAsync(Team team)
+    {
+        var teamDb = await GetTeamEntityByIdAsync(team.TeamId);
+        if (teamDb == null) return;
+        
+        teamDb.TeamBonusObjects.Clear();
+        
+        foreach (var bonusObject in team.TeamBonusObjects)
+        {
+            var bonusEntity = BonusObjectMapper.ToEntity(bonusObject);
+        
+            // Regarde si l'objet exite déjà ou pas dans la liste
+            if (!teamDb.TeamBonusObjects.Any(bo => bo.BonusObjectId == bonusEntity.BonusObjectId))
+            {
+                _context.Attach(bonusEntity); // Indique à Entity Framework que l'object/le lien exite déjà dans la base de donnée, pas besoin d'en rajouter un nouveau
+                teamDb.TeamBonusObjects.Add(bonusEntity);  // Ajoute à la collection, à l'update, ça rajoutera juste ceux là, pas tout. Ca évite les doublons
+            }
+        }
+        
+        _context.ScTeam.Update(teamDb);
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task DeleteTeamObjectsAsync(Team team)
+    {
+        var teamDb = await GetTeamEntityByIdAsync(team.TeamId);;
+        if (teamDb == null) return;
+        
+        teamDb.TeamBonusObjects.Clear();
+        await _context.SaveChangesAsync();
+    }
+
     public async Task UpdateTeamNameAsync(Team team)
     {
         var teamDb = await GetTeamEntityByIdAsync(team.TeamId);
@@ -92,5 +124,24 @@ public class TeamRepository :ITeamRepository
         var entity = TeamMapper.ToEntity(team);
         _context.ScTeam.Remove(entity);
         await _context.SaveChangesAsync();
+    }
+    public async Task AddBonusObjectToTeamAsync(string teamId, string bonusObjectId)
+    {
+        var team = await _context.ScTeam
+            .Include(t => t.TeamBonusObjects)
+            .FirstOrDefaultAsync(t => t.TeamId == teamId);
+
+        if (team == null) return;
+        
+        var bonusObject = await _context.ScBonusObject
+            .FirstOrDefaultAsync(b => b.BonusObjectId == bonusObjectId);
+
+        if (bonusObject == null) return;
+        
+        if (!team.TeamBonusObjects.Any(b => b.BonusObjectId == bonusObjectId))
+        {
+            team.TeamBonusObjects.Add(bonusObject);
+            await _context.SaveChangesAsync();
+        }
     }
 }

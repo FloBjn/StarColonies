@@ -1,9 +1,10 @@
 ﻿@page
+@using StarColonies.Domains
 @model TableMission
 <div class="mission-image">
     <img src="css/images/tablemission.png" alt="Table Mission Image" class="mission-img">
 </div>
-<h1>Tableau des missions</h1>
+<h1>Tableau des missions @Model.Team.ColonsTeam.Count</h1>
 
 <p>Level de la mission la plus haute autorisé :
     @if(Model.Team.LevelMaxAuthorized == 0) {
@@ -70,111 +71,3 @@
         }
     });
 </script>
-<style>
-    .mission-image {
-        text-align: center;
-        margin-bottom: 20px;
-    }
-    
-    .mission-img {
-        width: 120px;
-        height: auto;
-        border-radius: 12px;
-        margin-bottom: 10px;
-    }
-
-    .missions {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 20px;
-        margin-top: 20px;
-    }
-
-    details.mission-block {
-        background-color: #15181B;
-        border: 1px solid #ddd;
-        border-radius: 12px;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        padding: 0;
-        width: 100%;
-        max-width: 600px;
-        color: #eee;
-        overflow: hidden;
-    }
-
-    summary.mission-header {
-        cursor: pointer;
-        font-size: 18px;
-        padding: 20px;
-        text-align: center;
-        list-style: none;
-        user-select: none;
-    }
-
-    summary.mission-header::-webkit-details-marker {
-        display: none;
-    }
-
-    .mission-details {
-        padding: 0 20px 20px 20px;
-        font-size: 16px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .monsters-list {
-        padding: 0;
-        margin: 0;
-        width: 100%;
-        max-width: 400px;
-        text-align: center;
-        list-style: none;
-    }
-
-    .monsters-list li {
-        margin-bottom: 8px;
-        padding: 5px 0;
-    }
-
-    button, .btn-black-market {
-        margin-top: 15px;
-        padding: 8px 16px;
-        border: none;
-        background-color: #28a745;
-        color: white;
-        border-radius: 8px;
-        cursor: pointer;
-        text-decoration: none;
-        display: inline-block;
-        text-align: center;
-        font-size: 14px;
-    }
-
-    button:hover, .btn-black-market:hover {
-        background-color: #218838;
-    }
-
-    .mission-details form {
-        display: flex;
-        justify-content: center;
-        width: 100%;
-    }
-
-    .black-market-button {
-        margin: 10px 0 15px 0;
-        text-align: center;
-    }
-
-    .btn-black-market {
-        background-color: #6c757d;
-        padding: 6px 12px;
-        font-size: 14px;
-    }
-
-    .btn-black-market:hover {
-        background-color: #5a6268;
-        color: white
-    }
-</style>
