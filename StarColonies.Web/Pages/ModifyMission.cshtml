@@ -13,37 +13,166 @@
     ViewData["Title"] = "Modify the mission";
 }
 
-<div class="container">
+<style>
+    /* Page de modification de mission - Styles isolés */
+    #mission-modification-page.container {
+        max-width: 1200px;
+        margin: 2rem auto;
+        padding: 2rem;
+        background-color: #15181B;
+        border-radius: 1em;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        color: #eee;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    #mission-modification-page h1 {
+        color: #fff;
+        text-align: center;
+        margin-bottom: 2rem;
+        font-size: 2.5rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+    }
+
+    #mission-modification-page form {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    #mission-modification-page .form-floating {
+        position: relative;
+        margin-bottom: 1.5rem;
+    }
+
+    #mission-modification-page .form-control {
+        background-color: #0C0F12;
+        border: 1px solid #391C3B;
+        color: #fff;
+        padding: 1rem;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+    }
+
+    #mission-modification-page .form-control:focus {
+        background-color: #0C0F12;
+        color: #fff;
+        border-color: #6a3093;
+        box-shadow: 0 0 0 0.25rem rgba(106, 48, 147, 0.25);
+    }
+
+    #mission-modification-page .form-label {
+        color: #aaa;
+        transition: all 0.3s ease;
+    }
+
+    #mission-modification-page .form-check-input {
+        width: 1.2em;
+        height: 1.2em;
+        margin-right: 0.5rem;
+        background-color: #0C0F12;
+        border: 1px solid #6a3093;
+        position: relative;
+        top: 0.2em;
+    }
+
+    #mission-modification-page .form-check-input:checked {
+        background-color: #6a3093;
+        border-color: #6a3093;
+    }
+
+    #mission-modification-page .text-danger {
+        color: #dc3545;
+        font-size: 0.9rem;
+        margin-top: 0.5rem;
+        display: block;
+    }
+
+    #mission-modification-page .btn-primary {
+        background-color: #391C3B;
+        border: none;
+        padding: 0.8rem 2rem;
+        font-size: 1.1rem;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        transition: all 0.3s ease;
+        margin-top: 1rem;
+    }
+
+    #mission-modification-page .btn-primary:hover {
+        background-color: #4d2554;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(57, 28, 59, 0.4);
+    }
+
+    /* Style spécifique pour les ennemis */
+    #mission-modification-page .enemy-item {
+        background-color: #1E2124;
+        padding: 1rem;
+        border-radius: 0.5rem;
+        border-left: 3px solid #6a3093;
+        margin-bottom: 1rem;
+        transition: all 0.3s ease;
+    }
+
+    #mission-modification-page .enemy-item:hover {
+        background-color: #25282B;
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    #mission-modification-page .enemy-label {
+        font-weight: bold;
+        color: #fff;
+        margin-left: 0.5rem;
+    }
+
+    #mission-modification-page .enemy-stats {
+        color: #aaa;
+        font-size: 0.9rem;
+        margin-left: 1.7rem;
+    }
+</style>
+
+<div id="mission-modification-page" class="container">
     <h1>Modify @Model.Mission.Name</h1>
 
     <form method="post">
-        <div class="form-floating mb-3 w-100 d-flex flex-wrap">
+        <div class="form-floating mb-3 w-100">
             <input asp-for="InputModelInfos.MissionName" class="form-control" autocomplete="username" aria-required="true" value="@Model.Mission.Name"/>
             <label asp-for="InputModelInfos.MissionName" class="form-label">Nom de la mission</label>
             <span asp-validation-for="InputModelInfos.MissionName" class="text-danger"></span>
         </div>
 
+        <h3>Select Enemies</h3>
+        
         @for (var i = 0; i < Model.Enemies.Count; i++)
         {
             var enemyId = Model.Enemies[i].EnemyId;
             
-            <div class="form-floating mb-3 w-100">
-                @if (Model.EnemyInMission.Any(e => e.EnemyId == enemyId))
-                {
-                    <input asp-for="InputModelInfos.SelectedEnemiesId[i]" class="form-check-input" type="checkbox" checked="checked" value="@Model.Enemies[i].EnemyId"/>
-                }
-                else
-                {
-                    <input asp-for="InputModelInfos.SelectedEnemiesId[i]" class="form-check-input" type="checkbox" value="@Model.Enemies[i].EnemyId"/>
-                }
-                
-                <label asp-for="InputModelInfos.SelectedEnemiesId[i]" class="form-label text-black">@Model.Enemies[i].Name , Force : @Model.Enemies[i].Force , Endurance : @Model.Enemies[i].Stamina</label>
+            <div class="enemy-item">
+                <div class="d-flex align-items-center">
+                    @if (Model.EnemyInMission.Any(e => e.EnemyId == enemyId))
+                    {
+                        <input asp-for="InputModelInfos.SelectedEnemiesId[i]" class="form-check-input" type="checkbox" checked="checked" value="@Model.Enemies[i].EnemyId"/>
+                    }
+                    else
+                    {
+                        <input asp-for="InputModelInfos.SelectedEnemiesId[i]" class="form-check-input" type="checkbox" value="@Model.Enemies[i].EnemyId"/>
+                    }
+                    <label asp-for="InputModelInfos.SelectedEnemiesId[i]" class="enemy-label">@Model.Enemies[i].Name</label>
+                </div>
+                <div class="enemy-stats">
+                    Force: @Model.Enemies[i].Force | Endurance: @Model.Enemies[i].Stamina
+                </div>
                 <span asp-validation-for="InputModelInfos.SelectedEnemiesId[i]" class="text-danger"></span>
             </div>
         }
-        <div class="w-100 d-flex justify-content-end">
-            <button type="submit" asp-page="/CreateMission" class="btn btn-primary">Enregistrer</button>
-        </div>
         
+        <div class="w-100 d-flex justify-content-end">
+            <button type="submit" class="btn btn-primary">Enregistrer</button>
+        </div>
     </form>
 </div>
