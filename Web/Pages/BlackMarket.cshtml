@@ -10,7 +10,7 @@
     </div>
 </div>
 <div class="comptoir">
-    @foreach (var bonus in (await Model.GetAllMissions())
+    @foreach (var bonus in (await Model.GetAllBonusObjects())
               .Where(b => !Model.Team.TeamBonusObjects.Any(tbo => tbo.BonusObjectId == b.BonusObjectId)))
     {
         <div class="objet-card">

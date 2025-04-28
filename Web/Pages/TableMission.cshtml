@@ -1,0 +1,59 @@
+﻿@page
+@model TableMission
+<h1>Tableau des missions</h1>
+<div class="missions">
+    @foreach (var mission in await @Model.GetAllMissions())
+    {
+    <details class="mission-block" id="mission-@mission.MissionId">
+        <summary class="mission-header">
+            <strong>@mission.Name</strong> — Niveau : @mission.Level
+        </summary>
+        <div class="mission-details">
+            <ul>
+                @foreach (var monstre in mission.MissionEnemies)
+                {
+                <li><strong>@monstre.Name</strong> — Force : @monstre.Force, Endurance : @monstre.Stamina</li>
+                }
+            </ul>
+            <form method="post">
+                <input type="hidden" name="missionId" value="@mission.MissionId" />
+                <button type="submit" class="launch-mission">Lancer la mission</button>
+            </form>
+        </div>
+    </details>
+    }
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const params = new URLSearchParams(window.location.search);
+        const openMissionId = params.get('openMission');
+
+        if (openMissionId) {
+            const missionElement = document.getElementById(`mission-${openMissionId}`);
+            if (missionElement) {
+                missionElement.open = true;
+            }
+        }
+
+        document.querySelectorAll("details.mission-block").forEach(d => {
+            d.addEventListener("toggle", (e) => {
+                const missionId = e.currentTarget.id.replace('mission-', '');
+                const params = new URLSearchParams(window.location.search);
+
+                if (e.currentTarget.open) {
+                    params.set('openMission', missionId);
+                } else {
+                    params.delete('openMission');
+                }
+                history.replaceState(null, '', `${window.location.pathname}?${params.toString()}`);
+            });
+        });
+        if ('@TempData["Error"]' !== '') {
+            alert('@TempData["Error"]');
+        }
+        if ('@TempData["Success"]' !== '') {
+            alert('@TempData["Success"]');
+        }
+    });
+</script>
