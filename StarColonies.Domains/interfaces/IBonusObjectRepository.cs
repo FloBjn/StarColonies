@@ -10,4 +10,5 @@ public interface IBonusObjectRepository
     Task UpdateBonusObjectPerfBonusAsync(BonusObject bonusObject);
     Task DeleteBonusObject(BonusObject bonusObject);
     Task DeleteBonusObjectAsync(string id);
+    Task UpdateBonusObjectAsync(BonusObject bonusObject);
 }

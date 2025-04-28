@@ -24,8 +24,8 @@ public class CreateObjectBonus : PageModel
     {
         UserConnected = await _userRepository.GetUserConnectedAsync(User);
         
-        //TODO Vérifier si c'est admin
-        if (UserConnected == null)
+        
+        if (UserConnected == null || UserConnected.IsAdmin == false)
         {
             return Redirect("/Error");
         }
