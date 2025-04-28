@@ -9,16 +9,16 @@ namespace StarColonies.Infrastructures.Repositories;
 
 public class MissionRepository : IMissionRepository
 {
-    private readonly StarColoniesContext _dbContext;
+    private readonly StarColoniesContext _context;
 
-    public MissionRepository(StarColoniesContext dbContext)
+    public MissionRepository(StarColoniesContext context)
     {
-        _dbContext = dbContext;
+        _context = context;
     }
     
     public async Task<List<Mission>> GetAllAsync()
     {
-        var entities = await _dbContext.ScMission
+        var entities = await _context.ScMission
             .Include(e => e.MissionEnemies)
             .ToListAsync();
         
@@ -27,7 +27,7 @@ public class MissionRepository : IMissionRepository
 
     public async Task<Mission?> GetByIdAsync(string missionId)
     {
-        var entity = await _dbContext.ScMission
+        var entity = await _context.ScMission
             .Include(e => e.MissionEnemies)
             .FirstOrDefaultAsync(m => m.MissionId == missionId);
         
@@ -36,7 +36,7 @@ public class MissionRepository : IMissionRepository
     
     private async Task<StarColoniesMission?> GetMissionEntityByIdAsync(string missionId)
     {
-        var entity = await _dbContext.ScMission
+        var entity = await _context.ScMission
             .Include(m=> m.MissionEnemies)
             .FirstOrDefaultAsync(m => m.MissionId == missionId);
         
@@ -45,9 +45,9 @@ public class MissionRepository : IMissionRepository
 
     public async Task AddMissionAsync(Mission mission)
     {
-        var entity = MissionMapper.ToEntity(mission);
-        await _dbContext.ScMission.AddAsync(entity);
-        await _dbContext.SaveChangesAsync();
+        var entity = MissionMapper.ToEntity(mission, _context);
+        await _context.ScMission.AddAsync(entity);
+        await _context.SaveChangesAsync();
     }
 
     public async Task UpdateMissionNameAsync(Mission mission)
@@ -57,8 +57,8 @@ public class MissionRepository : IMissionRepository
         
         missionDb.Name = mission.Name;
         
-        _dbContext.ScMission.Update(missionDb);
-        await _dbContext.SaveChangesAsync();
+        _context.ScMission.Update(missionDb);
+        await _context.SaveChangesAsync();
     }
 
     public async Task UpdateMissionEnemiesAsync(Mission mission)
@@ -68,16 +68,16 @@ public class MissionRepository : IMissionRepository
         
         missionDb.MissionEnemies = mission.MissionEnemies.Select(EnemyMapper.ToEntity).ToList();
         
-        _dbContext.ScMission.Update(missionDb);
-        await _dbContext.SaveChangesAsync();
+        _context.ScMission.Update(missionDb);
+        await _context.SaveChangesAsync();
     }
     
 
     public async Task DeleteMissionAsync(Mission mission)
     {
-        var entity = MissionMapper.ToEntity(mission);
-        _dbContext.ScMission.Remove(entity);
-        await _dbContext.SaveChangesAsync();
+        var entity = MissionMapper.ToEntity(mission, _context);
+        _context.ScMission.Remove(entity);
+        await _context.SaveChangesAsync();
     }
 
 }

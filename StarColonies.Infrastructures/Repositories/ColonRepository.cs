@@ -39,7 +39,7 @@ public class ColonRepository : IColonRepository
     }
     public async Task AddColonAsync(Colon colon)
     {
-        var entity = ColonMapper.ToEntity(colon);
+        var entity = ColonMapper.ToEntity(colon, _context);
         _context.ScColon.Add(entity);
         await _context.SaveChangesAsync();
     }

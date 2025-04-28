@@ -16,7 +16,7 @@
         <form class="w-100 me-auto d-flex flex-wrap" method="post">
             @* choix equipe *@
             <label asp-for="InputModel.TeamId" class="form-label w-100">Choisir une équipe</label>
-            <select asp-for="InputModel.TeamId" class="form-control w-40" aria-required="true">
+            <select onchange="onSelectChange()" id="TeamSelect" asp-for="InputModel.TeamId" class="form-control w-40" aria-required="true">
                 <option value="">-- Choisir une équipe --</option>
                 @foreach (var team in Model.Teams)
                 {
@@ -25,7 +25,13 @@
             </select>
             <span asp-validation-for="InputModel.TeamId" class="text-danger ms-2"></span>
             <input type="hidden" asp-for="RedirectAction" value="Get"/>
-            <button type="submit" class="btn btn-primary w-auto">sélectionner</button>
+            <button disabled id="ValidationSelect" type="submit" class="btn btn-primary w-auto">sélectionner</button>
+            <script>
+                function onSelectChange(){
+                    const teamNameId = document.getElementById("TeamSelect").value;
+                    document.getElementById("ValidationSelect").disabled = !teamNameId;
+                }
+            </script>
         </form>
     </div>
     

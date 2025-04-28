@@ -50,7 +50,7 @@ public class UserRepository : IUserRepository
     
     public async Task AddAsync(User user)
     {
-        var entity = UserMapper.ToEntity(user);
+        var entity = UserMapper.ToEntity(user, _context);
         await _context.ScUser.AddAsync(entity);
         await _context.SaveChangesAsync();
     }
@@ -71,7 +71,7 @@ public class UserRepository : IUserRepository
 
     public async Task DeleteUserAsync(User user)
     {
-        var entity = UserMapper.ToEntity(user);
+        var entity = UserMapper.ToEntity(user, _context);
         _context.ScUser.Remove(entity);
         await _context.SaveChangesAsync();
     }

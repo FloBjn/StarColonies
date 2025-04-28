@@ -4,6 +4,7 @@ public class Statistics
 {
     public IList<MissionHistory> MissionHistories { get; set; }
     public IList<Team> Teams { get; set; }
+    public IList<Mission> Missions { get; set; }
     public double? GetWinningpercentageOfMissions(Mission mission)
     {
         int numberOfTimePlayed = 0;
@@ -37,9 +38,19 @@ public class Statistics
         
         foreach (var missionHistory in MissionHistories)
         {
+            Mission missionRecherchee = null;
+
+            foreach (var mission in Missions)
+            {
+                if (mission.MissionId == missionHistory.MissionId)
+                {
+                    missionRecherchee = mission;
+                    break;
+                }
+            }
             if (missionHistory.IsSuccess && classement.ContainsKey(missionHistory.Team.Name))
             {
-                classement[missionHistory.Team.Name] += missionHistory.Mission.Level;
+                classement[missionHistory.Team.Name] += missionRecherchee.Level;
             }
         }
         return classement.OrderByDescending(e => e.Value).ToList();;
