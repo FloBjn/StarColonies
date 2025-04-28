@@ -29,7 +29,9 @@
             <td>@obj.BonusStamina</td>
             <td>
                 <a href="/ModifierBonusObject/@obj.BonusObjectId" class="btn btn-sm btn-warning">Modifier</a>
-                <a href="/SupprimerBonusObject/@obj.BonusObjectId" class="btn btn-sm btn-danger">Supprimer</a>
+                <form method="post" asp-page-handler="Delete" asp-route-id="@obj.BonusObjectId" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet objet?');" style="display: inline;">
+                    <button type="submit" class="btn btn-sm btn-danger">Supprimer</button>
+                </form>
             </td>
         </tr>
     }
