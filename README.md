@@ -10,22 +10,35 @@ La suite du document sera à compléter par vos soins.
 
 ## Membres de l'équipe
 
-**TODO :** indiquez les membres de votre équipe (de deux à trois membres).
+Maxime Wouters, Florence Blanjean, Romain Bronowski
 
-**TODO :** indiquez quel membre est responsable du déploiement. Nous testerons l'application web depuis son URL https://ue19.cg.helmo.be/matricule.
+Sur le matricule de Florence Blanjean  https://ue19.cg.helmo.be/Q220191.
 
 ## Construction de la solution
-
-**TODO :** expliquez les étapes nécessaires à la récupération de votre solution, à sa construction et à son exécution dans un environnement de développement (tel que l'ordinateur de votre responsable).
-
+dotnet build .\StarColonies.sln
+cd .\StarColonies.Web\
+dotnet run
 ## Fonctionnalités implémentées
 
-**TODO :** pour chaque US décrite dans l'énoncé, indiquez son état d'avancement (non-faite, débutée, partiellement achevée, totalement achevée). Quand une US est débutée ou partiellement achevée, indiquez en quelques mots ce qui manque selon vous.
+US1 - totalement achevée
+US2 - totalement achevée
+US3 - totalement achevée
+US4 - totalement achevée
+US5 - partiellement achevée, la validateur pour éviter de contenir trop d'une même profession n'est pas faites
+US6 - partiellement achevée, visualiser fonctionne mais la modification des colons ne se fait pas
+US7 - non-faite
+US8 - partiellement achevée, il n'y a pas de filtrage
+US9 - partiellement achevée, on peut acheter, les bonus sont actif pour la prochaine mission mais il n'y a pas d'historique
+US10 - partiellement achevée, on ne peut pas comparer les colons entre eux
+US11 - partiellement achevée, la focntionnalité pour laisser des messages de félicitations n'est pas implémentée
+US12 - non-faite
 
 ## Données de connexion
 
-**TODO :** indiquez au minimum trois comptes dont un compte d'administrateur.
+Admin: admin@mail.be #Admin2025
+Utilisateur: masterchief@mail.be #Ms360
+Utilisateur: logan@mail.be #294sM
 
 ## Éléments techniques notables
 
-**TODO :** indiquez les éléments techniques que vous jugez notables. Par exemple, l'utilisation d'un framework CSS autre que Bootstrap. Autre exemple, l'utilisation de bibliothèques JS pour l'affichage de graphiques.
+Utilisationd Chart.js pour les graphique 
