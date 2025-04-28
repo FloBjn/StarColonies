@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using StarColonies.Domains;
 using StarColonies.Domains.interfaces;
 using StarColonies.Infrastructures.data;
 using StarColonies.Infrastructures.Entities;
@@ -21,11 +22,12 @@ builder.Services
 builder.Services.AddTransient<ReverseProxyLinksMiddleware>();
 
 //Interfaces
-builder.Services.AddScoped<IMissionRepository, MissionRepository>();
-builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<IColonRepository, ColonRepository>();
 builder.Services.AddScoped<IBonusObjectRepository, BonusObjectRepository>();
+builder.Services.AddScoped<IColonRepository, ColonRepository>();
+builder.Services.AddScoped<IMissionHistoryRepository, MissionHistoryRepository>();
+builder.Services.AddScoped<IMissionRepository, MissionRepository>();
 builder.Services.AddScoped<ITeamRepository, TeamRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 var app = builder.Build();
 
