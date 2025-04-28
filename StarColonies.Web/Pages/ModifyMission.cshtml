@@ -10,11 +10,11 @@
 @inject SignInManager<StarColoniesUser> SignInManager
 
 @{
-    ViewData["Title"] = "Gérer les missions";
+    ViewData["Title"] = "Modify the mission";
 }
 
 <div class="container">
-    <h1>Create New Mission</h1>
+    <h1>Modify @Model.Mission.Name</h1>
 
     <form method="post">
         <div class="form-floating mb-3 w-100 d-flex flex-wrap">
