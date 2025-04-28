@@ -53,6 +53,7 @@ public class ColonRepository : IColonRepository
         colonDb.Stamina = colon.Stamina;
         colonDb.JobName = JobNameMapper.ToInt(colon.JobName);
         colonDb.Name = colon.Name;
+        colonDb.Level = colon.Level;
         _context.ScColon.Update(colonDb);
         await _context.SaveChangesAsync();
     }

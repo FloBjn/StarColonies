@@ -90,7 +90,7 @@ public class TableMission : PageModel
         //Vérifie si l'équipe a réussi la mission
         if (!mission.IsChallengesOvercomed(Team) || !mission.IsTeamAlive(Team))
         {
-            Team.LevelMaxAuthorized = mission.Level;
+            Team.LevelMaxAuthorized =0 ;
             await _teamRepository.UpdateTeamMaxLvlMissionAsync(Team);
             missionHistory.IsSuccess = false;
             
@@ -127,7 +127,7 @@ public class TableMission : PageModel
         //Supprime tout les objets de la team (les objets ne sont actif que pour la prochaine mission que l'équipe fait)
         Team.TeamBonusObjects = new List<BonusObject>();
         await _teamRepository.DeleteTeamObjectsAsync(Team);
-        
+        //Rajouter un niveau à tous les colons 
         TempData["Success"] = $"Mission {mission.Name} terminée avec succès!";
         return RedirectToPage(new { TeamId });
     }
