@@ -35,19 +35,25 @@ public class CreateObjectBonus : PageModel
 
     public async Task<IActionResult> OnPostAsync()
     {
-        if (!ModelState.IsValid)
+        
+        if (BonusObject.Price <= 0 || BonusObject.BonusForce <0|| BonusObject.BonusLevel <0|| BonusObject.BonusStamina <0)
         {
             return Page();
         }
+        int sum = BonusObject.BonusForce + BonusObject.BonusLevel + BonusObject.BonusStamina;
 
+        if (sum <= 0)
+        {
+            return Page();
+        }
+        
         try
         {
             await _bonusObjectRepository.AddBonusObjectAsync(BonusObject);
-            return RedirectToPage("/TableObjectBonus");
+            return RedirectToPage("/TableBonusObject");
         }
         catch (Exception ex)
         {
-            ModelState.AddModelError(string.Empty, $"Une erreur est survenue: {ex.Message}");
             return Page();
         }
     }
