@@ -8,6 +8,7 @@
         <p class="ressources-text">Ressources : @Model.UserColon?.NumberResource</p>
         <img src="css/images/ressource.png" alt="Ressource" class="ressource-image"/>
     </div>
+    <a  class="btn-back-to-missions" asp-page="/TableMission" asp-route-TeamId="@Model.Team.TeamId">Partir en mission</a>
 </div>
 <div class="comptoir">
     @foreach (var bonus in (await Model.GetAllBonusObjects())
@@ -68,7 +69,7 @@
         display: flex;
         align-items: center;
         gap: 10px;
-        margin-bottom: 20px;
+        margin-bottom: 10px;
     }
 
     .image-marchand {
@@ -88,6 +89,24 @@
         vertical-align: middle;
         margin-top: -2px;
         border-radius: 50%;
+    }
+
+    .btn-back-to-missions {
+        padding: 6px 12px;
+        border: none;
+        background-color: #6c757d;
+        color: white;
+        border-radius: 8px;
+        cursor: pointer;
+        text-decoration: none;
+        font-size: 14px;
+        margin-bottom: 20px;
+        transition: background-color 0.3s;
+    }
+
+    .btn-back-to-missions:hover {
+        background-color: #5a6268;
+        color: white;
     }
 
     .comptoir {
