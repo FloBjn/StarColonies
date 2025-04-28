@@ -2,6 +2,7 @@
 @model IndexModel
 @{
     ViewData["Title"] = "Home page";
+    var classement = @Model.Statistics.GetAllOfFame();
 }
 
 <div class="text-center">
@@ -36,21 +37,18 @@
             </tr>
             </thead>
             <tbody>
+            @{
+            int rank = 1;
+            foreach (var item in classement)
+            {
             <tr>
-                <th scope="row">1</th>
-                <td>Les loosers</td>
-                <td>2235</td>
+                <th scope="row">@rank</th>
+                <td>@item.Key</td>
+                <td>@item.Value</td>
             </tr>
-            <tr>
-                <th scope="row">2</th>
-                <td>FoxHound</td>
-                <td>2106</td>
-            </tr>
-            <tr>
-                <th scope="row">3</th>
-                <td>VIMeurs</td>
-                <td>2056</td>
-            </tr>
+            rank++;
+            }
+            }
             </tbody>
         </table>
     </section>

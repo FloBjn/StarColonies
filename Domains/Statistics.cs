@@ -2,8 +2,8 @@
 
 public class Statistics
 {
-    public IList<MissionHistory> MissionHistories { get; set; } = new List<MissionHistory>();
-    
+    public IList<MissionHistory> MissionHistories { get; set; }
+    public IList<Team> Teams { get; set; }
     public double? GetWinningpercentageOfMissions(Mission mission)
     {
         int numberOfTimePlayed = 0;
@@ -22,5 +22,24 @@ public class Statistics
             return null;
         }
         return numberOfTimeSucceed *100/ numberOfTimePlayed;
+    }
+
+    public List<KeyValuePair<string, int>> GetAllOfFame()
+    {
+        Dictionary<string, int> classement = new Dictionary<string, int>();
+        
+        foreach (var team in Teams)
+        {
+            classement.Add(team.Name, 0);
+        }
+        
+        foreach (var missionHistory in MissionHistories)
+        {
+            if (missionHistory.IsSuccess && classement.ContainsKey(missionHistory.Team.Name))
+            {
+                classement[missionHistory.Team.Name] += missionHistory.Mission.Level;
+            }
+        }
+        return classement.OrderByDescending(e => e.Value).ToList();;
     }
 }
