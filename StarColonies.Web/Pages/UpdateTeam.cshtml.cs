@@ -34,19 +34,13 @@ public class UpdateTeam : PageModel
     {
         await SetConnectedUser();
         var monId = HttpContext.Session.GetString("SelectedId");
+        Console.WriteLine(monId);
         if (!string.IsNullOrEmpty(monId))
             ModifyingTeam = await _teamRepository.GetByIdAsync(monId);
         
-        if (ModifyingTeam == null)
-        {
-            ModifyingTeam = new Team();
-            ModifyingTeam.ColonsTeam.Add(UserConnected.UserColon);
-            IsCreatingTeam = true;
-        }
-        else
-        {
-            IdModifyingTeam = monId;
-        }
+        
+        IdModifyingTeam = monId;
+        
     }
     
     public async Task<IActionResult> OnPostAsync()
@@ -67,7 +61,7 @@ public class UpdateTeam : PageModel
         
         ModelState.Clear();
         
-        if (!TryValidateModel(ColonModelList) || !HasModelChanged(ColonModelList) || !EnoughColon())
+        if (!TryValidateModel(ColonModelList) || !HasModelChanged(ColonModelList))
         {
             Console.WriteLine("hasChanged : " + HasModelChanged(ColonModelList));
             // Console.WriteLine("prof : " + CheckProfConstraint());

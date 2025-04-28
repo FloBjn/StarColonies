@@ -11,6 +11,8 @@ public class TeamsModel : PageModel
     private readonly IColonRepository _colonRepository;
     private readonly IWebHostEnvironment _webHostEnvironment;
     private readonly ITeamRepository _teamRepository;
+    private readonly IUserRepository _userService;
+
     [BindProperty]
     public required InputFormModel InputModel { get; set; } = new ();
     public IList<Team> Teams { get; set; }
@@ -18,19 +20,22 @@ public class TeamsModel : PageModel
     [BindProperty]
     public string RedirectAction { get; set; } = string.Empty;
 
-    public TeamsModel(IWebHostEnvironment webHostEnvironment, IColonRepository colonRepository, ITeamRepository teamRepository)
+    public TeamsModel(IWebHostEnvironment webHostEnvironment, IColonRepository colonRepository, ITeamRepository teamRepository, IUserRepository userService)
     {
         _webHostEnvironment = webHostEnvironment;
         _colonRepository = colonRepository;
         _teamRepository = teamRepository;
+        _userService = userService;
     }
 
     public async Task OnGetAsync()
     {
+        var user = await _userService.GetUserConnectedAsync(User);
         Teams = await _teamRepository.GetAllTeamsAsync();// repo
-        
-        Console.WriteLine($"Teams: {Teams[0].ColonsTeam.Count}");
-        Console.WriteLine($"Teams: {Teams[1].ColonsTeam.Count}");
+        Teams = Teams.Where(t => t.ColonsTeam.Any(c => c.ColonId == user.ColonId))
+            .ToList();
+        // Console.WriteLine($"Teams: {Teams[0].ColonsTeam.Count}");
+        // Console.WriteLine($"Teams: {Teams[1].ColonsTeam.Count}");
         /*SelectionedTeam = new Team()
         {
             Name = "Equipe test",
@@ -46,9 +51,14 @@ public class TeamsModel : PageModel
 
     public async Task<IActionResult> OnPostAsync()
     {
-        
-        
-        
+        var team = await _teamRepository.GetByIdAsync(InputModel.TeamId);
+        if (team != null)
+        {
+            Console.WriteLine("teamfind : " + team.Name);
+            SelectionedTeam = team;
+            InputModel.TeamId = team.TeamId;
+            Console.WriteLine("teamfind : " + SelectionedTeam.TeamId);
+        }
         Console.WriteLine($"action: {RedirectAction}");
         switch (RedirectAction)
         {
@@ -56,19 +66,15 @@ public class TeamsModel : PageModel
                 HttpContext.Session.SetString("SelectedId", "");
                 return RedirectToPage("/CreateTeam");
             case "Modify":
-                HttpContext.Session.SetString("SelectedId", SelectionedTeam.TeamId);
+                // Console.WriteLine($"action: {SelectionedTeam.TeamId}");
+                /*Console.WriteLine($"action: {InputModel.TeamId}");
+                HttpContext.Session.SetString("SelectedId", InputModel.TeamId);*/
                 return RedirectToPage("/UpdateTeam");
             case "Get":
+                HttpContext.Session.SetString("SelectedId", SelectionedTeam.TeamId);
+                var user = await _userService.GetUserConnectedAsync(User);
                 Teams = await _teamRepository.GetAllTeamsAsync();// repo
-                if (ModelState.IsValid)
-                {
-                    var team = await _teamRepository.GetByIdAsync(InputModel.TeamId);
-                    if (team != null)
-                    {
-                        Console.WriteLine("teamfind : " + team.Name);
-                        SelectionedTeam = team;
-                    }
-                }
+                Teams = Teams.Where(t => t.ColonsTeam.Any(c => c.ColonId == user.ColonId)).ToList();
                 break;
             default:return Page();
         }

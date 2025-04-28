@@ -86,4 +86,32 @@ public class UserRepository : IUserRepository
         }
         return null;
     }
+    
+    public async Task<User?> GetUserConnectedNotTrackedAsync(ClaimsPrincipal user)
+    {
+        var userDb = await _userManager.GetUserAsync(user);
+        if (userDb != null)
+        {
+            return await GetUserByIdNotTrackedAsync(userDb.Id);
+            
+        }
+        return null;
+    }
+    
+    private async Task<StarColoniesUser?> GetUserEntityByIdNotTrackedAsync(string userId)
+    {
+        var entity = await _context.ScUser.AsNoTracking()
+            .Include(u => u.UserColon)
+            .ThenInclude(c=> c.Teams)
+            .FirstOrDefaultAsync(u => u.Id == userId);
+
+        return entity;
+    }
+    
+    private async Task<User?> GetUserByIdNotTrackedAsync(string userId)
+    {
+        var entity = await GetUserEntityByIdAsync(userId);
+
+        return entity is null ? null : UserMapper.ToDomain(entity);
+    }
 }

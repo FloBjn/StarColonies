@@ -77,4 +77,26 @@ public class ColonRepository : IColonRepository
         _context.ScColon.Update(colonDb);
         await _context.SaveChangesAsync();
     }
+
+    public async void DetacheTrackingColon(string modelColonId)
+    {
+        var colonToDetache = await GetColonEntityByIdAsync(modelColonId);
+        
+        _context.Entry(colonToDetache).State = EntityState.Detached;
+    }
+    
+    public async Task<Colon?> GetColonByIdNotTrackedAsync(string colonId)
+    {
+        var entity = await GetColonEntityByIdAsync(colonId);
+        return entity is null ? null : ColonMapper.ToDomain(entity);
+    }
+    
+    private async Task<StarColoniesColon?> GetColonEntityByIdNotTrackedAsync(string colonId)
+    {
+        var entity = await _context.ScColon.AsNoTracking()
+            /*.Include(c => c.JobName)*/
+            .Include(c => c.Teams)
+            .FirstOrDefaultAsync(c => c.ColonId == colonId);
+        return entity;
+    }
 }

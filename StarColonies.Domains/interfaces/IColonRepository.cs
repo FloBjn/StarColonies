@@ -8,4 +8,6 @@ public interface IColonRepository
     Task UpdateColonPerfAsync(Colon colon);
     Task UpdateColonNameAsync(Colon colon);
     Task UpdateColonNumberResource(Colon colon);
+    void DetacheTrackingColon(string modelColonId);
+    Task<Colon?> GetColonByIdNotTrackedAsync(string colonId);
 }

@@ -10,4 +10,5 @@ public interface IUserRepository
     Task UpdateUserAsync(User user);
     Task DeleteUserAsync(User user);
     Task<User?> GetUserConnectedAsync(ClaimsPrincipal user);
+    Task<User?> GetUserConnectedNotTrackedAsync(ClaimsPrincipal user);
 }
