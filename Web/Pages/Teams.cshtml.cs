@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using StarColonies.Domains;
 using StarColonies.Domains.interfaces;
@@ -12,9 +13,10 @@ public class TeamsModel : PageModel
     private readonly ITeamRepository _teamRepository;
     [BindProperty]
     public required InputFormModel InputModel { get; set; } = new ();
-    public IList<string> TeamsNames { get; set; } = new List<string>();
     public IList<Team> Teams { get; set; }
-    public Team SelectionedTeam{ get; set; }
+    public Team? SelectionedTeam{ get; set; }
+    [BindProperty]
+    public string RedirectAction { get; set; } = string.Empty;
 
     public TeamsModel(IWebHostEnvironment webHostEnvironment, IColonRepository colonRepository, ITeamRepository teamRepository)
     {
@@ -23,10 +25,13 @@ public class TeamsModel : PageModel
         _teamRepository = teamRepository;
     }
 
-    public async void OnGetAsync()
+    public async Task OnGetAsync()
     {
-        Teams = new List<Team>(); // repo
-        SelectionedTeam = new Team()
+        Teams = await _teamRepository.GetAllTeamsAsync();// repo
+        
+        Console.WriteLine($"Teams: {Teams[0].ColonsTeam.Count}");
+        Console.WriteLine($"Teams: {Teams[1].ColonsTeam.Count}");
+        /*SelectionedTeam = new Team()
         {
             Name = "Equipe test",
             ColonsTeam = new List<Colon>
@@ -36,16 +41,45 @@ public class TeamsModel : PageModel
                 new() { Name = "Hendrikx", Force = 7, Stamina = 0, JobName = JobName.Scientifique },
                 new() { Name = "Flo", Force = 5, Stamina = 2, JobName = JobName.Ingenieur }
             },
-        };
+        };*/
+    }
 
-        foreach (var team in Teams)
+    public async Task<IActionResult> OnPostAsync()
+    {
+        
+        
+        
+        Console.WriteLine($"action: {RedirectAction}");
+        switch (RedirectAction)
         {
-            TeamsNames.Add(team.Name);
+            case "Create":
+                HttpContext.Session.SetString("SelectedId", "");
+                return RedirectToPage("/UpdateTeam");
+            case "Modify":
+                HttpContext.Session.SetString("SelectedId", SelectionedTeam.TeamId);
+                return RedirectToPage("/UpdateTeam");
+            case "Get":
+                Teams = await _teamRepository.GetAllTeamsAsync();// repo
+                if (ModelState.IsValid)
+                {
+                    var team = await _teamRepository.GetByIdAsync(InputModel.TeamId);
+                    if (team != null)
+                    {
+                        Console.WriteLine("teamfind : " + team.Name);
+                        SelectionedTeam = team;
+                    }
+                }
+                break;
+            default:return Page();
         }
+
+        return Page();
     }
 
     public class InputFormModel
     {
-        public string TeamName { get; set; }
+        [Required]
+        [Display(Name = "TeamId")]
+        public string TeamId { get; set; }
     }
 }

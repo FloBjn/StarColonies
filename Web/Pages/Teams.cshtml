@@ -13,47 +13,59 @@
 <section class="w-100 d-flex">
     <div class="w-50 align-items-baseline d-flex">
         
-        <form class="w-100 me-auto">
+        <form class="w-100 me-auto d-flex flex-wrap" method="post">
             @* choix equipe *@
-            <label asp-for="InputModel.TeamName" class="form-label ">Choisir une équipe</label>
-            <select asp-for="InputModel.TeamName" class="form-control w-40" aria-required="true">
+            <label asp-for="InputModel.TeamId" class="form-label w-100">Choisir une équipe</label>
+            <select asp-for="InputModel.TeamId" class="form-control w-40" aria-required="true">
                 <option value="">-- Choisir une équipe --</option>
-                @foreach (var teamName in Model.TeamsNames)
+                @foreach (var team in Model.Teams)
                 {
-                    <option value="Ingénieur">@teamName</option>
+                    <option value="@team.TeamId">@team.Name</option>
                 }
-                <option value="Médecin">Equipe 2</option>
-                <option value="Explorateur">Equipe 3</option>
             </select>
-            <span asp-validation-for="InputModel.TeamName" class="text-danger"></span>
+            <span asp-validation-for="InputModel.TeamId" class="text-danger ms-2"></span>
+            <input type="hidden" asp-for="RedirectAction" value="Get"/>
+            <button type="submit" class="btn btn-primary w-auto">sélectionner</button>
         </form>
     </div>
     
-    <div class="w-50 align-items-baseline d-flex">
-        <a asp-area="" asp-page="/TeamUpdate" class="btn btn-success ms-auto w-auto">Créer une équipe</a>
+    <div class="w-50 align-items-baseline d-flex flex-wrap">
+        <form class="w-100 ms-auto d-flex" method="post">
+            <input type="hidden" asp-for="RedirectAction" value="Create"/>
+            <button type="submit" asp-page="/TeamUpdate" class="btn btn-success ms-auto w-auto">Créer une équipe</button>
+        </form>
     </div>
 </section>
-<section class="w-100 d-flex flex-wrap mt-3">
-    <h2 class="w-100 text-center text-decoration-underline">@Model.SelectionedTeam.Name</h2>
-    <div class="d-flex align-content-around w-100 mt-4 mb-5">
-        @foreach (var colon in Model.SelectionedTeam.ColonsTeam)
-        {
-            <article class="w-20 d-flex flex-column p-1 m-auto">
-                <h4 class="text-center mb-3">@colon.Name</h4>
-                @* ajouter contrainte en css *@
-                <img class="mx-auto" alt="Colon image"/>
-                <div class="w-auto mx-auto mt-3">
-                    <h5>Proffession : </h5>
-                    <p>@colon.JobName</p>
-                    <h5>Force : </h5>
-                    <p>@colon.Force</p>
-                    <h5>Endurance : </h5>
-                    <p>@colon.Stamina</p>
-                </div>
-                
-            </article>
-        }
-    </div>
+@if (Model.SelectionedTeam!= null)
+{
+    <section class="w-100 d-flex flex-wrap mt-3">
+        <h2 class="w-100 text-center text-decoration-underline">@Model.SelectionedTeam.Name</h2>
+        <div class="d-flex align-content-around w-100 mt-4 mb-5">
+            @if(Model.SelectionedTeam.ColonsTeam.Count > 0){
+                foreach (var colon in Model.SelectionedTeam.ColonsTeam)
+                {
+                    <article class="w-20 d-flex flex-column p-1 m-auto">
+                        <h4 class="text-center mb-3">@colon.Name</h4>
+                        @* ajouter contrainte en css *@
+                        <img class="mx-auto" alt="Colon image"/>
+                        <div class="w-auto mx-auto mt-3">
+                            <h5>Proffession : </h5>
+                            <p>@colon.JobName</p>
+                            <h5>Force : </h5>
+                            <p>@colon.Force</p>
+                            <h5>Endurance : </h5>
+                            <p>@colon.Stamina</p>
+                        </div>
 
-    <a asp-page="/TeamUpdate" asp-route-id="@Model.SelectionedTeam.TeamId" class="btn btn-primary ms-auto w-auto">Modifier l'équipe</a>
-</section>
+                    </article>
+                }
+            }
+        </div>
+
+        <form method="post" class="p-0 w-auto ms-auto">
+            <input type="hidden" asp-for="RedirectAction" value="Modify"/>
+            <button type="submit" asp-page="/Teams" class="btn btn-primary w-auto">Modifier l'équipe</button>
+        </form>
+        
+    </section>
+    }

@@ -1,0 +1,121 @@
+﻿@page
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using StarColonies.Infrastructures.Mappers
+@model UpdateTeam
+
+@{
+    ViewData["Title"] = "Create your team";
+}
+<h1 class="text-center mb-4 w-100">@(Model.IsCreatingTeam?"Création de ton équipe": "Modification de l'équipe "+Model.ModifyingTeam?.Name)</h1>
+<div class="d-flex w-100">
+    <a asp-page="/Teams" asp-route-id="" class="btn btn-primary w-auto me-auto">Retour</a>
+    <button type="button" class="btn btn-danger w-auto ms-auto" id="cancelBtn">Supprimer équipe</button>
+</div>
+
+<section class="w-100 d-flex flex-wrap mt-3">
+    <form class="w-50 d-flex flex-wrap mx-auto" id="formInfos" method="post" asp-page-handler="SubmitTeam">
+        <div class="d-flex w-100 align-items-end mb-3">
+            @* Nom équipe *@
+            <div class="form-floating mb-3 w-auto me-5">
+                <input asp-for="InputTeamInfosModel.TeamName" class="form-control" autocomplete="username" aria-required="true" value="@Model.ModifyingTeam?.Name"/>
+                <label asp-for="InputTeamInfosModel.TeamName" class="form-label text-black">Nom de l'équipe</label>
+                <span asp-validation-for="InputTeamInfosModel.TeamName" class="text-danger"></span>
+            </div>
+            @* Baniere *@
+            <div class="mb-3">
+                <label asp-for="InputTeamInfosModel.Banner" class="form-label">Choisissez une bannière</label>
+                <input asp-for="InputTeamInfosModel.Banner" type="file" class="form-control" id="avatarInput"/>
+                <span asp-validation-for="InputTeamInfosModel.Banner" class="text-danger"></span>
+            </div>
+            <img id="preview" class="img-thumbnail ms-3" style="display:none; max-height:100px;" />
+
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    setupImagePreview('avatarInput','preview');
+                });
+            </script>
+        </div>
+        <div class="d-flex justify-content-end gap-2 mt-3 w-100">
+            <button type="button" class="btn btn-danger" id="cancelBtn">↩️ Annuler</button>
+            <button type="submit" class="btn btn-primary" id="saveBtn">💾 Enregistrer</button>
+        </div>
+        <div asp-validation-summary="All" class="text-danger w-100"></div>
+    </form>
+        <div class="d-flex align-content-around w-100 mt-4 mb-5">
+            @for (var i = 0; i < 5; i++)
+            {
+                var profId = 0;
+                if (Model.ModifyingTeam.ColonsTeam.ElementAtOrDefault(i) != null)
+                {
+                    // Model.ColonModelList.ColonId = Model.ModifyingTeam.ColonsTeam[i].ColonId;
+                    Model.ColonModelList.Name = Model.ModifyingTeam.ColonsTeam[i].Name;
+                    Model.ColonModelList.Endurance = Model.ModifyingTeam.ColonsTeam[i].Stamina;
+                    Model.ColonModelList.Force = Model.ModifyingTeam.ColonsTeam[i].Force;
+                    profId = JobNameMapper.ToInt(Model.ModifyingTeam.ColonsTeam[i].JobName);
+                    Model.ColonModelList.ProfessionId = profId;
+                }
+                else
+                {
+                    Model.ColonModelList = new UpdateTeam.InputColonModel();
+                }
+                var formId = "formColon" + i;
+                var btnSaveId = "btnSave" + i;
+                var btnCancelId = "btnCancel" + i;
+                <form class="w-100 d-flex flex-wrap px-3" id="@formId" method="post" asp-page-handler="SubmitColon">
+                    <article class="w-100 d-flex flex-column p-1 m-auto">
+                        <h4 class="text-center mb-3">Colon @(i+1)</h4>
+                        <div class="w-auto mx-auto mt-3">
+                            @* ID *@
+                            @* <input type="hidden" asp-for="ColonModelList.ColonId" value="@Model.ColonModelList.ColonId"/> *@
+                            <input type="hidden" asp-for="ColonModelList.TeamId" value="@Model.ModifyingTeam.TeamId"/>
+                            <input type="hidden" asp-for="ColonModelList.Index" value="@i"/>
+                            @* Nom *@
+                            <div class="form-floating mb-3 w-100">
+                                <input asp-for="ColonModelList.Name" class="form-control" autocomplete="username" aria-required="true" value="@Model.ColonModelList.Name"/>
+                                <label asp-for="ColonModelList.Name" class="form-label text-black">Nom du colon</label>
+                                <span asp-validation-for="ColonModelList.Name" class="text-danger"></span>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <select asp-for="ColonModelList.ProfessionId" class="form-control" aria-required="true" >
+                                    @* <option value="@profId" selected="selected"></option> *@
+                                    <option value="0">Ingénieur</option>
+                                    <option value="1">Soldat</option>
+                                    <option value="2">Scientifique</option>
+                                    <option value="3">Medecin</option>
+                                </select>
+                                <label asp-for="ColonModelList.ProfessionId" class="form-label text-black fs-6">Profession</label>
+                                <span asp-validation-for="ColonModelList.ProfessionId" class="text-danger"></span>
+                            </div>
+                            @* Force *@
+                            <div class="form-floating mb-3">
+                                <input asp-for="ColonModelList.Force" type="number" min="0" max="7" class="form-control" aria-required="true" value="@Model.ColonModelList.Force"/>
+                                <label asp-for="ColonModelList.Force" class="form-label text-black">Force</label>
+                                <span asp-validation-for="ColonModelList.Force" class="text-danger"></span>
+                            </div>
+                            @* Endurance *@
+                            <div class="form-floating mb-3">
+                                <input asp-for="ColonModelList.Endurance" type="number" min="0" max="7" class="form-control" aria-required="true" value="@Model.ColonModelList.Endurance"/>
+                                <label asp-for="ColonModelList.Endurance" class="form-label text-black">Endurance</label>
+                                <span asp-validation-for="ColonModelList.Endurance" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                    </article>
+                    <div class="d-flex justify-content-end gap-2 mt-3 w-100">
+                        <button type="button" class="btn btn-danger me-3" id="@btnCancelId">↩️</button>
+                        <button type="submit" class="btn btn-primary" id="@btnSaveId">💾</button>
+                    </div>
+                </form>
+            }
+        </div>
+</section>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        setupFormWatcher("formInfos", "saveBtn", "cancelBtn");
+        setupFormWatcher("formColon0", "btnSave0", "btnCancel0");
+        setupFormWatcher("formColon1", "btnSave1", "btnCancel1");
+        setupFormWatcher("formColon2", "btnSave2", "btnCancel2");
+        setupFormWatcher("formColon3", "btnSave3", "btnCancel3");
+        setupFormWatcher("formColon4", "btnSave4", "btnCancel4");
+    });
+</script>

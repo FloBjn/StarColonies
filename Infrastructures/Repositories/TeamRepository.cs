@@ -65,6 +65,11 @@ public class TeamRepository :ITeamRepository
         var teamDb = await GetTeamEntityByIdAsync(team.TeamId);
         if (teamDb == null) return;
         
+        foreach (var colon in teamDb.ColonsTeam)
+        {
+            _context.Entry(colon).State = EntityState.Detached;
+        }
+        
         teamDb.ColonsTeam = team.ColonsTeam.Select(ColonMapper.ToEntity).ToList();
         
         _context.ScTeam.Update(teamDb);

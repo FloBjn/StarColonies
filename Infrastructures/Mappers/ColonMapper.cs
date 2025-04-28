@@ -14,7 +14,11 @@ public class ColonMapper
         Stamina = entity.Stamina,
         NumberResource = entity.NumberResource,
         JobName = JobNameMapper.ToJobName(entity.JobName),
-        Teams = entity.Teams.Select(TeamMapper.ToDomain).ToList()
+        Teams = entity.Teams.Select(team => new Team
+        {
+            TeamId = team.TeamId,
+            Name = team.Name
+        }).ToList()
     };
 
     public static StarColoniesColon ToEntity(Colon colon) => new StarColoniesColon
@@ -26,6 +30,12 @@ public class ColonMapper
         Stamina = colon.Stamina,
         NumberResource = colon.NumberResource,
         JobName = JobNameMapper.ToInt(colon.JobName),
-        Teams = colon.Teams.Select(TeamMapper.ToEntity).ToList()
+        // posait probleme
+        // Teams = colon.Teams.Select(team => new StarColoniesTeam
+        // {
+        //     TeamId = team.TeamId,
+        //     Name = team.Name,
+        //     LevelMaxAuthorized = team.LevelMaxAuthorized
+        // }).ToList()
     };
 }

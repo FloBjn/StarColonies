@@ -10,6 +10,10 @@ public class TeamMapper
         TeamId = entity.TeamId,
         Name = entity.Name,
         TeamBonusObjects = entity.TeamBonusObjects.Select(BonusObjectMapper.ToDomain).ToList(),
+        ColonsTeam = entity.ColonsTeam
+            .Where(x => x != null)
+            .Select(ColonMapper.ToDomain)
+            .ToList(),
         LevelMaxAuthorized = entity.LevelMaxAuthorized,
     };
 
@@ -18,6 +22,7 @@ public class TeamMapper
         TeamId = team.TeamId,
         Name = team.Name,
         TeamBonusObjects = team.TeamBonusObjects.Select(BonusObjectMapper.ToEntity).ToList(),
+        ColonsTeam = team.ColonsTeam.Select(ColonMapper.ToEntity).ToList(),
         LevelMaxAuthorized = team.LevelMaxAuthorized,
     };
 }

@@ -20,6 +20,13 @@ builder.Services
 
 builder.Services.AddTransient<ReverseProxyLinksMiddleware>();
 
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30); // durée d'inactivité avant expiration
+    options.Cookie.HttpOnly = true; // sécurité
+    options.Cookie.IsEssential = true; // pour fonctionner même si consentement aux cookies est requis
+});
+
 //Interfaces
 builder.Services.AddScoped<IMissionRepository, MissionRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
@@ -43,6 +50,8 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+
+app.UseSession();
 
 app.UseAuthorization();
 
