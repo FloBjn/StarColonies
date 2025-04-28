@@ -1,0 +1,76 @@
+﻿@model NavbarGoodModel
+
+<ul class="navbar-nav flex-row justify-content-evenly w-100 align-items-center">
+    <!-- Partie à gauche du logo -->
+    @if (@Model.UserConnected is not null)
+    {
+        if (@Model.UserConnected.IsAdmin)
+        {
+            <li class="nav-item">
+                <a class="nav-link text-white fs-5 fw-bold" id="dashboard" asp-area="" asp-page="/Dashboard">Bonus</a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link text-white fs-5 fw-bold" id="team" asp-area="" asp-page="/Teams">Mission</a>
+            </li> 
+        }
+        else
+        {
+            <li class="nav-item">
+                <a class="nav-link text-white fs-5 fw-bold" id="dashboard" asp-area="" asp-page="/Dashboard">Dashboard</a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link text-white fs-5 fw-bold" id="team" asp-area="" asp-page="/Teams">équipe</a>
+            </li>
+        }
+    }
+    else
+    {
+        <li class="nav-item">
+            <partial name="_RegisterPartial"/>
+        </li>
+    }
+</ul>
+
+<ul class="navbar-nav flex-row">
+    <!-- Logo -->
+    <li class="nav-item mx-3">
+        <a class="nav-link p-0" asp-area="" asp-page="/Index">
+            <img src="~/css/images/logo.png" alt="Logo" class="logo-img"/>
+        </a>
+    </li>
+</ul>
+
+<ul class="navbar-nav flex-row justify-content-evenly w-100 align-items-center">
+    <!-- Partie à droite du logo -->
+    @if (@Model.UserConnected is not null)
+    {
+        if (@Model.UserConnected.IsAdmin)
+        {
+            <li class="nav-item">
+                <a class="nav-link text-white fs-5 fw-bold" id="stats" asp-area="" asp-page="">Message</a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link text-white fs-5 fw-bold" id="profile" asp-area="" asp-page="/Profile">Logs</a>
+            </li>
+        }
+        else
+        {
+            <li class="nav-item">
+                <a class="nav-link text-white fs-5 fw-bold" id="stats" asp-area="" asp-page="">Statistiques</a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link text-white fs-5 fw-bold" id="profile" asp-area="" asp-page="/Profile">Profil</a>
+            </li>
+        }
+    }
+    else
+    {
+        <li class="nav-item">
+            <partial name="_LoginPartial"/>
+        </li>
+    }
+</ul>
