@@ -9,7 +9,7 @@ public class Statistics
     {
         int numberOfTimePlayed = 0;
         int numberOfTimeSucceed = 0;
-        foreach (var missions in MissionHistories.Where(missions => missions.Mission == mission))
+        foreach (var missions in MissionHistories.Where(missions => missions.Mission.MissionId == mission.MissionId))
         {
             numberOfTimePlayed++;
             if (missions.IsSuccess)
@@ -18,12 +18,13 @@ public class Statistics
             }
         }
 
+        Console.WriteLine("succes :" + numberOfTimeSucceed);
+        Console.WriteLine("timeplayed :" + numberOfTimePlayed);
         if (numberOfTimePlayed == 0)
         {
             return null;
         }
-        Console.WriteLine("succes :" + numberOfTimeSucceed);
-        Console.WriteLine("timeplayed :" + numberOfTimePlayed);
+        
         return numberOfTimeSucceed *100/ numberOfTimePlayed;
     }
 

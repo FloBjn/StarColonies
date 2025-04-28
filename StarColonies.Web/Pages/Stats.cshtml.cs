@@ -32,11 +32,9 @@ public class Stats : PageModel
         {
             if (mission != null)
             {
-                Console.WriteLine("winper : " + stats.GetWinningpercentageOfMissions(mission));
                 var win = (int?)stats.GetWinningpercentageOfMissions(mission);
                 if (win != null)
                 {
-                    Console.WriteLine("win :" + win);
                     var lose = (int)(100 - win);
                     DataSets.Add([(int)win, lose]);
                 }
