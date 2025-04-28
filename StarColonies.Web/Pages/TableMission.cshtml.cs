@@ -77,30 +77,36 @@ public class TableMission : PageModel
             TempData["Error"] = "Votre equipe doit d'abord surmonte une mission plus simple.";
             return RedirectToPage(new { TeamId });
         }
-        MissionHistory missionHistory = new MissionHistory();
-        missionHistory.Mission = mission;
-        missionHistory.Team = Team;
-        if (mission.ChallengesOvercome(Team))
+        
+        
+        MissionHistory missionHistory = new MissionHistory
+        {
+            MissionId = mission.MissionId,
+            Mission = mission,
+            TeamId = Team.TeamId,
+            Team = Team
+        };
+        
+        //Vérifie si l'équipe a réussi la mission
+        if (!mission.IsChallengesOvercomed(Team) || !mission.IsTeamAlive(Team))
         {
             Team.LevelMaxAuthorized = mission.Level;
             await _teamRepository.UpdateTeamMaxLvlMissionAsync(Team);
             missionHistory.IsSuccess = false;
-            // TODO Ajouter dans l'historique
-            //await _missionHistoryRepository.AddMissionHistoryAsync(missionHistory);
-            TempData["Error"] = "Vous n'avez pas su surmontés les defis";
+            
+            await _missionHistoryRepository.AddMissionHistoryAsync(missionHistory);
+            if (!mission.IsTeamAlive(Team))
+            {
+                TempData["Error"] = "Votre equipe a peri durant la mission";
+            }
+            else
+            {
+                TempData["Error"] = "L'equipe n'a pas surmonté les défis.";
+            }
             return RedirectToPage(new { TeamId });
         }
-
-        if (mission.ChallengesOvercome(Team))
-        {
-            Team.LevelMaxAuthorized = mission.Level;
-            await _teamRepository.UpdateTeamMaxLvlMissionAsync(Team);
-            missionHistory.IsSuccess = false;
-            // TODO Ajouter dans l'historique
-            //await _missionHistoryRepository.AddMissionHistoryAsync(missionHistory);
-            TempData["Error"] = "Votre equipe a peri durant la mission";
-            return RedirectToPage(new { TeamId });
-        }
+        
+        
         UserColon.AddResource(mission.GetReward());
         await _colonRepository.UpdateColonNumberResource(UserColon);
 
@@ -110,15 +116,19 @@ public class TableMission : PageModel
             await _colonRepository.UpdateColonPerfAsync(colon);
         }
 
+        //Enlève la restriction de lvl max de la mission que l'équipe peut faire
         Team.LevelMaxAuthorized = 0;
         await _teamRepository.UpdateTeamMaxLvlMissionAsync(Team);
         
+        //Rajoute dans l'historique le résultat de la mission
         missionHistory.IsSuccess = true;
-        // TODO Ajouter dans l'historique 
-        //await _missionHistoryRepository.AddMissionHistoryAsync(missionHistory);
-        //TODO SUPPRIMER TOUS LES OBJECT DE L'EQUIPE
+        await _missionHistoryRepository.AddMissionHistoryAsync(missionHistory);
         
-        TempData["Success"] = $"Mission {mission.Name} lancée avec succès!";
+        //Supprime tout les objets de la team (les objets ne sont actif que pour la prochaine mission que l'équipe fait)
+        Team.TeamBonusObjects = new List<BonusObject>();
+        await _teamRepository.DeleteTeamObjectsAsync(Team);
+        
+        TempData["Success"] = $"Mission {mission.Name} terminée avec succès!";
         return RedirectToPage(new { TeamId });
     }
     private async Task SetConnectedUser()

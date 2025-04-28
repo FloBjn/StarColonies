@@ -25,9 +25,21 @@ public class Colon
     public JobName JobName { get; set; }
     public IList<Team> Teams { get; set; } = new List<Team>();
 
+    //Augmente de niveau et augmente une stat au hasard
     public void LevelUp()
     {
         Level++;
+        
+        var rnd = new Random().Next(0, 1);
+
+        if (rnd == 0)
+        {
+            Force++;
+        }
+        else
+        {
+            Stamina++;
+        }
     }
     
 }

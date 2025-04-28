@@ -8,5 +8,7 @@ public interface ITeamRepository
     Task UpdateTeamNameAsync(Team team);
     Task UpdateTeamMaxLvlMissionAsync(Team team);
     Task UpdateTeamMembersAsync(Team team);
+    Task UpdateTeamObjectsAsync(Team team);
+    Task DeleteTeamObjectsAsync(Team team);
     Task DeleteTeamAsync(Team team);
 }
