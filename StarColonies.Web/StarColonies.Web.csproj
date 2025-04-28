@@ -26,7 +26,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Infrastructures\Infrastructures.csproj" />
+      <ProjectReference Include="..\StarColonies.Infrastructures\StarColonies.Infrastructures.csproj" />
     </ItemGroup>
 
 </Project>

@@ -3,7 +3,6 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using StarColonies.Infrastructures.data;
 
@@ -12,11 +11,9 @@ using StarColonies.Infrastructures.data;
 namespace StarColonies.Infrastructures.Migrations
 {
     [DbContext(typeof(StarColoniesContext))]
-    [Migration("20250427193944_FixDeleteBehaviorAndTeamRelations")]
-    partial class FixDeleteBehaviorAndTeamRelations
+    partial class StarColoniesContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -225,7 +222,7 @@ namespace StarColonies.Infrastructures.Migrations
                     b.ToTable("ScTeamColonMembers", (string)null);
                 });
 
-            modelBuilder.Entity("StarColonies.Infrastructures.Entities.StarColoniesBonusObject", b =>
+            modelBuilder.Entity("StarColonies.StarColonies.Infrastructures.Entities.StarColoniesBonusObject", b =>
                 {
                     b.Property<string>("BonusObjectId")
                         .ValueGeneratedOnAdd()
@@ -281,7 +278,7 @@ namespace StarColonies.Infrastructures.Migrations
                         });
                 });
 
-            modelBuilder.Entity("StarColonies.Infrastructures.Entities.StarColoniesColon", b =>
+            modelBuilder.Entity("StarColonies.StarColonies.Infrastructures.Entities.StarColoniesColon", b =>
                 {
                     b.Property<string>("ColonId")
                         .ValueGeneratedOnAdd()
@@ -353,7 +350,7 @@ namespace StarColonies.Infrastructures.Migrations
                         });
                 });
 
-            modelBuilder.Entity("StarColonies.Infrastructures.Entities.StarColoniesEnemy", b =>
+            modelBuilder.Entity("StarColonies.StarColonies.Infrastructures.Entities.StarColoniesEnemy", b =>
                 {
                     b.Property<string>("EnemyId")
                         .ValueGeneratedOnAdd()
@@ -483,7 +480,7 @@ namespace StarColonies.Infrastructures.Migrations
                         });
                 });
 
-            modelBuilder.Entity("StarColonies.Infrastructures.Entities.StarColoniesMission", b =>
+            modelBuilder.Entity("StarColonies.StarColonies.Infrastructures.Entities.StarColoniesMission", b =>
                 {
                     b.Property<string>("MissionId")
                         .ValueGeneratedOnAdd()
@@ -510,7 +507,7 @@ namespace StarColonies.Infrastructures.Migrations
                         });
                 });
 
-            modelBuilder.Entity("StarColonies.Infrastructures.Entities.StarColoniesMissionHistory", b =>
+            modelBuilder.Entity("StarColonies.StarColonies.Infrastructures.Entities.StarColoniesMissionHistory", b =>
                 {
                     b.Property<string>("MissionHistoryId")
                         .ValueGeneratedOnAdd()
@@ -536,7 +533,7 @@ namespace StarColonies.Infrastructures.Migrations
                     b.ToTable("ScMissionHistory");
                 });
 
-            modelBuilder.Entity("StarColonies.Infrastructures.Entities.StarColoniesTeam", b =>
+            modelBuilder.Entity("StarColonies.StarColonies.Infrastructures.Entities.StarColoniesTeam", b =>
                 {
                     b.Property<string>("TeamId")
                         .ValueGeneratedOnAdd()
@@ -554,7 +551,7 @@ namespace StarColonies.Infrastructures.Migrations
                     b.ToTable("ScTeam");
                 });
 
-            modelBuilder.Entity("StarColonies.Infrastructures.Entities.StarColoniesUser", b =>
+            modelBuilder.Entity("StarColonies.StarColonies.Infrastructures.Entities.StarColoniesUser", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
@@ -644,7 +641,7 @@ namespace StarColonies.Infrastructures.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("StarColonies.Infrastructures.Entities.StarColoniesUser", null)
+                    b.HasOne("StarColonies.StarColonies.Infrastructures.Entities.StarColoniesUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -653,7 +650,7 @@ namespace StarColonies.Infrastructures.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("StarColonies.Infrastructures.Entities.StarColoniesUser", null)
+                    b.HasOne("StarColonies.StarColonies.Infrastructures.Entities.StarColoniesUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -668,7 +665,7 @@ namespace StarColonies.Infrastructures.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("StarColonies.Infrastructures.Entities.StarColoniesUser", null)
+                    b.HasOne("StarColonies.StarColonies.Infrastructures.Entities.StarColoniesUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -677,7 +674,7 @@ namespace StarColonies.Infrastructures.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("StarColonies.Infrastructures.Entities.StarColoniesUser", null)
+                    b.HasOne("StarColonies.StarColonies.Infrastructures.Entities.StarColoniesUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -686,13 +683,13 @@ namespace StarColonies.Infrastructures.Migrations
 
             modelBuilder.Entity("ScMissionEnemies", b =>
                 {
-                    b.HasOne("StarColonies.Infrastructures.Entities.StarColoniesEnemy", null)
+                    b.HasOne("StarColonies.StarColonies.Infrastructures.Entities.StarColoniesEnemy", null)
                         .WithMany()
                         .HasForeignKey("EnemyId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("StarColonies.Infrastructures.Entities.StarColoniesMission", null)
+                    b.HasOne("StarColonies.StarColonies.Infrastructures.Entities.StarColoniesMission", null)
                         .WithMany()
                         .HasForeignKey("MissionId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -701,13 +698,13 @@ namespace StarColonies.Infrastructures.Migrations
 
             modelBuilder.Entity("ScTeamBonusObjects", b =>
                 {
-                    b.HasOne("StarColonies.Infrastructures.Entities.StarColoniesBonusObject", null)
+                    b.HasOne("StarColonies.StarColonies.Infrastructures.Entities.StarColoniesBonusObject", null)
                         .WithMany()
                         .HasForeignKey("BonusObjectId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("StarColonies.Infrastructures.Entities.StarColoniesTeam", null)
+                    b.HasOne("StarColonies.StarColonies.Infrastructures.Entities.StarColoniesTeam", null)
                         .WithMany()
                         .HasForeignKey("TeamId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -716,28 +713,28 @@ namespace StarColonies.Infrastructures.Migrations
 
             modelBuilder.Entity("ScTeamColonMembers", b =>
                 {
-                    b.HasOne("StarColonies.Infrastructures.Entities.StarColoniesColon", null)
+                    b.HasOne("StarColonies.StarColonies.Infrastructures.Entities.StarColoniesColon", null)
                         .WithMany()
                         .HasForeignKey("ColonId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("StarColonies.Infrastructures.Entities.StarColoniesTeam", null)
+                    b.HasOne("StarColonies.StarColonies.Infrastructures.Entities.StarColoniesTeam", null)
                         .WithMany()
                         .HasForeignKey("TeamId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("StarColonies.Infrastructures.Entities.StarColoniesMissionHistory", b =>
+            modelBuilder.Entity("StarColonies.StarColonies.Infrastructures.Entities.StarColoniesMissionHistory", b =>
                 {
-                    b.HasOne("StarColonies.Infrastructures.Entities.StarColoniesMission", "Mission")
+                    b.HasOne("StarColonies.StarColonies.Infrastructures.Entities.StarColoniesMission", "Mission")
                         .WithMany()
                         .HasForeignKey("MissionId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("StarColonies.Infrastructures.Entities.StarColoniesTeam", "Team")
+                    b.HasOne("StarColonies.StarColonies.Infrastructures.Entities.StarColoniesTeam", "Team")
                         .WithMany()
                         .HasForeignKey("TeamId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -748,11 +745,11 @@ namespace StarColonies.Infrastructures.Migrations
                     b.Navigation("Team");
                 });
 
-            modelBuilder.Entity("StarColonies.Infrastructures.Entities.StarColoniesUser", b =>
+            modelBuilder.Entity("StarColonies.StarColonies.Infrastructures.Entities.StarColoniesUser", b =>
                 {
-                    b.HasOne("StarColonies.Infrastructures.Entities.StarColoniesColon", "UserColon")
+                    b.HasOne("StarColonies.StarColonies.Infrastructures.Entities.StarColoniesColon", "UserColon")
                         .WithOne()
-                        .HasForeignKey("StarColonies.Infrastructures.Entities.StarColoniesUser", "ColonId")
+                        .HasForeignKey("StarColonies.StarColonies.Infrastructures.Entities.StarColoniesUser", "ColonId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
