@@ -12,8 +12,6 @@ La suite du document sera à compléter par vos soins.
 
 Maxime Wouters, Florence Blanjean, Romain Bronowski
 
-Sur le matricule de Florence Blanjean  https://ue19.cg.helmo.be/Q220191.
-
 ## Construction de la solution
 dotnet build .\StarColonies.sln
 cd .\StarColonies.Web\
